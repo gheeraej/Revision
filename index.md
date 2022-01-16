@@ -1,3 +1,3 @@
 # Index
 ## Machine Learning
-### Linear Regression
+### [Linear Regression] (linear_regression.md)
