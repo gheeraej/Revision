@@ -1,3 +1,8 @@
+---
+layout: default
+title: Revision
+---
+
 # Index
 
 ## Statistique
@@ -5,7 +10,7 @@
 ### tests statistiques
 
 ## Machine Learning
-### [Linear Regression](linear_regression.md)
+### [Linear Regression]({% link linear_regression.md %})
 ### Logistic Regression
 ### Tree
 ### Random Forest
@@ -15,6 +20,7 @@
 ### PCA
 ### EM Algorithme
 ### K-means
+### Metric
 ### Biais variance tradeoff
 ### Representation theorem
 
