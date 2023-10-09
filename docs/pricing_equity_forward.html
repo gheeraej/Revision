@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Finance - Equity Pricing - Forward</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-finance---pricing-equity"><a href="/Revision/pricing_equity.html">Back to Finance - Pricing Equity</a></h2>
+
+<p><br /></p>
+<h1 id="theoretical">Theoretical</h1>
+<h2 id="formula">Formula</h2>
+<p>The theoretical equity forward price at date \(t\) for a maturity \(T\) is:</p>
+
+\[F_{(0, T)} = S_0 * e^{(r-d)(T-t)}\]
+
+<p>With:</p>
+<ul>
+  <li>\(r\): the risk free rate,</li>
+  <li>\(d\): the dividend rate.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="no-arbitrage-opportunity">No Arbitrage Opportunity</h2>
+<h3 id="replication-payoff">Replication Payoff</h3>
+<p>The pricing of a Forward on equity can be replicated using this strategy.</p>
+
+<h4 id="at-t0">At \(t=0\)</h4>
+<ol>
+  <li>I have \(S_0\) in cash to invest and I use it to buy the asset \(S\) with value \(S_0\),</li>
+</ol>
+
+<h4 id="at-tt">At \(t=T\)</h4>
+<ol>
+  <li>The asset \(S\) current value is now \(S_T\),</li>
+</ol>
+
+<p><br />
+Finally at \(t=T\) I have:</p>
+<ul>
+  <li>Asset \(S\) with value \(S_T\),</li>
+  <li>The dividend \(D\),</li>
+</ul>
+
+<p>Total: \(S_T + D\)</p>
+
+<p><br /></p>
+<h3 id="forward-payoff">Forward Payoff</h3>
+<h4 id="at-t0-1">At \(t=0\)</h4>
+<ol>
+  <li>I have \(S_0\) in cash that I invest at the risk free rate,</li>
+  <li>I enter a forward agreement on \(S_0\) with value \(S_0 * e^{(r-d)T}\)</li>
+</ol>
+
+<h4 id="at-tt-1">At \(t=T\)</h4>
+<ol>
+  <li>I get back the \(S_0\) that I have invested at the risk free rate plus the risk free rate on the period \(R\),</li>
+  <li>I buy the asset with value \(S_T\) using my forward agreement at price \(F_{(0, T)} = S_0 + R - D\)</li>
+</ol>
+
+<p><br />
+Finally at \(t_T\) I have:</p>
+<ul>
+  <li>Asset \(S\) with value \(S_T\),</li>
+  <li>The difference of interests earned and forward payed: \((S_0 + R) - (S_0 + R - D) = D\)</li>
+</ul>
+
+<p>Total: \(S_T + D\)</p>
+
+<p><br /><br /></p>
+<h1 id="practical">Practical</h1>
+<p>In theory, the cost of financing is usually given as the risk free rate, although in the real world a forward’s implied financing cost can deviate from the market’s risk free rate. <br />
+In a market with particular supply/demand dynamics equity repo rates reach extreme levels and lending an owned equity is an investment opportunity.</p>
+
+<p>The practical formula takes into account this investment opportunity rising from the lending of the equity owned.</p>
+
+<h2 id="formula-1">Formula</h2>
+<p>The practical equity forward price at date \(t\) for a maturity \(T\) is:</p>
+
+\[F_{(0, T)} = S_0 * e^{(r-(d - s)) (T-t)}\]
+
+<p>With:</p>
+<ul>
+  <li>\(r\): the risk free rate,</li>
+  <li>\(d\): the dividend rate,</li>
+  <li>\(s\): the spread of the repo rate over the risk free rate to go short (ie the inverted spread).</li>
+</ul>
+
+<h2 id="no-arbitrage-opportunity-1">No Arbitrage Opportunity</h2>
+<h3 id="replication-payoff-1">Replication Payoff</h3>
+<p>The pricing of a Forward on equity can be replicated using this strategy.</p>
+
+<h4 id="at-t0-2">At \(t=0\)</h4>
+<ol>
+  <li>I have \(S_0\) in cash to invest and I use it to buy the asset \(S\) with value \(S_0\),</li>
+  <li>I sell the stock \(S\) through a repurchase agreement contract and I get back \(S_0\) in cash,</li>
+  <li>I invest \(S_0\) at the risk free rate (risk free rate \(\textit{almost always}\) greater than repo rate - ie \(s &gt; 0\)).</li>
+</ol>
+
+<h4 id="at-tt-2">At \(t=T\)</h4>
+<ol>
+  <li>I get back the asset \(S\) with current value \(S_T\),</li>
+  <li>The buyer of the repo pays back the dividend \(D\) of the asset,</li>
+  <li>I get back the \(S_0\) that I have invested at the risk free rate plus the risk free rate on the period \(R\),</li>
+  <li>I pay back the \(S_0\) in cash to the buyer of the repo plus the repo rate on the period \(Re\) (\(Re\) being the sum of the risk free rate and the inverse of the repo spread: \(Re=R-Se\) and \(Se=R-Re\)),</li>
+</ol>
+
+<p><br />
+Finally at \(t=T\) I have:</p>
+<ul>
+  <li>Asset \(S\) with value \(S_T\),</li>
+  <li>The dividend \(D\),</li>
+  <li>The difference of interests earned and payed: \(R-Re\) (with \(\textit{almost always}\) \(R-Re&gt;0\))</li>
+</ul>
+
+<p>Total: \(S_T + (R - Re) + D\)</p>
+
+<p><br /></p>
+<h3 id="forward-payoff-1">Forward Payoff</h3>
+<h4 id="at-t0-3">At \(t=0\)</h4>
+<ol>
+  <li>I have \(S_0\) in cash that I invest at the risk free rate,</li>
+  <li>I enter a forward agreement on \(S_0\) with value \(S_0 * e^{(r-(s + d))T}\)</li>
+</ol>
+
+<h4 id="at-tt-3">At \(t=T\)</h4>
+<ol>
+  <li>I get back the \(S_0\) that I have invested at the risk free rate plus the risk free rate on the period \(R\),</li>
+  <li>I buy the asset with value \(S_T\) using my forward agreement at price \(F_{(0, T)} = S_0 + R - (S + D)\)</li>
+</ol>
+
+<p><br />
+Finally at \(t_T\) I have:</p>
+<ul>
+  <li>Asset \(S\) with value \(S_T\),</li>
+  <li>The difference of interests earned and forward payed: \((S_0 + R) - (S_0 + R - (S + D)) = S + D = (R - Re) + D\)</li>
+</ul>
+
+<p>Total: \(S_T + (R - Re) + D\)</p>
+
+<h1 id="ressources">Ressources:</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://www.globalvolatilitysummit.com/wp-content/uploads/2015/10/A-New-Normal-in-Equity-Repo-BNP-Paribas.pdf">BNP Paribas 2014 research paper on Equity Repo</a>,</li>
+  <li><a href="https://www.eurexchange.com/resource/blob/34718/622649dd378e4338d2f56cae1adf8a6f/data/eurostoxx-repo-trf.pdf">Eurex research on Equity Repo and TRS</a>.</li>
+</ul>
+
+  </body>
+</html>

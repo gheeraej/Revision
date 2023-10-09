@@ -1,0 +1,189 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - Feature Engineering</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="9-best-practices-for-feature-engineering">9 best practices for feature engineering</h1>
+<ol>
+  <li>
+    <p>Split data by time instead of doing it randomly,</p>
+  </li>
+  <li>
+    <p>If you oversample your data, do it after splitting,</p>
+  </li>
+  <li>
+    <p>Use statistics/info from the train split, instead of the entire data, for feature engineering: scaling, normalizing, handling missing values, creating n-gram count, item encoding, etc,</p>
+  </li>
+  <li>
+    <p>Understand how your data is generated, collected, and processed. Involve domain experts if necessary,</p>
+  </li>
+  <li>
+    <p>Keep track of data lineage,</p>
+  </li>
+  <li>
+    <p>Understand feature importance to your model,</p>
+  </li>
+  <li>
+    <p>Measure correlation between features and labels,</p>
+  </li>
+  <li>
+    <p>Use features that generalize well,</p>
+  </li>
+  <li>
+    <p>Remove stale features from your models.</p>
+  </li>
+</ol>
+
+<p><br /></p>
+<h1 id="feature-engineering-steps">Feature Engineering steps</h1>
+<ol>
+  <li>
+    <p>Handling missing values</p>
+  </li>
+  <li>
+    <p>Scaling</p>
+  </li>
+  <li>
+    <p>Discretization</p>
+  </li>
+  <li>
+    <p>Categorical features</p>
+  </li>
+  <li>
+    <p>Feature crossing</p>
+  </li>
+  <li>
+    <p>Positional embeddings</p>
+  </li>
+</ol>
+
+<p><br /></p>
+<h2 id="handling-missing-values">Handling missing values</h2>
+<p>Not all missing values are equal:</p>
+<ul>
+  <li>Missing not at random (MNAR): when a value is missing due to the value itself,</li>
+  <li>Missing at random (MAR):  when a value is missing due to another observed variable,</li>
+  <li>Missing completely at random (MCAR): there is no pattern to which values are missing.</li>
+</ul>
+
+<p>2 solutions:</p>
+<ul>
+  <li>Deletion: removing data with missing entries</li>
+  <li>Imputation: filling missing fields with certain values</li>
+</ul>
+
+<p><br /></p>
+<h3 id="deletion">Deletion</h3>
+<p>Column deletion: remove columns with too many missing entries.</p>
+<ul>
+  <li>Drawbacks: even if half the values are missing, the remaining data still potentially useful information for predictions e.g. even if over half the column for ‘Marital status’ is missing, marital status is still highly correlated with house purchasing</li>
+</ul>
+
+<p>Row deletion:</p>
+<ul>
+  <li>Good for: data missing completely at random (MCAR) and few values missing,</li>
+  <li>Bad when many examples have missing fields,</li>
+  <li>Bad for: missing values are not at random (MNAR) when missing information is information itself,</li>
+  <li>Bad for: missing data at random (MAR): Can potentially bias data – we’ve accidentally removed all examples with one feature’s value.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="imputation">Imputation</h3>
+<p>Fill missing fields with certain values:</p>
+<ul>
+  <li>Defaults: 0, or the empty string, etc.</li>
+  <li>Statistical measures: mean, median, mode</li>
+</ul>
+
+<p><br /></p>
+<h2 id="scaling">Scaling</h2>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/scaling.png" width="40%" height="40%" />
+</div>
+<p>Computing some statistics (mean, std, min, max) generally requires to know the value for a sampling of the population. It can generate data leakage if, for example the statistics are computed with future values (and if temporality is important).</p>
+
+<p><br /></p>
+
+<p>Log-scaling: help with skewed data and often gives performance gain:</p>
+<div style="text-align: center">
+<img src="assets/images/logscaling.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="discretization">Discretization</h2>
+<ul>
+  <li>Turning a continuous feature into a discrete feature (quantization),</li>
+  <li>Create buckets for different ranges:
+    <ul>
+      <li>Incorporate knowledge/expertise about each variable by constructing specific buckets.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h2 id="categorical-features">Categorical features</h2>
+<p>Different solutions exist:</p>
+
+<ol>
+  <li>One-hot encoding
+    <ul>
+      <li>Encode unseen brands with “UNKNOWN”</li>
+      <li>Group bottom 1% of brands and newcomers into “UNKNOWN” category</li>
+      <li>Problem: this treats all newcomers the same as unpopular brands on the platform</li>
+    </ul>
+  </li>
+  <li>Represent each category with its attribute:
+    <ul>
+      <li>To represent a brand, use features: yearly revenue, company size, etc..</li>
+    </ul>
+  </li>
+  <li>Hashing trick
+    <ul>
+      <li>Hashing – use a hash function to hash categories to different indexes</li>
+    </ul>
+    <ul>
+      <li>Example: hash(“Nike”) = 0, hash(“Adidas”) = 27, etc…
+      - Benefits: you can choose how large the hash space is, memory efficient, useful for continual learning,
+      - Drawbacks: two categories being hashed to the same index.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Hashing trick is widely used in industry and in machine learning frameworks and is useful in practice for continual learning in production.</p>
+
+<p><br /></p>
+<h2 id="feature-crossing">Feature crossing</h2>
+<ul>
+  <li>Helps models learn non-linear relationships between variables,</li>
+  <li>Warning: feature crossing can blow up your feature space.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="positional-embeddings">Positional embeddings</h2>
+<p>See <a href="/Revision/transformers_positional_encoding.html">Positional embeddings in Transformers</a>.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329, lecture 4</a>,</li>
+</ul>
+
+  </body>
+</html>

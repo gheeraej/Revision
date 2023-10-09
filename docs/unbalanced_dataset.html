@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Unbalanced Dataset</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-machine-learning"><a href="/Revision/machine_learning.html">Back to Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>Unbalanced data is common problem in classification problem in which the proportions of data from each class are very unbalanced. One of the class (majority class) is over represented and/or one the class (minority class) is under represented.</p>
+
+<p>In can occurs in binary classification or multiclass classification.</p>
+
+<p>Unbalanced data are vert common in the real world application of classification.</p>
+
+<p><br /></p>
+<h2 id="example">Example</h2>
+<p>On typical example is fraud detection:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/fraud.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<h1 id="resampling">Resampling</h1>
+<p>A widely adopted technique for dealing with highly unbalanced datasets is called resampling. It consists of removing samples from the majority class (under-sampling) and / or adding more examples from the minority class (over-sampling).</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/resampling.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>Despite the advantage of balancing classes, these techniques also have their weaknesses (there is no free lunch). The simplest implementation of over-sampling is to duplicate random records from the minority class, which can cause overfitting. In under-sampling, the simplest technique involves removing random records from the majority class, which can cause loss of information.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/resampling_problems.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h2 id="tomek-links-undersampling">Tomek links: Undersampling</h2>
+<h3 id="definition-1">Definition</h3>
+<p>Tomek links are pairs of very close instances, but of opposite classes. Removing the instances of the majority class of each pair increases the space between the two classes, facilitating the classification process.</p>
+
+<p><br /></p>
+<h3 id="visual-representation">Visual representation</h3>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/tomek.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h3 id="pseudo-code">Pseudo-code</h3>
+<ol>
+  <li>Compute nearest neighbors of every data point,</li>
+  <li>Select \(a\) and \(b\) if:
+    <ul>
+      <li>\(a\) nearest neighbors is \(b\),</li>
+      <li>\(b\) nearest neighbors is \(a\),</li>
+      <li>\(a\) and \(b\) are from different class,</li>
+    </ul>
+  </li>
+  <li>Delete the point \(a\) or \(b\) that belongs to the majority class.</li>
+</ol>
+
+<p><br /></p>
+<h3 id="resources">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://towardsdatascience.com/imbalanced-classification-in-python-smote-tomek-links-method-6e48dfe69bbc">This Toward Data Science blog post</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="smote-oversampling">SMOTE: Oversampling</h2>
+<h3 id="definition-2">Definition</h3>
+<p>SMOTE (Synthetic Minority Oversampling TEchnique) consists of synthesizing elements for the minority class, based on those that already exist. It works randomly picking a point from the minority class and computing the \(k\)-nearest neighbours for this point. For each chosen point, \(N\) synthetic points are added between the chosen point and its neighbours. Each synthetic point is added randomly on the line between the chosen point and one of its neighbours.</p>
+
+<p><br /></p>
+<h3 id="visual-representation-1">Visual representation</h3>
+<p>General view:</p>
+<div style="text-align: center">
+<img src="assets/images/smote1.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>Visualisation of the creation of 1 synthetic point:</p>
+<div style="text-align: center">
+<img src="assets/images/smote2.png" width="30%" height="30%" />
+</div>
+<p>\(gap\) is a random value between \(0\) and \(1\).</p>
+
+<p><br /></p>
+
+<p>Another view that combines global and specific view:</p>
+<div style="text-align: center">
+<img src="assets/images/smote3.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h3 id="pseudo-code-1">Pseudo-code</h3>
+<h4 id="synthetic-view">Synthetic view</h4>
+<ol>
+  <li>Choose random data from the minority class,</li>
+  <li>Calculate the Euclidean distance between the random data and its k nearest neighbors,</li>
+  <li>Multiply the difference with a random number between 0 and 1, then add the result to the minority class as a synthetic sample,</li>
+  <li>Repeat the procedure until the desired proportion of minority class is met.</li>
+</ol>
+
+<h4 id="detailed-code">Detailed code</h4>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/smote_pc.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h3 id="resources-1">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://arxiv.org/pdf/1106.1813.pdf">SMOTE: Synthetic Minority Over-sampling Technique by NV Chawla et al.</a>,</li>
+  <li><a href="https://towardsdatascience.com/imbalanced-classification-in-python-smote-tomek-links-method-6e48dfe69bbc">This Toward Data Science blog post</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="algorithm-level-methods">Algorithm level methods</h1>
+<p>The idea of algorithm level methods is that training samples we care about should contribute more to the loss.</p>
+
+<p><br /></p>
+<h2 id="cost-sensitive-learning">Cost-sensitive learning</h2>
+<p>Back in 2001, based on the insight that misclassification of different classes incur different cost, Elkan proposed cost-sensitive learning where the individual loss function is modified to take into account this varying cost.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/cost_sensitive.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="class-balance-loss">Class-balance loss</h2>
+<p>Class-balance loss gives more weight to rare classes.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/class_unbalanced.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="focal-loss">Focal Loss</h2>
+<p>Focal loss gives more weights to difficult sample.
+See <a href="/Revision/loss_functions.html#focal-loss">Focal loss</a> in the machine learning losses page.</p>
+
+<p><br /></p>
+<h1 id="resources-2">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1">This Kaggle post</a>,</li>
+  <li><a href="https://towardsdatascience.com/imbalanced-classification-in-python-smote-tomek-links-method-6e48dfe69bbc">This Toward Data Science blog post</a>,</li>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329, lecture 4</a>.</li>
+</ul>
+
+  </body>
+</html>

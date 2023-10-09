@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Deep Learning - Initialisation</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-deep-learning"><a href="/Revision/deep_learning.html">Back to Deep Learning</a></h2>
+
+<p><br /></p>
+<h1 id="initialisation">Initialisation</h1>
+<p>The weights of a neural network are initialized to given values.
+A coherent initialisation is mandatory to obtain good gradient flows and convergence of the network.</p>
+
+<p>On the contrary bad initialisation leads to exploding or vanishing gradient.</p>
+
+<p>In the following parts, \(n_l\) is the number of neurons of layer \(l\).</p>
+
+<p><br /></p>
+<h2 id="lecun-initialisation">LeCun initialisation</h2>
+<p>LeCun initilization was the first to deal with normality of layers’ weights and gradient flow.
+Their exist two different types of LeCun initialisation, uniform and normal.</p>
+
+<h5 id="uniform">Uniform</h5>
+
+\[W^l \sim \mathcal{U} \left[-\frac{\sqrt{3}}{\sqrt{n_l}}, \frac{\sqrt{3}}{\sqrt{n_l}}\right]\]
+
+<h5 id="normal">Normal</h5>
+
+\[W^l \sim \mathcal{N}\left(0, \frac{1}{n^l}\right)\]
+
+<p><br /></p>
+<h2 id="xavier-or-glorot-initialisation">Xavier (or Glorot) initialisation</h2>
+<p><a href="http://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf">Xavier initialisation</a> initialised the weights of the network in order to obtain standard normal value after getting the matrix product \(W X\) and a \(\tanh\) activation function. The initialisation depends on the number of neurons in the preceding layer and the current layer.</p>
+
+<p>Their exist two different types of Xavier initialisation, uniform and normal.</p>
+
+<h5 id="uniform-1">Uniform</h5>
+
+\[W^l \sim \mathcal{U} \left[-\frac{\sqrt{6}}{\sqrt{n_l + n_{l+1}}}, \frac{\sqrt{6}}{\sqrt{n_l + n_{l+1}}}\right]\]
+
+<h5 id="normal-1">Normal</h5>
+
+\[W^l \sim \mathcal{N}\left(0, \frac{2}{n^l + n^{l+1}}\right)\]
+
+<h2 id="he-initialisation">He initialisation</h2>
+<p><a href="https://arxiv.org/pdf/1502.01852.pdf">He initialisation</a> is a new (but simple and very similar to LeCun intialization) way of initializing weights.</p>
+
+<p>It has been noticed that Xavier does not work very well with ReLU initialization (its variance of unit 1 is proved for \(\tanh\) activation function). He initialisation is another method meant to work better with ReLU activation function.</p>
+
+<h5 id="uniform-2">Uniform</h5>
+
+\[W^l \sim \mathcal{U}\left[-\frac{\sqrt{6}}{\sqrt{n_l}}, \frac{\sqrt{6}}{\sqrt{n_l}}\right]\]
+
+<h5 id="normal-2">Normal</h5>
+
+\[W^l \sim \mathcal{N}\left(0, \frac{2}{n^l}\right)\]
+
+<p><br /></p>
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://www.deeplearning.ai/ai-notes/initialization/">DeepLearning.ai</a> with a proof on the variance of Xavier initialisation,</li>
+  <li><a href="https://wandb.ai/sauravmaheshkar/initialization/reports/A-Gentle-Introduction-To-Weight-Initialization-for-Neural-Networks--Vmlldzo2ODExMTg">wandb.ai</a></li>
+  <li><a href="https://pytorch.org/docs/master/nn.init.html">Pytorch</a>,</li>
+  <li><a href="https://www.tensorflow.org/api_docs/python/tf/keras/initializers">Tensorflow</a>.</li>
+</ul>
+
+  </body>
+</html>

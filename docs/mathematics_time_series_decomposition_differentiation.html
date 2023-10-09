@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mathematics - Time Series - Decomposition and Differentiation</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-time-series"><a href="/Revision/mathematics_time_series.html">Back to Time series</a></h2>
+
+<p><br /></p>
+<h1 id="decomposition">Decomposition</h1>
+<p>A non stationary process can be split in different part: a trend, a seasonality and residuals that will likely be stationnary.</p>
+
+<p><br /></p>
+<h2 id="trend">Trend</h2>
+<p>The trend represent the global evolution of the serie.</p>
+
+<p>The trend can be estimated rr we can get rid of this trend by differentiating the serie.</p>
+
+<p>Suppose the process \(X_t\) is composed of a deterministic trend \(m_t\) and a random process (white noise) \(\varepsilon_t\).</p>
+
+<p><br /></p>
+<h3 id="parametric-estimation">Parametric estimation</h3>
+<p>For the parametric estimation we assume that the trend \(m_t\) has a linear form: \(m_t=a+bt\).</p>
+
+<p>We estimate \(\hat{a}\) and \(\hat{b}\) using the least squares:</p>
+
+\[\{\hat{a}, \hat{b}\} = \min_{\{a, b\}} \sum_{t=0}^T(x_t - a - bt)^2\]
+
+<p><br />
+The solutions are:</p>
+
+\[\begin{cases}
+  \hat{a} = \frac{6}{T(T-1)} \left( - \sum_{t=1}^{T} tx_t + \frac{2T + 1}{3} T \bar{x}\right)\\
+  \hat{b} = \frac{12}{T(T^2-1)} \left( \sum_{t=1}^{T} tx_t - \frac{T + 1}{2} T \bar{x} \right)
+\end{cases}\]
+
+<p><br /></p>
+<h3 id="non-parametric-estimation-moving-average">Non parametric estimation: moving average</h3>
+<p>The trend can be estimated using a moving average of a given window size for example \(2h\): \([t-h; t+h]\).</p>
+
+\[\bar{m}_t = \frac{1}{2h+1} \sum_{s=-h}^{h}x_{t+s}\]
+
+<p><br /></p>
+<h2 id="seasonality">Seasonality</h2>
+<p>The seasonality is a repetition of pattern at a given interval.</p>
+
+<p>The seasonality correction factor can be estimated as in the Holt-Winters method with seasonality.
+Or we can get rid of this seasonnality by differentiating the serie.</p>
+
+<p><br /></p>
+<h1 id="differentiation">Differentiation</h1>
+<p>We can get rid of trend and seasonality using differentiation. Let define the operator \(\Delta_h\) as:</p>
+
+\[\Delta_h X_t = X_t - X_{t-h}\]
+
+<p>Let also define the operator \(\Delta_h^k\) as \(k\) repetition of the operator \(\Delta_h\) on the serie.
+\(\Delta_h\) is \(\Delta_h^1\).</p>
+
+<p>The operator \(\Delta_h^k\) is used to suppress polynomial trend of order \(k\).</p>
+
+<p><br /></p>
+<h2 id="proposition">Proposition</h2>
+<p>Let \(X_t\) be a process with a trend and a seasonality:</p>
+
+\[X_t = m_t +  s_t + \varepsilon_t\]
+
+<p>Where:</p>
+<ul>
+  <li>\(m_t\) is the linear trend,</li>
+  <li>\(s_t\) is the seasonality with period \(h\),</li>
+  <li>\(\varepsilon_t\) is the a white noise.</li>
+</ul>
+
+<p>Then:</p>
+
+\[\Delta_h X_t = X_t - X_{t-h} = (m_t - m_{t-h}) +  (\varepsilon_t - \varepsilon_{t-h})\]
+
+<p>If \(m_t\) has a linear trend, hence \(m_t - m_{t-h}\) does not depend on \(t\) and hence \(\Delta_h X_t\) is a stationary process.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://eric.univ-lyon2.fr/~jjacques/Download/Cours/ST-Cours.pdf">Course on time series by Julien Jacques (in french)</a>.</li>
+</ul>
+
+  </body>
+</html>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - Continual Learning</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<ul>
+  <li>Continual learning: continually adapt models to changing data distributions,</li>
+  <li>Set up infrastructure such that models can continuously learn from new data in production,</li>
+  <li>Stateful training.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="continual-learning-use-cases">Continual learning use cases</h1>
+<ul>
+  <li>Rare events:
+    <ul>
+      <li>Christmas/Black Friday/Prime Day shopping,</li>
+      <li>Total Landscaping,</li>
+    </ul>
+  </li>
+  <li>Continuous cold start (in-session adaptation):
+    <ul>
+      <li>New users,</li>
+      <li>New devices,</li>
+      <li>Users not logged in,</li>
+      <li>Users rarely logged in.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p>Continual Learning is good for:</p>
+<ul>
+  <li>Natural labels: e.g. user, click -&gt; good prediction,</li>
+  <li>Short feedback loops</li>
+  <li>Examples:
+    <ul>
+      <li>RecSys,</li>
+      <li>Ranking,</li>
+      <li>Ads CTR prediction,</li>
+      <li>eDiscovery.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h1 id="how-frequently-should-a-model-be-updated">How frequently should a model be updated?</h1>
+<ul>
+  <li>Very few companies actually update models with each incoming sample:
+    <ul>
+      <li>Catastrophic forgetting,</li>
+      <li>Can get unnecessarily expensive,</li>
+    </ul>
+  </li>
+  <li>Update models with micro-batches.</li>
+</ul>
+
+<p>How much model’s performance changes if switch from retraining monthly to weekly to daily to hourly?
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/daily_retraining.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<h1 id="evaluating-schedule">Evaluating schedule</h1>
+<ul>
+  <li>Evaluated after a certain period of time:
+    <ul>
+      <li>Offline evaluation (sanity check),</li>
+      <li>Online evaluation: canary analysis, A/B testing, bandits.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h2 id="online-evaluation">Online evaluation</h2>
+<h3 id="canary-testing">Canary Testing</h3>
+<p>New model alongside existing system.</p>
+
+<ul>
+  <li>Some traffic is routed to new model,</li>
+  <li>Slowly increase the traffic to new model.</li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/canary_testing.png" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+<h3 id="ab-testing">A/B Testing</h3>
+<p>See <a href="/Revision/ab_testing.html">A/B testing</a>.</p>
+
+<p><br /></p>
+
+<p>New model alongside existing system.</p>
+
+<ul>
+  <li>A percentage of traffic is routed to new model based on routing rules,</li>
+  <li>Control target audience &amp; monitor any statistically significant differences in user behavior,</li>
+  <li>Can have more than 2 versions.</li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ab_testing.png" width="25%" height="25%" />
+</div>
+
+<p><br /></p>
+<h3 id="interleaved-experiments">Interleaved Experiments</h3>
+<p>Especially useful for ranking/recsys.</p>
+
+<ul>
+  <li>Take recommendations from both model A &amp; B,</li>
+  <li>Mix them together and show them to users,</li>
+  <li>See which recommendations are clicked on.</li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/interleaved_experiments1.png" width="20%" height="20%" />
+</div>
+
+<p><br />
+Example with Netflix:</p>
+<div style="text-align: center">
+<img src="assets/images/interleaved_experiments2.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h3 id="shadow-testing">Shadow Testing</h3>
+<p>New model in parallel with existing system.</p>
+
+<ul>
+  <li>New model’s predictions are logged, but not show to users</li>
+  <li>Switch to new model when results are satisfactory</li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/shadow_testing.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329, lecture 11</a>.</li>
+</ul>
+
+  </body>
+</html>

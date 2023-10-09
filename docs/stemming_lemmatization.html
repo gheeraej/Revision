@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Tokenizers</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-nlp"><a href="/Revision/deep_learning_nlp.html">Back to NLP</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>Stemming and Lemmatization are methods used to extract the root of a word.</p>
+
+<p><br /></p>
+<h1 id="stemming">Stemming</h1>
+<p>Stemming represents an ensemble of rule based methods based on suffix and prefix used to extract the root of a word.</p>
+
+<p>Stemming works by cutting off the end or the beginning of the word, taking into account a list of common prefixes and suffixes that can be found in an inflected word. This indiscriminate cutting can be successful in some occasions, but not always, and that is why we affirm that this approach presents some limitations.</p>
+
+<p>Here are an example of how stemming works:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/stem.png" width="30%" height="30%" />
+</div>
+<p>Using this stemming method, the words ‘studying’ and ‘studies’ are not mapped to the same root word.</p>
+
+<p><br /></p>
+<h1 id="lemmatization">Lemmatization</h1>
+<p>Lemmatization is based on a dictionary of relation among words and their roots. It thus can take into consideration the morphological analysis of the words.</p>
+
+<p>Here are an example of how lemmatization works:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/lem.png" width="40%" height="40%" />
+</div>
+<p>Using this a lemmatization dictionary, the words ‘studying’ and ‘studies’ are mapped to the word ‘study’.</p>
+
+<p><br /></p>
+<h1 id="difference-with-subwords-tokenizers">Difference with subwords tokenizers</h1>
+<p>A subword tokenizer like word-piece helps in multiple ways, and should be better than lemmatizer or stemming due to multiple reasons:</p>
+
+<ul>
+  <li>If you have the words ‘playful’, ‘playing’, ‘played’, to be lemmatized to ‘play’, it can lose some information such as playing is present-tense and played is past-tense, which doesn’t happen in word-piece tokenization.</li>
+  <li>Word piece tokens cover all the word, even the words that do not occur in the dictionary. It splits the words and there will be word-piece tokens, that way, you shall have embeddings for the split word-pieces, unlike removing the words or replacing with ‘unknown’ token.</li>
+</ul>
+
+<p>Usage of word-piece tokenization instead of tokenizer + lemmatizer is merely a design choice, word-piece tokenization should perform well. But you may have to take into count because word-piece tokenization increases the number of tokens, which is not the case in lemmatization.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://blog.bitext.com/what-is-the-difference-between-stemming-and-lemmatization/">This blog page on lemmatization and stemming</a>,</li>
+  <li><a href="https://nlp.stanford.edu/IR-book/html/htmledition/stemming-and-lemmatization-1.html">This Stanford page on lemmatization and stemming</a>,</li>
+  <li><a href="https://medium.com/geekculture/introduction-to-stemming-and-lemmatization-nlp-3b7617d84e65">This Medium blog page on lemmatization and stemming</a></li>
+  <li><a href="https://stackoverflow.com/questions/57057992/wordpiece-tokenization-versus-conventional-lemmatization">This stackoverflow page on difference between lemmatization and WordPiece</a></li>
+</ul>
+
+  </body>
+</html>

@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>RNN and LSTM</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-nlp"><a href="/Revision/deep_learning_nlp.html">Back to NLP</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>RNN for Recurent Neural Network and LSTM for Long Short Term Memory are sequential neural networks used mainly in NLP.</p>
+
+<p>The sequential structure of these models takes sequential data as input and maintain an hidden layer \(h\) which is sequentially updated by each element of the input sequence and which contains all the information of the precedent element of the sequence.</p>
+
+<p>The hidden layer \(h\) is in fact a sequence of hidden layers: \(h = (h_1, \ldots, h_n)\).</p>
+
+<p><br /></p>
+<h1 id="recurent-neural-network">Recurent Neural Network</h1>
+<p>Here is the architecture of an RNN:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/rnn.png" width="50%" height="50%" />
+</div>
+<p>The left part of the graph is the synthetic view of the model and the right part is the unfold view where we can see every updates of the sequence.</p>
+
+<p>Each input data \(x_t\) updates the input layer \(h_{t-1}\) to \(h_t\) and generate an output \(o_t\) (for translation for example). For task with a unique output such as sentiment analysis, only the last output \(o_n\) is used.</p>
+
+<p><br /></p>
+<h2 id="formula">Formula</h2>
+<p>The formula that link \(h_{t-1}\) and \(x_t\) to \(h_t\) and \(o_t\) is:</p>
+
+\[\begin{eqnarray}
+  h_t &amp;&amp;= \sigma_h (U_h x_t + W_h h_{t-1} + b_h)\\
+  o_t &amp;&amp;= \sigma_o (W_o h_t + b_o)
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\sigma_h\) is the activation for \(h\) (generally \(tanh\)),</li>
+  <li>\(\sigma_o\) is the activation for output \(o\) (sigmoid or softmax),</li>
+  <li>\(U_h\) is the matrix of weights that link \(x\) to \(h\),</li>
+  <li>\(W_h\) is the matrix of weights that link \(h_{t-1}\) to \(h_t\),</li>
+  <li>\(W_o\) is the matrix of weights that link \(h\) to \(o\).</li>
+  <li>\(b_h\) is the biase for \(h\),</li>
+  <li>\(b_o\) is the biase for \(o\).</li>
+</ul>
+
+<p><br /></p>
+<h2 id="pros">Pros</h2>
+<ul>
+  <li>Can deal with texts of any lengths,</li>
+  <li>Can use information from many steps back (in theory),</li>
+  <li>Model size does not increase with longer input.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="cons">Cons</h2>
+<ul>
+  <li>Slow</li>
+  <li>In practice, difficult to access information from many steps back.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="long-short-term-memory">Long Short Term Memory</h1>
+<p>Long Short Term Memory is a special RNN that deals better with long memory (information from many steps back).</p>
+
+<p>Here is the architecture of an LSTM:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/lstm.png" width="50%" height="50%" />
+</div>
+<p>A LSTM contains different gates and units to keep or erase long term memory and to use more or less information from last input.</p>
+
+<p><br /></p>
+<h2 id="formula-1">Formula</h2>
+<p>The formula that link the different blocks of an LSTM is:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/lstm_formula.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>And here are some visual explainations:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/lstm_explained.png" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://web.stanford.edu/class/cs224n/slides/cs224n-2022-lecture05-rnnlm.pdf">CS224 course on RNN</a>,</li>
+  <li><a href="https://web.stanford.edu/class/cs224n/slides/cs224n-2022-lecture06-fancy-rnn.pdf">CS224 course on LSTM</a>,</li>
+  <li><a href="https://www.youtube.com/watch?v=UNmqTiOnRfg">Simple introduction to RNN</a>,</li>
+  <li><a href="https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/">Visualisation of sequence to sequence models with RNN and Attention</a>.</li>
+</ul>
+
+  </body>
+</html>

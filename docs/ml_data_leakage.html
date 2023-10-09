@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - Data Leakage</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>Some form of the label “leaks” into the features
+This same information is not available during inference</p>
+
+<p><br /></p>
+<h1 id="causes-of-data-leakage">Causes of Data Leakage</h1>
+<ol>
+  <li>Splitting time-correlated data randomly instead of by time,</li>
+  <li>Data processing before splitting: use the whole dataset (including valid/test) to generate global statistics/info
+    <ul>
+      <li>Solution: split your data before scaling/filling in missing values / split even before any EDA to ensure you’re blind to the test set,</li>
+    </ul>
+  </li>
+  <li>Poor handling of data duplication before splitting: test set includes data from the train set
+    <ul>
+      <li>Solution: deduplicate data before splitting, oversample after splitting,</li>
+    </ul>
+  </li>
+  <li>Group leakage: a group of examples have strongly correlated labels but are divided into different splits
+    <ul>
+      <li>Solution: understand your data and keep track of its metadata,</li>
+    </ul>
+  </li>
+  <li>Leakage from data generation &amp; collection process
+    <ul>
+      <li>Solution: data normalization + subject matter expertise.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+<h1 id="how-to-detect-data-leakage">How to detect Data Leakage?</h1>
+<ol>
+  <li>Measure correlation of a feature with labels:
+    <ul>
+      <li>A feature alone might not cause leakage, but 2 features together might,</li>
+    </ul>
+  </li>
+  <li>Feature ablation study:
+    <ul>
+      <li>If removing a feature causes the model performance to decrease significantly, figure out why,</li>
+    </ul>
+  </li>
+  <li>Monitor model performance as more features are added:
+    <ul>
+      <li>Sudden increase: either a very good feature or leakage.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329, lecture 5</a>.</li>
+</ul>
+
+  </body>
+</html>

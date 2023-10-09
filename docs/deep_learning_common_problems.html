@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Deep Learning - Common problems</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-deep-learning"><a href="/Revision/deep_learning.html">Back to Deep Learning</a></h2>
+
+<p><br /></p>
+<h1 id="vanishing-gradient">Vanishing gradient</h1>
+<p>Vanishing gradient is a problem that appears when the gradient of the neural network is too small and the parameters of the network (the weights) have very small updates. In this case the training will be stuck in an area as the updates are too slow.</p>
+
+<p><br /></p>
+<h2 id="causes-of-vanishing-gradient">Causes of Vanishing gradient</h2>
+<p>The two main causes of vanishing gradient are:</p>
+<ul>
+  <li>Activation functions that squishe large input space in a small output space,</li>
+  <li>Deep network, as the gradient are multiplied among them (if there are all \(\lt 1\) then their product converges to 0).</li>
+</ul>
+
+<p><br /></p>
+<h3 id="activation-function">Activation function</h3>
+<p>As said previously, activation functions that squishe large input space in a small output space are prone to vanishing gradient as the gardient for input data far from 0 are very close to 0:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/sigmoid_derivative.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>Hence each time the network as an activation function like sigmoid or tan, the gradient has a probability to become very small.</p>
+
+<p>For large network this probability converges to 1.</p>
+
+<p><br /></p>
+<h4 id="solutions">Solutions</h4>
+<p>The solutions are of two kinds.</p>
+
+<p><br /></p>
+<h5 id="using-non-saturated-activation-function">Using non saturated activation function</h5>
+<p>Activation function like ReLU, Leaky ReLU or ELU and its derivatives are not prone to vanishing gradient as they  do not squishe large input space in a small output space.</p>
+
+<p><br /></p>
+<h5 id="using-batch-normalisation-and-proper-initialization">Using Batch normalisation and proper initialization</h5>
+<p>A proper initialization coupled with Batch normalization is another solution when using sigmoid or tan activation function. Indeed, they will insure the output of a layer to have a distribution \(\mathcal{N}(0, 1)\) hence the derivative of sigmoid (or tan) won’t be vanished:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/sigmoid_derivative_bn.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<h3 id="deep-network">Deep network</h3>
+<p>Even with a the problem due to the activation function fix, a deep neural network can be prone to vanishing gradient due to its depth (it is also prone to exploding gradient).</p>
+
+<p>Indeed, the product of n numbers has an high probability to vanish or explode when n converge to infinity.</p>
+
+<p><br /></p>
+<h4 id="resnet">ResNet</h4>
+<p>The solution is to use residual block.</p>
+
+<p>A residual block adds the value of a layer to a layer further in the network. As the derivative of an addition will just transfer the current gradient (without multiplying it), the flow of gradient won’t vanish (or explode).</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ResBlock.png" width="30%" height="30%" />
+</div>
+<p>A residual block just add the input of a layer to its output (or to the output of a layer further).</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ResNet.png" width="50%" height="50%" />
+</div>
+<p>The black arrows represent residual block where the output of a layer is added to the output two layers further.</p>
+
+<p><br /></p>
+<h3 id="resources">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://towardsdatascience.com/the-vanishing-gradient-problem-69bf08b15484">This Toward Data Science blog post</a>,</li>
+  <li><a href="https://www.analyticsvidhya.com/blog/2021/06/the-challenge-of-vanishing-exploding-gradients-in-deep-neural-networks/">This Analytics Vidhya blog post</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Vanishing_gradient_problem">Vanishing gradient problem on Wikipedia</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="exploding-gradient">Exploding gradient</h2>
+<p>Exploding gradient is the opposite of vanishing gradient. It appears also in neural network and more probably in deep networks.</p>
+
+<p>Exploding gradient make updates to the parameters that are to important.</p>
+
+<p><br /></p>
+<h3 id="solutions-1">Solutions</h3>
+<h5 id="using-batch-normalisation-and-proper-initialization-1">Using Batch normalisation and proper initialization</h5>
+<p>Same as vanishing gradient, a proper initialization and batch normalization will insure the output of a layer to have a distribution \(\mathcal{N}(0, 1)\) and hence it will prevent the model to generate large outputs of layers and hence it prevents exploding gradient.</p>
+
+<p><br /></p>
+<h5 id="gradient-clipping">Gradient clipping</h5>
+<p>Another popular method is gradient clipping that will clip the gradient value between to chosen values.
+For example it is possible to clip the gradient between \(-1\) and \(1\). This will hence prevent exploding gradient.</p>
+
+<p><br /></p>
+<h3 id="resources-1">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://www.analyticsvidhya.com/blog/2021/06/the-challenge-of-vanishing-exploding-gradients-in-deep-neural-networks/">This Analytics Vidhya blog post</a>.</li>
+</ul>
+
+<h1 id="recipe-to-train-neural-nets">Recipe to train Neural Nets</h1>
+<p>See <a href="http://karpathy.github.io/2019/04/25/recipe/">this great post by Andrej Karpathy</a>.</p>
+
+  </body>
+</html>

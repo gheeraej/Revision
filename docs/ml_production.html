@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - Production</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="when-to-use-ml">When to use ML?</h1>
+<ul>
+  <li>The system has the capacity to learn,</li>
+  <li>Complex: the patterns are complex,</li>
+  <li>Patterns: there are patterns to learn,</li>
+  <li>Existing data: data is available, or it’s possible to collect data,</li>
+  <li>Predictions: it’s a predictive problem,</li>
+  <li>Unseen data: Unseen data shares patterns with the training data,</li>
+  <li>It’s repetitive,</li>
+  <li>The cost of wrong predictions is cheap,</li>
+  <li>It’s at scale,</li>
+  <li>The patterns are constantly changing</li>
+</ul>
+
+<p><br /></p>
+<h1 id="ml-system-needs">ML System needs</h1>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ds_hierarchy.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h1 id="machine-learning-in-research-vs-in-production">Machine learning in research vs. in production</h1>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ml_research_vs_production.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>About inference latency:</p>
+<ul>
+  <li>100ms delay can hurt conversion rates by 7% (Akamai study ‘17),</li>
+  <li>30% increase in latency costs 0.5% conversion rate (Booking.com ‘19),</li>
+  <li>53% phone users will leave a page that takes &gt;3s to load (Google ‘16).</li>
+</ul>
+
+<p><br /></p>
+<h1 id="data-difference-in-research-and-production">Data: difference in research and production</h1>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ml_data.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h1 id="requirements-for-ml-systems">Requirements for ML Systems</h1>
+<ul>
+  <li>Reliability: the system should continue to perform the correct function at the desired level of performance even in the face of adversity (hardware or software faults, and even human error),</li>
+  <li>Scalability: as the system grows (in data volume, traffic volume, or complexity), there should be reasonable ways of dealing with that growth,</li>
+  <li>Maintainability: it’s important to structure your project and set up your infrastructure in a way such that different contributors can work using tools that they are comfortable with, instead of one group of contributors forcing their tools onto other groups,</li>
+  <li>Adaptability: To adapt to changing data distributions and business requirements, the system should have some capacity for both discovering aspects for performance improvement and allowing updates without service interruption.</li>
+  <li>Iterative Process: the process looks like a cycle with a lot of back and forth between different steps.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="iterative-process">Iterative Process</h2>
+<ol>
+  <li>Project scoping</li>
+  <li>Data engineering</li>
+  <li>ML model development</li>
+  <li>Deployment</li>
+  <li>Monitoring and continual learning</li>
+  <li>Business analysis</li>
+</ol>
+
+<p><br /></p>
+<h1 id="steps">Steps</h1>
+<ul>
+  <li>Understand / Clarify requirements,</li>
+  <li>Design Architecture,</li>
+  <li>Defined needed data,</li>
+  <li>Design the model (and a baseline) as well as the metric,</li>
+  <li>Design the interface</li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329 lecture 1</a>,</li>
+</ul>
+
+  </body>
+</html>

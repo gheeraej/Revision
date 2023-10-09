@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>p-value</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-inferential-statistics"><a href="/Revision/mathematics_inferential_statistics.html">Back to Inferential statistics</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>The p-value is, in a statistical test, the probability to obtain a value at least as extreme as the one observed if the null hypotheses is correct.</p>
+
+<p>For example if the p-value of my statistical test is 0.0124, this means that the probability to get a value at least as extreme as my value is 1.24%. In this case it would mean that either we are on the edge of the null hypotheses distribution or the null hypotheses is wrong.</p>
+
+<p>On the other hand, if my p-value is 0.46, this means that following the null distribution, one half of the output variables would be more extreme than my value (more distant to the mean of the distribution) and one half would be less extreme than it (closer to the mean). In this case the null hypotheses seems to be satisfied.</p>
+
+<p>The p-value is a measure of how extreme a given value is for a given distribution.</p>
+
+<p>A low p-value means that the probability to reject H0 is high and a high p-value means that the probability to reject H0 is low.</p>
+
+<p><br /></p>
+<h1 id="formula">Formula</h1>
+<p>Let:</p>
+<ul>
+  <li>\(z\) is my test statistic,</li>
+  <li>\(X\) follows the null hypothesis distribution.</li>
+</ul>
+
+<p><br /></p>
+<h4 id="unilateral-test">Unilateral test</h4>
+<h5 id="unilateral-test-on-the-left">Unilateral test on the left</h5>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/pvalue_left.png" width="30%" height="30%" />
+</div>
+
+\[\text{p-value} = P(X \leq z)\]
+
+<p><br /></p>
+<h5 id="unilateral-test-on-the-right">Unilateral test on the right</h5>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/pvalue_right.png" width="30%" height="30%" />
+</div>
+
+\[\text{p-value} = P(X \geq z)\]
+
+<p><br /></p>
+<h4 id="bilateral-test">Bilateral test</h4>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/pvalue_bilat.png" width="30%" height="30%" />
+</div>
+
+\[\text{p-value} = P(X \leq -\vert z \vert \text{ or } X \geq \vert z \vert)\]
+
+<p><br /></p>
+
+<p>Note that it is the probability to be more extreme than my statistic on any of the side of the distribution.</p>
+
+<p><br /></p>
+<h1 id="estimation">Estimation</h1>
+<p>p-value is obtained through a statistical test.
+The test will output a statistic that is a value that we compare to the test distribution.
+To obtain the p-value from this statistic and this distribution we must apply the inverse cdf function on the statistic.</p>
+
+\[p-value={cdf}^{-1}(statistic)\]
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/P-value">Wikipedia page of p-value</a></li>
+</ul>
+
+  </body>
+</html>

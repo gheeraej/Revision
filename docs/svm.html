@@ -1,0 +1,306 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SVM</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-machine-learning"><a href="/Revision/machine_learning.html">Back to Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>SVM is a classification algorithm.
+The goal of SVM is (if inputs are perfectly separable) to maximize the distance between any points and the separation plane.</p>
+
+<p>One of the main advantage of SVM is that it can compute this separation plan in a projection space (called the feature space) but without having to actually project the inputs in this feature space.</p>
+
+<p>It means that it can operate in large feature spaces (even infinite - for example with a gaussian kernel) but with a low computation coast. This is possible if the inner product of element of the feature space can be simplified and does not require to compute the projection of the element.
+From a mathematical point of view it means that the result of \(K(x,y)=\langle \phi(x), \phi(z) \rangle\) does not include \(\phi(x)\) or \(\phi(z)\).</p>
+
+<p>The trick behind this is known as the <strong>kernel trick</strong>. If the kernel matrix associated with the Kernel is symmetric positive semi-definite then it is a valid Kernel (ie the kernel trick can be used). This is the Mercer theorem.</p>
+
+<p><br /></p>
+<h1 id="notation">Notation</h1>
+<p>\(x_i\) represents the \(i\)-th individuals.</p>
+
+<p><br /></p>
+<h1 id="computation-detail">Computation detail</h1>
+<p>Let \(wx+b=0\) be the separation plan. It is parametrized by \(w\) and \(b\).</p>
+
+<p><br /></p>
+<h2 id="functional-margin">Functional margin</h2>
+<p>The functional margin (the distance to the decision plan) for an \(x_i\) is :</p>
+
+\[\hat{\gamma_i}=y_i(w^t x_i+b)\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\hat{\gamma_i}\) is the distance of point \(x_i\) to the separation plan,</li>
+  <li>\(y_i\) is the class associated with individual \(x_i\).</li>
+</ul>
+
+<p><br /></p>
+
+<p>Note that this margin can be made arbitrarily large by scaling \(w\) and \(b\) by a scalar (however the separation plan won’t be modified).
+We look for the smallest margin among all \(x_i\) (ie the distance of the \(x_i\) closest to the plan):</p>
+
+<p><br /></p>
+
+\[\hat{\gamma} = \min\widehat{\gamma_i}\]
+
+<p><br /></p>
+<h2 id="geometrical-margin">Geometrical margin</h2>
+<p>The geometric margin follows the same idea from the functional margin but from a geometrical point of view. Also this margin is invariant to a scaling of \(w\) and \(b\). To understand the geometric margin, first note that \(w\) is orthogonal to the separation plan (check the separation plan for \(b=0\) and \(w=(1, -1)\) to convince you and remember that if \(\langle x, y \rangle=0\) then \(x\) and \(y\) are orthogonal).</p>
+
+<p>For any input \(x_i\), let’s define its distance to the plan as \(\gamma_i\). Note that \(\frac{w} {\Vert w \Vert}\) is a unit length vector orthogonal to the separation plan. Then the point of projection of \(x_i\) to the separation plan is \(x_i - \gamma_i \frac{w} {\Vert w \Vert}\) and as this point belongs to the separation plan:</p>
+
+\[w(x_i-\gamma_i \frac{w} {\Vert w \Vert})+b=0\]
+
+\[\gamma_i=\left(\frac{w}{\Vert w \Vert}\right)^tx_i+\frac{b}{\Vert w \Vert}\]
+
+<p>This distance can be negative if \(x_i\) is behind the separation plan. To keep it positive just multiply by \(y_i\):</p>
+
+\[\gamma_i=y_i\left[\left(\frac{w}{\Vert w \Vert}\right)^tx_i+\frac{b}{\Vert w \Vert}\right]\]
+
+<p>Let \(\gamma=\min{\gamma_i}\) be the minimum of these distances.</p>
+
+<p><br /></p>
+
+<p>Note that if \(\Vert w \Vert=1\) the geometrical margin and the functional margin are equal. The geometrical margin is invariant to a scaling of \(w\) and \(b\) but the functional margin is not.</p>
+
+<p><br /></p>
+<h2 id="optimal-margin">Optimal margin</h2>
+<p>We want to find the parameters of the separation plan (ie \(w\) and \(b\)) that maximise \(\gamma\) (or equivalently that maximise \(\hat{\gamma}\) but subject to some constraints on the norm as scaling \(w\) and \(b\) can make \(\hat{\gamma}\) arbitrarily large).</p>
+
+<p>Starting with the geometrical margin we look for:</p>
+
+\[\begin{eqnarray}
+  \max_{w,b} \; &amp;&amp; \gamma \\
+  st \; &amp;&amp; y_i(w^t x_i + b) \geq \gamma
+\end{eqnarray}\]
+
+<p>It is equivalent to:</p>
+
+\[\begin{eqnarray}
+  \max_{w,b} \; &amp;&amp; \widehat{\gamma} \\
+  st \; &amp;&amp; y_i(w^t x_i + b) \geq \widehat{\gamma} \\
+  &amp;&amp; \Vert w \Vert=1
+\end{eqnarray}\]
+
+<p>Which is equivalent to:</p>
+
+\[\begin{eqnarray}
+\max_{w,b} \; &amp;&amp; \frac{\widehat{\gamma}}{\Vert w \Vert} \\
+st  \; &amp;&amp; y_i(w^t x_i + b) \geq \widehat{\gamma}
+\end{eqnarray}\]
+
+<p><br /></p>
+<h3 id="using-the-scaling-invariance">Using the scaling invariance</h3>
+<p>We will now use the scaling invariance at our advantage. Recall that we can scale \(w\) and \(b\) arbitrarily without changing anything. In particular we can choose a scaling factor \(\lambda\) for \(w\) and \(b\) in order to make \(\hat{\gamma}\) equal to \(1\). In this case we want all \(x_i\) to be at a distance greater than 1 with respect to the separation plan. Another way of saying this is to remark that our problem is over parametrized has \(\hat{\gamma}\) totally depends on \(w\) and \(b\).</p>
+
+<p><br /></p>
+
+<p>Let’s thus set \(\hat{\gamma}=1\) (ie let’s choose values \(w\) for \(b\) such that \(\hat{\gamma}=1\)) :</p>
+
+\[\begin{eqnarray}
+\max_{w,b} \; &amp;&amp; \frac{1}{\Vert w \Vert} \\
+st \; &amp;&amp; y_i(w^t x_i + b) \geq 1
+\end{eqnarray}\]
+
+<p>This maximization problem can be transform in a minimization problem:</p>
+
+\[\begin{eqnarray}
+\min_{w,b}\; &amp;&amp; \frac{1}{2}\Vert w \Vert^2 \\
+st \; &amp;&amp; y_i(w^t x_i + b) \geq 1
+\end{eqnarray}\]
+
+<p>This minimization problem can be solved using, for example, QP solver. <br />
+We can also use the Lagrangian (and more specifically take advantage of the Lagrangian duality) to solve it.</p>
+
+<p><br /></p>
+<h2 id="lagrange-duality">Lagrange Duality</h2>
+<p>As said previously the above optimization problem can be solved using Lagrangian.</p>
+
+<p>Let define its Lagrangian as:</p>
+
+\[L(w,b,\alpha)=\frac{1}{2}\Vert w \Vert^2-\sum\alpha_i\left[y_i\left(w^t x_i + b\right)-1\right]\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\alpha_i \geq 0\).</li>
+</ul>
+
+<p>We can solve this using two different formulation.</p>
+
+<p><br /></p>
+<h3 id="primal">Primal</h3>
+<p>The primal finds the optimal point by:</p>
+<ol>
+  <li>Taking the \(\max\) with respect to \(\alpha_i\),</li>
+  <li>Taking the \(\min\) with respect to \(w\) and \(b\).</li>
+</ol>
+
+<p>So the primal takes the \(\min\) with respect to \(w\) and \(b\) of the \(\max\) with respect to \(\alpha_i\).</p>
+
+<p>of the  and the dual takes the max wrt to \(\alpha_i\) of the min wrt w and b :</p>
+
+<p><br /></p>
+<h3 id="dual">Dual</h3>
+<p>The dual finds the optimal point by:</p>
+<ol>
+  <li>Taking the \(\min\) with respect to \(w\) and \(b\),</li>
+  <li>Taking the \(\max\) with respect to \(\alpha_i\).</li>
+</ol>
+
+<p>So the dual takes \(\max\) with respect to \(\alpha_i\) of the \(\min\) with respect to \(w\) and \(b\).</p>
+
+<p><br /></p>
+<h3 id="link-between-primal-and-dual">Link between Primal and Dual</h3>
+<p>The link between the Primal and the Dual is:</p>
+
+\[d = \max \min L(w, b, \alpha) \leq \min \max L(w, b, \alpha) = p\]
+
+<p>Under the <a href="https://en.wikipedia.org/wiki/Karush–Kuhn–Tucker_conditions#Necessary_conditions">KKT constrains</a>, the dual and the primal are equal.</p>
+
+<p><br /></p>
+<h3 id="back-to-svm">Back to SVM</h3>
+<p>In the case of our SVM problem, the KKT constrains are respected and then using the primal or the dual leads to an equivalent solution.</p>
+
+<p>We will use the dual to find our optimal parameters as it leads to a convenient formulation (that allows to use the kernel trick).</p>
+
+<p><br /></p>
+
+<p>Recall our optimization problem:</p>
+
+\[L(w,b,\alpha)=\frac{1}{2}\Vert w \Vert^2-\sum\alpha_i\left[y_i\left(w^t x_i + b\right)-1\right]\]
+
+<p>First steps is to compute the \(\min\) by setting the derivatives with respect to \(w\) equal to 0.</p>
+
+\[w=\sum\alpha_i y_i x_i\]
+
+<p>Setting the derivative with respect to b equal to 0 lead to:</p>
+
+\[\sum\alpha_i y_i = 0\]
+
+<p>We can reinject it in the loss \(L\):</p>
+
+\[L(w,b,\alpha)=\sum \alpha_i - \frac{1}{2} \sum y_i y_j \alpha_i \alpha_j \langle x_i, x_j \rangle\]
+
+<p>Finally the dual form to find \(\alpha_i\) is :</p>
+
+\[\begin{eqnarray}
+\max_{\alpha} \; W(\alpha) &amp;&amp;= \sum \alpha_i - \frac{1}{2} \sum y_i y_j \alpha_i \alpha_j \langle x_i, x_j \rangle \\
+&amp;&amp; st \; \alpha_i \geq 0 \\
+&amp;&amp; st \; \sum \alpha_i y_i = 0
+\end{eqnarray}\]
+
+<p><br /></p>
+
+<p>We can use a SMO algorithm (see CS229 - 3 SVM - page 20) to find the \(\alpha_i\). Once the \(\alpha_i\) are found we can easily compute \(w\) using the previous equation and \(b\) using the primal (see <a href="https://stats.stackexchange.com/questions/451868/calculating-the-value-of-b-in-an-svm">this link Stack StackExchange question</a>).</p>
+
+<h4 id="inference-function">Inference function</h4>
+<p>Recalling that:</p>
+
+\[w=\sum\alpha_i y_i x_i\]
+
+<p>The inference function is:</p>
+
+\[\begin{eqnarray}
+w^t x + b &amp;&amp;= \left(\sum\alpha_i y_i x_i\right)^t x + b \\
+&amp;&amp;= \sum \alpha_i y_i \langle x_i, x \rangle + b
+\end{eqnarray}\]
+
+<p>Hence, if we’ve found the \(\alpha_i\)’s, in order to make a prediction, we have to calculate a quantity that depends only on the inner product between \(x\) and the points in the training set.</p>
+
+<p>If we are in the projected case we have:</p>
+
+\[w^t x + b = \sum \alpha_i y_i \langle \phi(x_i), \phi(x) \rangle + b\]
+
+<p>Hence if we are able to find a Kernel associated with the projection function \(\phi\), we will be able to use complex projection functions \(\phi\) without having to compute the projection of the points.</p>
+
+<p><br /></p>
+<h3 id="kernel">Kernel</h3>
+<h4 id="mercers-theorem">Mercer’s theorem</h4>
+<p>Let \(K\) be a kernel. If \(K\) is symmetric positive ie:</p>
+
+\[K(x,y)=K(y,x)\]
+
+<p>and:</p>
+
+\[\sum_i \sum_j \alpha_i \alpha_j K(x_i, x_j) \leq 0\]
+
+<p>(or if \(K^{(mat)}\) is the matrix where \(K_{i,j}^{(mat)} = K(x_i, x_j)\) the \(\left(K^{(mat)}\right)^t=K^{(mat)}\) and \(vK^{(mat)}v \leq 0\)).</p>
+
+<p>Then \(K\) can represent the scalar product of a projection function \(\phi\) without having to compute the projection of the element:</p>
+
+\[K(x,y)=f(x) \cdot f(y)\]
+
+<p>Where:</p>
+<ul>
+  <li>\(f\) is a function is a function mapping to a lower dimension than the projection matrix \(\phi\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="example-of-kernel-usable-with-kernel-trick">Example of Kernel usable with kernel trick</h4>
+<p>Let’s define a kernel as follow:</p>
+
+\[\begin{eqnarray}
+K(x,z) &amp;&amp;= (x^T z)^2 \\
+&amp;&amp;= \left(\sum x_i z_i\right)\left(\sum x_j z_j\right)\\
+&amp;&amp;= \sum\sum x_i x_j z_i z_j\\
+&amp;&amp;= \sum_{i,j}(x_i x_j) (z_i z_j)
+\end{eqnarray}\]
+
+<p>We can deduct that the projection function associated with this kernel is \(\phi_K(x)=\sum_{i,j}x_i x_j\).</p>
+
+<p>Computation time to compute \(\phi_K(x)\) is quadratic (\(O(N)\)) but for the inner product it is linear (check with n=3).</p>
+
+<p><br /></p>
+<h4 id="link-with-svm">Link with SVM</h4>
+<p>The optimization function and the inference function implied the scalar product of a projection function \(\phi\) and then then kernel trick may be applied in order to not compute the projection of the points.</p>
+
+<p><br /></p>
+<h1 id="svm-with-misclassification">SVM with misclassification</h1>
+<p>In all the previous part, the assumption that no input was misclassified was done.
+However in practice even in large feature spaces, some inputs remain misclassified.</p>
+
+<p>Hence the loss function is a litte bit different.</p>
+
+<p><br /></p>
+<h3 id="misclassification-loss-function">Misclassification Loss function</h3>
+<p>Loss function to take into account misclassified input in SVM is the <a href="/Revision/loss_functions.html#hing_loss">Hinge Loss</a>:</p>
+
+\[L(w, b; (X, Y))=\max(0,1 - (w^t x + b) \cdot Y)\]
+
+<p>Over the whole dataset it is:</p>
+
+\[l(w, b) = \sum_{j=1}^{n_{pop}} \max(0, 1 - h_\beta(X^{(j)}) \cdot Y^{(j)})\]
+
+<p>Where \(w, b\) represents the parameters of the SVM model.</p>
+
+<p><br /></p>
+<h3 id="total-loss-function-with-misclassification">Total Loss function with misclassification</h3>
+<p>Hence the total loss is:</p>
+
+\[l(h_\beta) = \frac{1}{2} \Vert w \Vert_2^2 + \sum_{j=1}^{n_{pop}} \max(0, 1 - (w^t X^{(j)} + b) \cdot Y^{(j)})\]
+
+<p><br /></p>
+<h2 id="references">References</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://cs229.stanford.edu/syllabus.html">Kernel and SVM from CS229</a>,</li>
+  <li><a href="https://towardsdatascience.com/optimization-loss-function-under-the-hood-part-iii-5dff33fa015d">This Toward Data Science blog post</a>.</li>
+</ul>
+
+  </body>
+</html>

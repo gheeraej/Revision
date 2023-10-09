@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - Distributed Training</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="split-the-data-across-devices">Split the data across devices</h1>
+<p>How to split data across different devices durint training?</p>
+<div style="text-align: center">
+<img src="assets/images/data_parallalized1.png" width="40%" height="40%" />
+</div>
+
+<p><br />
+First is to replicate the model on the different devices:</p>
+<div style="text-align: center">
+<img src="assets/images/data_parallalized2.png" width="30%" height="30%" />
+</div>
+
+<p><br />
+Second the forward pass is done in parallel on the different devices with different batch of data:</p>
+<div style="text-align: center">
+<img src="assets/images/data_parallalized3.png" width="30%" height="30%" />
+</div>
+
+<p><br />
+Third the gradient are backpropagated on each device (but the parameters are not updated):</p>
+<div style="text-align: center">
+<img src="assets/images/data_parallalized4.png" width="30%" height="30%" />
+</div>
+
+<p><br />
+Fourth the gradient are averaged across every devices:</p>
+<div style="text-align: center">
+<img src="assets/images/data_parallalized5.png" width="30%" height="30%" />
+</div>
+<p>AllReduce is an operation that reduces the target arrays in all processes to a single array and returns the resultant array to all processes.</p>
+
+<p><br />
+Fifth all replicated model on every devices are updates with the same gradients:</p>
+<div style="text-align: center">
+<img src="assets/images/data_parallalized6.png" width="30%" height="30%" />
+</div>
+
+<p><br />
+Finally the parameters stay synchronized:</p>
+<div style="text-align: center">
+<img src="assets/images/data_parallalized7.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h1 id="split-the-model-across-devices">Split the model across devices</h1>
+<p>How to split the model across different devices during training:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/model_parallalized1.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>For example, we have 10 GPUs and we want to train a simple ResNet50 model. We could assign the first 5 layers to GPU \(1\), the second 5 layers to GPU \(2\), and so on, and the last 5 layers to GPU \(10\). During the training, in each iteration, the forward propagation has to be done in GPU \(1\) first. GPU \(2\) is waiting for the output from GPU \(#1\), GPU \(3\) is waiting for the output from GPU \(2\), etc. Once the forward propagation is done. We calculate the gradients for the last layers which reside in GPU \(#10\) and update the model parameters for those layers in GPU \(10\). Then the gradients back propagate to the previous layers in GPU \(9\), etc. Each GPU/node is like a compartment in the factory production line, it waits for the products from its previous compartment and sends its own products to the next compartment.
+True model parallelism means your model is split in such a way that each part can be evaluated concurrently, i.e. the order does NOT matter.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/model_parallalized2.png" width="50%" height="50%" />
+</div>
+<p>Pipeline parallelism splits the input minibatch into multiple microbatches and pipelines the execution of these microbatches across multiple GPUs</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/model_parallalized3.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>Micro-batch 0 first passes to device 0 and compute by forward function at device 0.</p>
+
+<p>Device 1 receives micro-batch 0 from device 0, computes and transfers it to device 2. At the same time, micro-batch 1 passes to device 0.</p>
+
+<p>Device 2 receives micro-batch 0 from device 1, computes and transfers it to device 3. At the same time, device 1 receives micro-batch 1 from device 0 computes and transfers it to device 2. At the same time, micro-batch 2 passes to device 0.</p>
+
+<p>Device 3 receives micro-batch 0 from device 2, computes and transfers it to device 4. Device 2 receives micro-batch 1from device 1, computes and transfers it to device 3. At the same time, device 1 receives micro-batch 2 from device 0, computes and transfers it to device 2. At the same time, micro-batch 3 passes to device 0.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329, lecture 6</a>.</li>
+</ul>
+
+  </body>
+</html>

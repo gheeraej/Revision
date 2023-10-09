@@ -1,0 +1,239 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Gaussian Discriminant Analysis</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="machine-learning"><a href="/Revision/machine_learning.html">Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>Gaussian discriminant analysis (GDA) is a binary classification model which tries to estimate the distribution of the input \(X\) given the output class \(Y\), ie \(p(X \vert Y)\).</p>
+
+<p>The model learns the conditional distribution of \(X\) given \(Y\) during training and for inference it will compare the distribution of the true \(X\) to the expected distribution of the difference class \(Y\) (ie class 0 and 1 - \(p(X \vert 0)\) and \(p(X \vert 1)\)). The class attributed to \(X\) will be the one that match the best the distribution of \(X\). The tool used here in the Baye’s theorem.</p>
+
+<p>In Gaussian discriminant analysis (GDA) the distributions of the inputs \(X\) given \(Y\) follow a normal distribution. The goal of the GDA is to find the parameters of the distribution for every output class.</p>
+
+<p><br /></p>
+<h1 id="bayes-theorem">Baye’s theorem</h1>
+<p>The <a href="/Revision/mathematics_bayesian_statistics.html#bayes_theorem">Baye’s theorem</a> is:</p>
+
+\[p(y \vert x) = \frac{p(x \vert y)p(y)}{p(x)}\]
+
+<p>It is just a derivation of this:</p>
+
+\[p(y \vert x) = p(x \cap y) = p(x \vert y)p(y)\]
+
+<p>Another formulation is:</p>
+
+\[posterior = \frac{prior \times likelihood}{evidence}\]
+
+<p>When looking for the \(y\) that maximises this probability we can get rid of the denominator as it does not depend on \(y\):</p>
+
+\[\begin{eqnarray}
+\arg \max_{y} p(y \vert x) &amp;&amp;= \arg \max_{y} \frac{p(x \vert y)p(y)}{p(x)} \\
+&amp;&amp;= \arg \max_{y} p(x \vert y)p(y)
+\end{eqnarray}\]
+
+<p>It is the same for the GDA, we won’t have to compute the distribution of \(X\).</p>
+
+<p><br /></p>
+<h1 id="formula">Formula</h1>
+<h2 id="multivariate-gaussian">Multivariate gaussian</h2>
+<p>For a dimension \(d\) greater than 1, the normal distribution is:</p>
+
+\[p(x;\mu,\Sigma) = \frac{1}{(2\pi)^{d/2}\vert \Sigma \vert^{d/2}} \exp \left(-\frac{1}{2}\ (x-\mu)^T \Sigma^{-1} (x-\mu)\right)\]
+
+<p>Where:</p>
+<ul>
+  <li>The mean vector is \(\mu\),</li>
+  <li>The Variance-Covariance matrix is \(\Sigma\), \(\Sigma \in \mathbb{R}^{d\times d}\),</li>
+  <li>\(\vert \Sigma \vert\) is the determinant of the Variance-Covariance matrix \(\Sigma\),</li>
+  <li>The distribution is \(p(x;\mu,\Sigma) \sim \mathcal{N}(\mu, \Sigma)\).</li>
+</ul>
+
+<p><br /></p>
+<h2 id="model">Model</h2>
+<p>The Gaussian discriminant analysis is:</p>
+
+\[\begin{eqnarray}
+Y &amp;&amp;\sim \mathcal{B}(\phi) \\
+X \vert Y=0 &amp;&amp;\sim \mathcal{N}(\mu_0, \Sigma) \\
+X \vert Y=1 &amp;&amp;\sim \mathcal{N}(\mu_1, \Sigma)
+\end{eqnarray}\]
+
+<p>Writing the distribution we get:</p>
+
+\[\begin{eqnarray}
+p(Y) &amp;&amp;= \phi^Y (1-\phi)^{1-Y} \\
+p(X \vert Y=0) &amp;&amp;= \frac{1}{(2\pi)^{d/2}\vert \Sigma \vert^{d/2}} \exp \left(-\frac{1}{2}\ (x-\mu_0)^T \Sigma^{-1} (x-\mu_0)\right) \\
+p(X \vert Y=1) &amp;&amp;= \frac{1}{(2\pi)^{d/2}\vert \Sigma \vert^{d/2}} \exp \left(-\frac{1}{2}\ (x-\mu_1)^T \Sigma^{-1} (x-\mu_1)\right)
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>The probability \(p(Y)\) (ie \(p(Y=0)\) and \(p(Y=1)\)) is call the <strong>prior</strong>: it is the probability of being of one class without any information on the individu (it is the proportion of each class in the population),</li>
+  <li>\(p(x \vert y)\) represents the probability distribution of each class,</li>
+  <li>The probabilities \(p(Y=0 \vert X)\) and \(P(Y=1 \vert X)\) are called the <strong>posterior</strong> as they represent the probability for \(X\) of being of one class given its caracteristics.</li>
+</ul>
+
+<h5 id="assumption-on-the-variance-covariance-matrix">Assumption on the variance-covariance matrix</h5>
+<p>Here we make the assumption that the variance of \(X\) is not conditional to the class. This model, part of the GDA familly is called Linear Discriminant Analysis. Without this assumption the model is called Quadratic Discriminant Analysis.</p>
+
+<p>To summarize:</p>
+<ul>
+  <li>If \(\Sigma_0 = \Sigma_1\): Linear Discriminant Analysis as the frontier is linear,</li>
+  <li>If \(\Sigma_0 \neq \Sigma_1\): Quadratic Discriminant Analysis as the frontier is quadratic.</li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/lda_gda.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<h2 id="calibration-using-mle">Calibration using MLE</h2>
+<p>The model is calibrated using the maximum likelihood estimation.</p>
+
+<p>We want to maximise the joint probability of having \(X\) and \(Y\).</p>
+
+<p>By definition \(p(X \cap Y) = p(X, Y) = p(X \vert Y)p(Y)\) and we get \(L\) the MLE loss:</p>
+
+\[\begin{eqnarray}
+L(\phi,\mu_{0},\mu_{1},\Sigma) &amp;&amp; = \prod_{j=1}^{n_{pop}} p\left(X^{(j)}, Y^{(j)}; \phi, \mu_{0}, \mu_{1}, \Sigma\right) \\
+&amp;&amp; = \prod_{j=1}^{n_{pop}} p\left(X^{(j)} | Y^{(j)}; \mu_{0}, \mu_{1}, \Sigma\right) p(Y^{(j)}; \phi) \\
+&amp;&amp; = \prod_{j=1}^{n}\phi^{Y^{(j)}}(1-\phi)^{1-Y^{(j)}} \frac{1}{(2\pi)^{d/2}|\Sigma|^{1/2}}\exp \left(-\frac{1}{2}(X^{(j)}-\mu_{Y^{(j)}})^{T}\Sigma^{-1}(X^{(j)}-\mu_{Y^{(j)}})\right)
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\mu_{y^{(j)}}\) is \(\mu_0\) if \(Y==0\) and \(\mu_1\) if \(Y=1\).</li>
+</ul>
+
+<p>Applying the log (monotone strictly increasing function), we obtain:</p>
+
+\[\begin{eqnarray}
+l(\phi,\mu_{0},\mu_{1},\Sigma) &amp;&amp;= \log L(\phi,\mu_{0},\mu_{1},\Sigma) \\
+&amp;&amp;= \sum_{j=1}^{n_{pop}} \left(Y^{(j)} \log \phi + (1-Y^{(j)}) \log(1-\phi) - \frac{1}{2} \log(2\pi) -\frac{1}{2} \log |\Sigma| - \frac{1}{2} (X^{(j)} - \mu_{Y^{(j)}})^{T} \Sigma^{-1} (X^{(j)}-\mu_{Y^{(j)}})\right)
+\end{eqnarray}\]
+
+<p>We can analytically maximize this function with respect to the different parameters by setting their derivatives to 0.</p>
+
+<h3 id="resolution-for-phi">Resolution for \(\phi\)</h3>
+
+\[\begin{eqnarray}
+\frac{d l}{d \phi} &amp;&amp; = \frac{d}{d \phi} \sum_{j=1}^{n_{pop}}\left(Y^{(j)}\log\phi+(1-Y^{(j)})\log(1-\phi)\right) \\
+&amp;&amp; = \sum_{j=1}^{n_{pop}}\frac{d(Y^{(j)}\log\phi)}{d \phi} + \frac{d\left((1-Y^{(j)})\log(1-\phi)\right)}{d \phi} \\
+&amp;&amp; = \frac{\sum_{j=1}^{n_{pop}}Y^{(j)}}{\phi} - \frac{\sum_{j=1}^{n_{pop}}(1-Y^{(j)})}{1-\phi} \\\\
+\text{Setting derivative to 0 } &amp;&amp; \Rightarrow \frac{\sum_{j=1}^{n_{pop}}Y^{(j)}}{\phi} - \frac{\sum_{j=1}^{n_{pop}}(1-Y^{(j)})}{1-\phi} = 0 \\
+&amp;&amp; \Rightarrow \ \frac{\sum_{j=1}^{n_{pop}}Y^{(j)}}{\phi} = \frac{\sum_{j=1}^{n_{pop}}(1-Y^{(j)})}{1-\phi} \\
+&amp;&amp; \Rightarrow \ \sum_{j=1}^{n_{pop}}Y^{(j)}-\phi\sum_{j=1}^{n_{pop}}Y^{(j)} = n_{pop} \phi - \phi \sum_{j=1}^{n_{pop}}Y^{(j)} \\
+&amp;&amp; \Rightarrow \ \phi = \frac{\sum_{j=1}^{n_{pop}} Y^{(j)}} {n_{pop}} \\
+&amp;&amp; \Rightarrow \ \phi = \frac{\sum_{j=1}^{n_{pop}} [Y^{(j)} = 1]} {n_{pop}}
+\end{eqnarray}\]
+
+<p>\(\phi\) is simply the proportion of individuals of class 1 in the population.</p>
+
+<p><br /></p>
+<h3 id="resolution-for-mu_0-and-mu_1">Resolution for \(\mu_0\) and \(\mu_1\)</h3>
+
+\[\begin{eqnarray}
+\frac{d l}{d \mu_{0}} &amp;&amp;= \frac{d}{d \mu_{0}}\sum_{j=1}^{n_{pop}} - \frac{1}{2}(X^{(j)}-\mu_{Y^{(j)}})^{T}\Sigma^{-1}(X^{(j)}-\mu_{Y^{(j)}}) \\
+&amp;&amp;= -\frac{1}{2}\sum_{j=1}^{n_{pop}} \left(\frac{d(X^{(j)}-\mu_{Y^{(j)}})^{T}\Sigma^{-1}(X^{(j)}-\mu_{Y^{(j)}})}{d (X^{(j)}-\mu_{Y^{(j)}})}\right)\frac{d(X^{(j)}-\mu_{Y^{(j)}})}{d \mu_{0}} \\
+&amp;&amp;= \Sigma^{-1}\sum_{j=1}^{n_{pop}} (X^{(j)}-\mu_{0})[Y^{(j)}=0] \\\\
+\text{Setting derivative to 0 } &amp;&amp; \Rightarrow \ \sum_{j=1}^{n_{pop}} (X^{(j)}-\mu_{0})[Y^{(j)}=0] = 0 \\
+&amp;&amp; \Rightarrow \ \sum_{j=1}^{n_{pop}} X^{(j)}[Y^{(j)}=0] = \mu_{0}\sum_{j=1}^{n_{pop}} [Y^{(j)}=0] \\
+&amp;&amp; \Rightarrow \ \mu_{0} = \frac{\sum_{j=1}^{n_{pop}}X^{(j)}[Y^{(j)}=0]}{\sum_{j=1}^{n_{pop}} [Y^{(j)}=0]}                                  
+\end{eqnarray}\]
+
+<p>Equivalently for \(\mu_1\) we get:</p>
+
+\[\mu_{1} = \frac{\sum_{j=1}^{n_{pop}}X^{(j)} [Y^{(j)} = 1]} {\sum_{j=1}^{n_{pop}}[Y^{(j)} = 1]}\]
+
+<p>\(\mu_0\) and \(\mu_1\) are just the average of the individuals caracteristics of each class.</p>
+
+<h3 id="resolution-for-sigma">Resolution for \(\Sigma\)</h3>
+<p>With the assumption that \(\Sigma_0 = \Sigma_1\) (LDA) we get:</p>
+
+\[\begin{eqnarray}
+\frac{d l}{d \Sigma} &amp;&amp; = \frac{d}{d \Sigma} \left[\sum_{j=1}^{n_{pop}}\frac{1}{2}\log|\Sigma^{-1}|-\frac{1}{2}(X^{(j)}-\mu_{Y^{(j)}})^{T}\Sigma^{-1}(X^{(j)}-\mu_{Y^{(j)}}) \right]\\
+&amp;&amp; = \frac{d}{d \Sigma}\sum_{j=1}^{n_{pop}} \left[\frac{1}{2}\log|\Sigma^{-1}|\right] - \frac{d}{d \Sigma}\sum_{j=1}^{n_{pop}} \left[\frac{1}{2}tr\left((X^{(j)}-\mu_{Y^{(j)}})(X^{(j)}-\mu_{Y^{(j)}})^{T}\Sigma^{-1}\right)\right] \\
+&amp;&amp; = \left[\frac{n}{2}\frac{1}{\Sigma^{-1}} \frac{d \Sigma^{-1}}{d \Sigma}\right] - \left[\frac{1}{2} \frac{d \Sigma^{-1}}{d \Sigma} \sum_{j=1}^{n_{pop}}(X^{(j)}-\mu_{Y^{(j)}})(X^{(j)}-\mu_{Y^{(j)}})^{T}\right] \\\\
+\text{Setting derivative to 0 } &amp;&amp; \Rightarrow \ \frac{n}{2}\frac{1}{\Sigma^{-1}} \frac{d \Sigma^{-1}}{d \Sigma} - \frac{1}{2} \frac{d \Sigma^{-1}}{d \Sigma} \sum_{j=1}^{n_{pop}}(X^{(j)}-\mu_{Y^{(j)}})(X^{(j)}-\mu_{Y^{(j)}})^{T} = 0\\
+&amp;&amp; \Rightarrow \ \frac{n}{2} \Sigma \frac{d \Sigma^{-1}}{d \Sigma} = \frac{1}{2} \frac{d \Sigma^{-1}}{d \Sigma} \sum_{j=1}^{n_{pop}}(X^{(j)} - \mu_{Y^{(j)}})(X^{(j)} - \mu_{Y^{(j)}})^{T} \\
+&amp;&amp; \Rightarrow \ n \Sigma = \sum_{j=1}^{n_{pop}}(X^{(j)} - \mu_{Y^{(j)}})(X^{(j)} - \mu_{Y^{(j)}})^{T} \\
+&amp;&amp; \Rightarrow \ \Sigma = \frac{1}{n} \sum_{j=1}^{n_{pop}}(X^{(j)} - \mu_{Y^{(j)}})(X^{(j)} - \mu_{Y^{(j)}})^{T}
+\end{eqnarray}\]
+
+<p>Without the assumption \(\Sigma_0 = \Sigma_1\) (QDA) we get (using the same steps):</p>
+
+\[\Sigma_0=\frac{1}{(n_{pop})^0}\sum_{j=1}^{(n_{pop})^0}(X^{(j)}-\mu_0)(X^{(j)}-\mu_0)^{T}\mathbb 1\!\!1_{Y^{(j)} = 0}\]
+
+\[\Sigma_1=\frac{1}{(n_{pop})^1}\sum_{j=1}^{(n_{pop})^1}(X^{(j)}-\mu_1)(X^{(j)}-\mu_1)^{T}\mathbb 1\!\!1_{Y^{(j)} = 1}\]
+
+<p><br /></p>
+<h2 id="inference">Inference</h2>
+<p>Now that all the parameters are calibrated, for inference we will just get the the class \(Y\) with maximum \(p(Y \vert X)\).
+Using Bayes theorem and the properties of max we get:</p>
+
+\[\begin{eqnarray}
+Y &amp;&amp;= \max_Y p(Y \vert X)
+&amp;&amp;= \max_Y \frac{p(X \vert Y)p(Y)}{p(X)}
+&amp;&amp;= \max_Y p(X \vert Y)p(Y)
+\end{eqnarray}\]
+
+<p>Using the parameters we can compute \(p(X \vert Y)\) and \(p(Y)\) for \(Y=0\) and \(Y=1\).</p>
+
+<p><br /></p>
+<h2 id="link-with-logistic-regression">Link with logistic regression</h2>
+<p>If we view the quantity \(p(Y = 1 \vert X; \phi, \mu_0, \mu_1, \Sigma)\) as a function of \(X\), we’ll find that it can be expressed in the form:</p>
+
+\[p(Y = 1 \vert X; \phi, \mu_0, \mu_1, \Sigma) = \frac{1}{1+\exp(-\theta^T X)}\]
+
+<p>Where \(\theta\) depends on \(\phi, \mu_0, \mu_1, \Sigma\).</p>
+
+<p>Hence it is the same form as the logistic regression.</p>
+
+<p>The only difference is that GDA assumes that the distribution of \(p(X \vert Y)\) is gaussian but the logistic regression does not make this assumption.</p>
+
+<p><br /></p>
+<h2 id="frontiers-of-lda-and-qda">Frontiers of LDA and QDA</h2>
+<h3 id="lda">LDA</h3>
+<p>The frontier for the LDA is:</p>
+
+\[2(\Sigma^{-1}(\mu_1-\mu_0))^T X + (\mu_1 - \mu_0)^T\Sigma^{-1}(\mu_1 - \mu_0) + 2\log(\frac{1-\phi}{\phi}) = 0\]
+
+<p>It can be easily derived starting from \(p(Y=0 \vert X) = p(Y=1 \vert X)\) and expending the distribution.</p>
+
+<p>The form of the equation is \(aX + b = 0\), hence it is linear.</p>
+
+<p><br /></p>
+<h3 id="qda">QDA</h3>
+<p>The frontier for the QDA is:</p>
+
+\[X^T (\Sigma_0-\Sigma_1)^{-1} X + 2 (\mu_0^T\Sigma_0^{-1} - \mu_1^T\Sigma_1^{-1})^T X + 2 \log (\frac{1-\phi}{\phi}) + \log (\frac{|\Sigma_0|}{|\Sigma_1|}) + (\mu_1^T\Sigma_1^{-1}\mu_1 -  \mu_0^T\Sigma_0^{-1}\mu_0) = 0\]
+
+<p>It can be easily derived starting from \(p(Y=0 \vert X) = p(Y=1 \vert X)\) and expending the distribution.</p>
+
+<p>The form of the equation is \(aX^2 + bX + C = 0\), hence it is quadratic.</p>
+
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://cs229.stanford.edu/notes2021fall/cs229-notes2.pdf">CS229</a>.</li>
+</ul>
+
+  </body>
+</html>

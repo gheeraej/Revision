@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Finance - Interest Rate</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-interest-rates"><a href="/Revision/finance_general.html">Back to Interest Rates</a></h2>
+
+<p><br /></p>
+<h1 id="main-rates">Main rates</h1>
+<h2 id="overnight-interest-swap-ois">Overnight Interest Swap (OIS)</h2>
+<p>The Overnight Interest Swap (OIS) is an interest rate swap (IRS) over some given term (for example 10Y).</p>
+
+<p>The fixed leg pays a given fixed rate at a given frequency.
+The floating rate pays a floating rate at a given frequency where the floating rate is calculated using a daily compounded overnight rate (for example overnight Libor) over the the coupon period.</p>
+
+<p>It is important to note that the OIS term is not overnight it is the underlying reference rate that is an overnight rate.</p>
+
+<p>As an interest rate swap, the OIS does not include any nominal payment and hence it does not include credit risk.</p>
+
+<p>Euro OIS underlying rate is ESTR and US OIS underlying rate is SOFR.</p>
+
+<p><br /></p>
+<h2 id="libor">Libor</h2>
+<p>The London Interbank Offered Rate (Libor) is the interest rate at which a bank offers to lend funds to other banks in the interbank market. Depending on the length of deposits, LIBOR rates come in different maturities (overnight, 1w, 1m, 2m, 3m, 6m, 12m) and are associated with all major currencies (EUR, USD, GBP, JPY, CHF).</p>
+
+<p>Libor rate is payed on a given nominal that a bank lends to another bank. It hence includes credit risk.</p>
+
+<p><br /></p>
+<h2 id="treasury-rates">Treasury Rates</h2>
+<p>Treasury rates are the rates earned on debt instruments issued by governments. Regulatory issues can impact the value of Treasury rates and cause them to be persistently low. Accordingly, derivatives traders rather use LIBOR as a better proxy for short-term risk-free rates.</p>
+
+<p><br /></p>
+<h1 id="important-spread-for-market-health-measure">Important spread for market health measure</h1>
+<p>The spreads among theses rates are meaningful measure of the health of the banking system.</p>
+
+<p><br /></p>
+<h2 id="libor-ois-spread">LIBOR-OIS spread</h2>
+<p>The LIBOR–OIS spread is the difference between IRS rates, based on the Libor, and OIS rates, based on overnight rates, for the same term. The spread between the two rates is considered to be a measure of health of the banking system as it compare a non credit risk free rate (Libor) to a credit risk free rate (OIS).
+Therefore the Libor-OIS spread serves as a measure of credit risk in the interbank market.</p>
+
+<p><br /></p>
+<h2 id="ted-spread">TED Spread</h2>
+<p>The TED Spread is the difference between 3-month Libor and 3-month Treasury Bills. It is often used as a measure of liquidity in the interbank market. Indeed Libor rates involve some credit risk whereas Treasury rates are considered credit risk free. Therefore similar to the Libor-OIS spread, the TED spread serves as a measure of credit risk in the interbank market.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Overnight_indexed_swap">Wikipedia page on OIS</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Libor">Wikipedia page on Libor</a>,</li>
+  <li><a href="https://bookdown.org/maxime_debellefroid/MyBook/back-to-basics.html">This page by Maxime de Bellefroid on rates (and more)</a>.</li>
+</ul>
+
+  </body>
+</html>

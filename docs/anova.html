@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ANOVA</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-inferential-statistics"><a href="/Revision/mathematics_inferential_statistics.html">Back to Inferential statistics</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>ANOVA for Analysis of Variance is a method to the impact of one ore more quantitive variables on a qualitative observed variable.</p>
+
+<p>ANOVA analyzes the variances intra-class vs the variance inter-classes.
+To summarize, if the variances intra-class are low but the variance inter-classes is high then it the classes have an impact otherwise, if the variances intra-class and the variance inter-classes are similar then it is probable that the classes do not have an impact.</p>
+
+<p>ANOVA uses the Fisher test to test the ratio of the variances.</p>
+
+<p><br /></p>
+<h1 id="formula">Formula</h1>
+<p>The ANOVA model can have a fixed (deterministic) effect for each class of a random effect.</p>
+
+<p>The formula for a fixed effect is the following:</p>
+
+\[y_{i,j}=A_i+\varepsilon_j\]
+
+<p>With:</p>
+<ul>
+  <li>i: the group number</li>
+  <li>j: the observation number in the group</li>
+</ul>
+
+<p>The formula for a random effect is the following:</p>
+
+\[y_{i,j}=\alpha_i+\varepsilon_j\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\alpha_i = mu_i + \varepsilon_i\) is a random effect and \(\varepsilon_i \sim \mathcal{N}(0, \sigma^2_i)\)</li>
+</ul>
+
+<p><br /></p>
+<h2 id="assumptions">Assumptions</h2>
+<ul>
+  <li>Samples are from a same population,</li>
+  <li>Observations are independent,</li>
+  <li>Distributions of the samples (or equivalently of the residuals) are normal,</li>
+  <li>Distributions are homoscedastics; to test homoscedasticity see <a href="https://en.wikipedia.org/wiki/Bartlett%27s_test">Bartlett’s test</a>,</li>
+  <li>\(\varepsilon_i \sim \mathcal{N}(0, \sigma^2)\).</li>
+</ul>
+
+<p><br /></p>
+<h2 id="hypotheses-to-test">Hypotheses to test</h2>
+<p>The tests used are the same for fixed and random effect but the formulation of the hypotheses are different.</p>
+
+<p><br /></p>
+<h4 id="fixed-effect">Fixed effect</h4>
+<p>The hypotheses H0 says that the offsets \(A_i\) of every groups are equivalent.</p>
+
+<p>H1 says that at least one group’s offset is different.</p>
+
+<p><br /></p>
+<h4 id="fixed-effect-1">Fixed effect</h4>
+<p>The hypotheses H0 says that the variance of the random effect distribution is null (ie the expected values of the effects of each group are the same).
+H1 says that at this variance is not null.
+<br /></p>
+
+<h1 id="variance-decomposition">Variance decomposition</h1>
+<p>An important law used in ANOVA is the law of total variance.
+Law of total variance says that \(Var(Y)=\mathbb{E}[Var(Y|X)] + Var(\mathbb{E}[Y|X])\).</p>
+
+<p>The proof is based on the law of total expectation \(\mathbb{E}[Y]=\mathbb{E}[\mathbb{E}[Y \vert X]]\) and the definition of variance (see the <a href="https://en.wikipedia.org/wiki/Law_of_total_variance#Proof">proof on Wikipedia</a>).</p>
+
+<p><br /></p>
+
+<p>In ANOVA the law of total variance is used to express total variance from inter-classes variance and intra-classes variance. It is applied on sum of squares (that is not exactly the variance as not divided by the sample sizes):</p>
+
+<p><br /></p>
+
+\[SS_{Total}=SS_{Factors}+SS_{Residual}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(SS_{Total}=\sum_{i=1}^{n_{pop}}\sum_{j=1}^{m_{obs}(i)}\left(y_{i, j}-\bar{y}\right)^2\),</li>
+  <li>\(SS_{Factors}=\sum_{i=1}^{n_{pop}}\left(\bar{y_i}-\bar{y}\right)^2\),</li>
+  <li>
+    <p>\(SS_{Residual}=\sum_{i=1}^{n_{pop}}\left(\sum_{j=1}^{m_{obs}(i)}\left(y_{i, j}-\bar{y_i}\right)^2\right)\).</p>
+  </li>
+  <li>\(n_{pop}\) is the number of groups,</li>
+  <li>\(m_{obs}(i)\) is the number of observation in the group i,</li>
+  <li>\(y_{i, j}\) is the j-th observation in group i,</li>
+  <li>\(\bar{y}\) is the global mean: \(\bar{y}=\frac{1}{n}\sum_{i=1}{n_{pop}}\sum_{j=1}{n_{obs}(i)}y_{i,j}\),</li>
+  <li>\(\bar{y_i}\) is the mean of group i: \(\bar{y_i}=\frac{1}{n_{obs}(i)}\sum_{j=1}{n_{obs}(i)}y_{i,j}\).</li>
+</ul>
+
+<p><br /></p>
+
+<p>We also defined the mean squares:</p>
+
+<ul>
+  <li>\(S^2_{Total}=\frac{SS_{Total}}{n-1}\),</li>
+  <li>\(S^2_{Factors}=\frac{SS_{Factors}}{n_{pop}-1}\),</li>
+  <li>\(S^2_{Residual}=\frac{SS_{Residual}}{n-n_{pop}}\).</li>
+</ul>
+
+<p><br /></p>
+<h1 id="distributions-of-the-variances">Distributions of the variances</h1>
+<p>Under the normality hypotheses and the hypotheses of equivalence of variances we have:</p>
+
+<ul>
+  <li>\(\frac{SS_{Total}}{\sigma} \sim \chi^2_{n-1}(X)\),</li>
+  <li>\(\frac{SS_{Factors}}{\sigma} \sim \chi^2_{n_{pop}}(X)\),</li>
+  <li>\(\frac{SS_{Residual}}{\sigma} \sim \chi^2_{n-n_{pop}}(X)\).</li>
+</ul>
+
+<p><br /></p>
+<h1 id="fisher-statistic">Fisher statistic</h1>
+<p>Using the distributions of \(SS_{Factors}\) and \(SS_{Residual}\) and the fact that the variances are equivalent, we obtain the Fisher statistic:</p>
+
+\[F = \frac{SS_{Factors}/(n_{pop}-1)}{SS_{Residual}/(n-n_{pop})}\]
+
+<p>And \(F \sim \mathcal{F}(n_{pop}-1, n-n_{pop})\).</p>
+
+<p>We can then use the inverse cdf of the Fisher distribution on this value to obtain the test p-value.</p>
+
+<p><br /></p>
+<h1 id="summary-in-french">Summary (in french)</h1>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ANOVA.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h1 id="multi-factors-analysis">Multi factors Analysis</h1>
+<p>If factors are independent, it is possible to make a multi factor analysis based on the same formula:</p>
+
+<p><br /></p>
+
+\[SS_{Total}=\sum_{f=1}^{n_{factors}}SS_{Factors_f}+SS_{Residual}\]
+
+<p><br /></p>
+
+<p>If the factors are not independent, the analysis of interactions among factors may be complex. For 2 factors, the formula would be:</p>
+
+<p><br /></p>
+
+\[SS_{Total}=SS_{Factors_1}+SS_{Factors_2}+SS_{Interaction}+SS_{Residual}\]
+
+<p>Where:</p>
+
+\[SS_{Interaction}=n\sum_{i_1=1}^{n_{pop_1}}\sum_{i_2=1}^{n_{pop_2}}\left(\bar{y_{(i_1, i_2)}}-\bar{y_{i_1}}-\bar{y_{i_2}}+\bar{y}\right)^2\]
+
+<p><br /></p>
+<h1 id="proof-of-ss_totalss_factorsss_residual">Proof of \(SS_{Total}=SS_{Factors}+SS_{Residual}\)</h1>
+<p>Remark that \(y_{i,j}-\bar{y}=y_{i,j}-\bar{y_i}+\bar{y_i}-\bar{y}\) and that:</p>
+
+\[\begin{eqnarray}
+\left[y_{i,j}-\bar{y_i}+\bar{y_i}-\bar{y}\right]^2
+     &amp;&amp; = \left[\left(y_{i,j}-\bar{y_i}\right)+\left(\bar{y_i}-\bar{y}\right)\right]^2 \\
+     &amp;&amp; = \left(y_{i,j}-\bar{y_i}\right)^2+2\left(y_{i,j}-\bar{y_i}\right)\left(\bar{y_i}-\bar{y}\right)+\left(\bar{y_i}-\bar{y}\right)^2
+\end{eqnarray}\]
+
+<p>Summing over all \(y_{i,j}\) we obtain:
+\(\begin{eqnarray}
+\sum_{i=1}^{n_{pop}}\sum_{j=1}^{m_{obs}(i)}\left[y_{i,j}-\bar{y_i}+\bar{y_i}-\bar{y}\right]^2
+     &amp;&amp; = \sum_{i=1}^{n_{pop}}\sum_{j=1}^{m_{obs}(i)}\left[\left(y_{i,j}-\bar{y_i}\right)+\left(\bar{y_i}-\bar{y}\right)\right]^2 \\
+     &amp;&amp; = \sum_{i=1}^{n_{pop}}\sum_{j=1}^{m_{obs}(i)}\left(y_{i,j}-\bar{y_i}\right)^2+2\sum_{i=1}^{n_{pop}}\sum_{j=1}^{m_{obs}(i)}\left(y_{i,j}-\bar{y_i}\right)\left(\bar{y_i}-\bar{y}\right)+\sum_{i=1}^{n_{pop}}\sum_{j=1}^{m_{obs}(i)}\left(\bar{y_i}-\bar{y}\right)^2 \\
+     &amp;&amp; = \sum_{i=1}^{n_{pop}}\sum_{j=1}^{m_{obs}(i)}\left(y_{i,j}-\bar{y_i}\right)^2+\sum_{i=1}^{n_{pop}}\sum_{j=1}^{m_{obs}(i)}\left(\bar{y_i}-\bar{y}\right)^2
+\end{eqnarray}\)</p>
+
+<p>As \(2\sum_{i=1}^{n_{pop}}\sum_{j=1}^{m_{obs}(i)}\left(y_{i,j}-\bar{y_i}\right)\left(\bar{y_i}-\bar{y}\right) = 0\) as :</p>
+
+\[2\sum_{i=1}^{n_{pop}}\sum_{j=1}^{m_{obs}(i)}\left(y_{i,j}-\bar{y_i}\right)\left(\bar{y_i}-\bar{y}\right) = 2\sum_{i=1}^{n_{pop}}\left(\bar{y_i}-\bar{y}\right)\left[\sum_{j=1}^{m_{obs}(i)}\left(y_{i,j}-\bar{y_i}\right)\right]\]
+
+<p>And this is 0 as all \(\left[\sum_{j=1}^{m_{obs}(i)}\left(y_{i,j}-\bar{y_i}\right)\right]=0\) by definition of \(\bar{y_i}\).</p>
+
+<p><br /></p>
+<h1 id="references">References</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://www2.mat.ulaval.ca/uploads/media/polyANOVA.pdf">Cours d’Analyse de la Variance - Michel Carbon Université de Laval (pdf) - in french</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Analysis_of_variance">Wikipedia ANOVA webpage</a>.</li>
+</ul>
+
+  </body>
+</html>

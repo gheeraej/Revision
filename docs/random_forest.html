@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Random Forest</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-machine-learning"><a href="/Revision/machine_learning.html">Back to Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="description">Description</h1>
+<p>A random forest is a classification or regression method based on an ensemble of decision trees.
+Each tree of a random forest is calibrated on a randomly created sample of the original data.</p>
+
+<p><br /></p>
+<h1 id="bagging">Bagging</h1>
+<p>Bagging or bootstrap aggregating is a way of generating training subsets from an original dataset.
+The creation of the sub sample of data for a random forest is done as follow:</p>
+
+<ul>
+  <li>Let D be the ensemble of data \(D=\{\left(X^j, Y^j\right) \forall j \in [1, n_{pop}]\}\),</li>
+  <li>For \(k \in [1, n_{trees}]\):
+    <ul>
+      <li>Sample, with replacement, \(n_{pop}\) (or \(l \leq n_{pop}\)) training examples from \(\left(X, Y\right)\); call these \(\left(X_k, Y_k\right)\).</li>
+    </ul>
+  </li>
+  <li>Each subsample \(D_i\) of \(D\) contains the same quantity of data as \(D\) (ie \(n_{pop}\)),</li>
+  <li>Each subsample \(D_i\) may contain duplicates (each \(D_i\) has an average of 63% of the original data).</li>
+</ul>
+
+<p><br /></p>
+<h3 id="bagging-model">Bagging model</h3>
+<p>The method of learning decision tree on bagged sample of data is called the bagging algorithm.</p>
+
+<p>For each \(D_i\), it trains a classification or regression tree \(T_i\) based on \(X_i\) and \(Y_i\).
+The final prediction for an unseen sample \(x\) using the bagging algorithm is then:</p>
+
+<ul>
+  <li>For regression</li>
+</ul>
+
+\[T_B(x)=\frac{1}{n_{trees}}\sum_{k=0}^{n_{trees}}T_k(x)\]
+
+<ul>
+  <li>For classification:</li>
+</ul>
+
+\[T_B(x)=\frac{1}{n_{trees}}\sum_{k=0}^{n_{trees}} \left[T_k(x) \leq 0.5\right]\]
+
+<p>For regression the model outputs the average of every results and for classification it outputs the majority of vote.</p>
+
+<p>Bagging algorithms has a lower variance than a decision tree without increasing the biais.</p>
+
+<p>A random forest is very similar to a bagging model but adds some other type of bagging scheme.</p>
+
+<p><br /></p>
+<h1 id="feature-bagging">Feature Bagging</h1>
+<p>Random forest uses a modified tree learning algorithm.
+For each tree and at split in the learning process only a random subset of the features is selected.</p>
+
+<p>The reason for this is to decrease the correlation among the trees compared to bagging model. Indeed, in the bagging model, if one or a few features are very strong predictors for the response variable (target output), these features will be selected in many of the trees, causing them to become correlated.</p>
+
+<p><br /></p>
+<h2 id="formula">Formula</h2>
+<p>The random forest predictor for an unseen sample \(x\) is thus:</p>
+
+<ul>
+  <li>For regression</li>
+</ul>
+
+\[T_B(x)=\frac{1}{n_{trees}}\sum_{k=0}^{n_{trees}}T_k(x)\]
+
+<ul>
+  <li>For classification:</li>
+</ul>
+
+\[T_B(x)=\frac{1}{n_{trees}}\sum_{k=0}^{n_{trees}}\left[T_k(x) \leq 0.5\right]\]
+
+<p>Where:</p>
+<ul>
+  <li>\(T_i\) is a tree trained using feature bagging on a subsample \(D_i\)</li>
+  <li>\(n_{trees}\) is an hyperparameter</li>
+</ul>
+
+<p><br /></p>
+
+<p>The only difference with the bagging model is the way \(T_i\) is trained (‘normal’ tree learning algorithm for bagging model and using feature bagging for random forest).</p>
+
+<p>Compared to a bagging model it reduces more the variance (due to lower correlation among trees) but it adds biais as the trees does not use all the features at each split.</p>
+
+<p>Increase the number \(n_{trees}\) of trees does not overfit the model.</p>
+
+<p><br /></p>
+<h1 id="extratrees">ExtraTrees</h1>
+<p>ExtraTrees or extremely randomized trees is another method similar to random forest.</p>
+
+<p>In ExtraTrees:</p>
+<ol>
+  <li>Each tree is trained using the whole learning sample (rather than a bootstrap sample),</li>
+  <li>At each split the selected ‘cut-point’ for each feature is randomly selected from a uniform distribution within the feature’s empirical range,</li>
+  <li>The best best split among all randomly selected features is used (using a criterion - Gini impurity or Entropy impurity for example).</li>
+</ol>
+
+<p><br /></p>
+<h1 id="bias-variance">Bias Variance</h1>
+<p>Random Forest uses an ensemble of weak learners (decision trees) with low bias but high variance.</p>
+
+<p>Using an ensemble of uncorrelated trees it reduces the total variance. If feature bagging is used, the decorrelation if the trees is better but the bias is increased.</p>
+
+<p><br /></p>
+<h1 id="references">References</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://perso.univ-rennes2.fr/system/files/users/rouviere_l/poly_apprentissage.pdf">Introduction aux méthodes d’agrégation - Laurent Rouvière (in french)</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Random_forest">Wikipedia - Random forest</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Bootstrap_aggregating">Wikipedia - Boostrap aggregating</a>.</li>
+</ul>
+
+  </body>
+</html>

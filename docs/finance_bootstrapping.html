@@ -1,0 +1,263 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Finance - Bootstrapping</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-finance---general"><a href="/Revision/finance_general.html">Back to Finance - General</a></h2>
+
+<p><br /></p>
+
+<h1 id="definition">Definition</h1>
+<p>Bootstrapping is a method used to compute zero rate curves from incremental (in maturity) non zero rate instruments.</p>
+
+<p><br /></p>
+
+<p>Bootstrapping aims at finding incrementally the zero rates using:</p>
+<ul>
+  <li>The precedent zero rates,</li>
+  <li>A non zero rate instrument.</li>
+</ul>
+
+<p><br /></p>
+
+<p>The different instruments used to bootstrap a curve are:</p>
+<ul>
+  <li>Spot value of the rate,</li>
+  <li>Forward Rate Agreement,</li>
+  <li>Interest Rate Swap (IRS),</li>
+  <li>Bonds.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="single-curve-framework-vs-multi-curve-framework">Single-Curve Framework vs Multi-Curve Framework</h1>
+<p>In the pre-crisis era, the standard market practice was to construct a single interest rate yield curve (single curve framework). This single interest rate yield curve was constructed using liquid vanilla interest Libor rate instruments based on different tenors (it could mix 1M Libor instruments with 6M Libor instruments, …).<br />
+This was possible as every of the Libor rates were risk free.</p>
+
+<p>However the crisis showed that these Libor rates were not risk free.<br />
+As shown in the second graph, the spread between a 6M ZC rate on Euribor 3M and Euribor 6M was greater than 0 (same for 12M ZC rate on Euribor 6M vs Euribor 12M).</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ois_basis_spread.png" width="30%" height="30%" />
+</div>
+<p>After the crisis the spread between EURIBOR and OIS curves started to increase, reflecting the risk premium in the EURIBOR rate.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/basis_spread.png" width="30%" height="30%" />
+</div>
+<p>Also, after the crisis the temporal basis swap started to increase showing the greater credit risk associated with greater maturity.</p>
+
+<p><br /></p>
+
+<p>This led to the creation of the multi curve framework where each rate (ESTR, Euribor 1M, Euribor 3M, Euribor 6M, Euribor 12M) induces its own yield curves and its own forward curves (forward curves that can be deducted from the spot yield curve).</p>
+
+<p><br /></p>
+<h1 id="bootstraping-methodology">Bootstraping Methodology</h1>
+<p>Bootstraping Methodology is the same in Single-Curve Framework and Multi-Curve Framework exept that in Multi-Curve Framework the discounted rate used is not the same as the rate of the instrument. This methodology is pretty straighforward.</p>
+
+<p>For each point in time (maturity):</p>
+<ol>
+  <li>Retrieve market price of a non zero rate instrument with this maturity,</li>
+  <li>Retrieve past zero rates,</li>
+  <li>Use past zero coupon rates and market price of the instrument to deduce the zero coupon rate for this maturity.</li>
+</ol>
+
+<p><br /></p>
+<h2 id="single-curve-framework-bootstrapping-of-ois-overnight-index-swap-curve">Single-Curve Framework: Bootstrapping of OIS (Overnight Index Swap) Curve</h2>
+<p>Interest rate instrument are generally discounted using the OIS curve. Hence to bootstrap the OIS curve, the zero rate will appear in the discount factor as well as in the coupon definition.</p>
+
+<p><br /></p>
+
+<p>Let \(DF(t,T) = e^{-r_{(t,T)}*(T-1)}\)</p>
+
+<p>The pricing of the fixed/floating swap is:</p>
+
+\[\begin{cases}
+  NPV_{fixed}(t, T) &amp;&amp;= N * \sum_{T_i}^{T_n=T} C_{fixed} * \Delta\left(T_{i-1}, T_i\right) * DF\left(t, T_i\right)\\
+  NPV_{OIS}(t, T) &amp;&amp;= N * \sum_{T_i}^{T_n=T} C_i * \Delta\left(T_{i-1}, T_i\right) * DF\left(t, T_i\right)\\
+\end{cases}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(N\) is the swap nominal,</li>
+  <li>\(C_{fixed}\) is the fixed coupon (the quoted or observable value),</li>
+  <li>\(C_i\) is the OIS coupon (rate) between \(\left(T_{i-1}, T_i\right)\),</li>
+  <li>\(\Delta\left(T_{i-1}, T_i\right)\) is the year fraction between \(T_{i-1}\) and \(T_i\).</li>
+</ul>
+
+<p>Note that:</p>
+
+\[C_i = \prod_{j=i-1}^{i}(1+f_{T_j})-1\]
+
+<p>With:</p>
+<ul>
+  <li>\(f_{T_j}\)t the (unobserved) fixing of the Overnight rate (for Overnight rate the fixings are daily when the coupon frequency is not).</li>
+</ul>
+
+<p><br /></p>
+
+<p>The optimisation solves the following equation:</p>
+
+\[NPV_{fixed}(t, T) - NPV_{OIS}(t, T) = 0\]
+
+<p>By finding the \(C_i\).<br />
+Finding the \(C_i\) is equivalent to finding the \(r_{(T_{i-1},T_i)}\) (equivalent to finding the product of the \(f_j\)).<br />
+The \(DF(t, T_i)\) are initially unknown and are totally linked to the \(r_{(T_{i-1},T_i)}\).</p>
+
+<p>Generally we can assume a structure for the rates between two time periods \(T_i\) and \(T_{i+1}\) (for example constant rates on the period or using interpolation methods).</p>
+
+<p><br /></p>
+
+<p>Using the Bootstrapping idea:</p>
+<ul>
+  <li>We first use the quote of an OIS of maturity \(T_1\) and we look for \(C_1\) (and hence \(DF(t, T_1)\)) as it does not depend on the other \(C_i\),</li>
+  <li>Then by recurrence, assuming \(C_i\) known, we use the quote of an OIS of maturity \(T_{i+1}\) and we look for \(C_{i+1}\) (and hence \(DF(t, T_{i+1})\)),</li>
+  <li>We stop when we reach the last OIS instrument of maturity \(T_n\).</li>
+</ul>
+
+<p><br /></p>
+
+<p>Using the obtained \(DF\) we can deduct the OIS zero rate curve.</p>
+
+<p><br /></p>
+<h2 id="multi-curve-framework-bootstrapping-of-ibor-curves">Multi-Curve Framework: Bootstrapping of IBOR Curves</h2>
+<p>In the multi-curve framework, the discounting curve comes from a different (already bootstraped) curve than the one currently bootstraped.</p>
+
+<h3 id="using-fra">Using FRA</h3>
+<p>The pricing of a FRA is:</p>
+
+\[\begin{cases}
+FRA(t, T_i, T_{i+1}) &amp;&amp;= \left[\frac{DF(t, T_i)}{DF(t, T_{i+1})} - 1\right] \frac{1}{\Delta\left(T_i, T_{i+1}\right)} \\
+                 &amp;&amp;= \left[\frac{\left(1+r_{t,T_{i+1}}*T_{i+1}\right)}{\left(1+r_{t,T_i}*T_i\right)}\right] \frac{1}{\Delta\left(T_i, T_{i+1}\right)}
+\end{cases}\]
+
+<p>To use the Bootstrapping method, the \(FRA(t, T_1, T_2)\) should be quoted (observable).<br />
+Then iteratively we find the \(r_{t,T_i}\) assuming \(r_{t,T_{i-1}}\) is known (\(r{t,T_1}\) is the observable value of the rate). The \(DF\) comes from another curve (OIS curve) and are already calculated.</p>
+
+<p><br /></p>
+<h3 id="using-vanilla-interest-rate-swap-irs">Using Vanilla Interest Rate Swap (IRS)</h3>
+<p>To bootstrap IBOR products using vanilla swaps, the idea is the same than for the Overnight rate but here the discount factor comes for another already know zero rate discounting curve (the OIS discounting curve).</p>
+
+\[\begin{cases}
+  NPV_{fixed}(t, T) &amp;&amp;= N * \sum_{T_i}^{T_n=T} C_{fixed} * \Delta\left(T_{i-1}, T_i\right) * DF_{OIS}\left(t, T_i\right)\\
+  NPV_{floating}(t, T) &amp;&amp;= N * \sum_{T_i}^{T_n=T} C_i * \Delta\left(T_{i-1}, T_i\right) * DF_{OIS}\left(t, T_i\right)\\
+\end{cases}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(N\) is the swap nominal,</li>
+  <li>\(C_{fixed}\) is the fixed coupon (the quoted or observable value),</li>
+  <li>\(C_i\) is the floating (IBOR) coupon (rate) between \(\left(T_{i-1}, T_i\right)\),</li>
+  <li>\(\Delta\left(T_{i-1}, T_i\right)\) is the year fraction between \(T_{i-1}\) and \(T_i\).</li>
+</ul>
+
+<p>Note that:</p>
+
+\[C_i = \prod_{j=i-1}^{i}(1+f_{T_j})-1\]
+
+<p>With:</p>
+<ul>
+  <li>\(f_{T_j}\)t the (unobserved) fixing of the rate (the fixings of the rate may be different from the coupon frequency).</li>
+</ul>
+
+<p>The optimisation solves the following equation:</p>
+
+\[NPV_{fixed}(t, T) - NPV_{floating}(t, T) = 0\]
+
+<p>By finding the \(C_i\).<br />
+Finding the \(C_i\) is equivalent to finding the \(r_{(T_{i-1},T_i)}\) (equivalent to finding the product of the \(f_j\)).<br />
+The \(DF\) comes from another curve (OIS curve) and are already calculated.</p>
+
+<p><br /></p>
+<h3 id="real-world-example-with-euribor-6m-bootstrap">Real World example with Euribor 6M Bootstrap</h3>
+<p>Assume the OIS (ESTR) zero curve is already known.<br />
+Let see how the bootstrapping of the Euribor 6M is done.</p>
+
+<p><br /></p>
+<h4 id="for-maturity-from-1-week-to-6-months">For maturity from 1 week to 6 months</h4>
+<p>Use the observable rates of liquid Euribor products such as EUR001W for 1 week, EUR003M for 3 months or EUR006M for 6 months.</p>
+
+<p><br /></p>
+<h4 id="for-maturity-from-7-months-to-18-months">For maturity from 7 months to 18 months</h4>
+<p>Use the observable FRA quotations (from EUFR0AG for FRA(1M, 7M) to EUFR011F for FRA(12M, 18M)) and use the bootstrapping methodology for FRA products.</p>
+
+<p><br /></p>
+<h4 id="for-maturity-from-2-years-to-50-years">For maturity from 2 years to 50 years</h4>
+<p>Use the observable quotation of IRS (from EUSA2 for 2 years IRS to EUSA50 for 50 years IRS) and use the bootstrapping methodology for Vanilla IRS.</p>
+
+<p><br /></p>
+<h2 id="bootstrapping-of-multi-devise-curves">Bootstrapping of Multi Devise Curves</h2>
+<h3 id="xccy-basis-swaps">XCCY Basis Swaps</h3>
+<p>When pricing multi devise products, we could simply discount each leg given the discounting curve of its currency and then transform the foreign currency leg present value in the local currency using the spot FX rate.</p>
+
+<p><br /></p>
+
+<p>However a basis spread exist when discounting the foreign leg. This spread expresses the difference in liquidity (balance) and credit risk of the two currency.</p>
+
+<p><br /></p>
+
+<p>From <a href="https://www.frontieradvisors.com.au/wp-content/uploads/2021/09/Market-Insights-Cross-currency-basis-swaps-.pdf">Frontier advisors document on XCCY basis Swap</a>: “In principle, the basis should be zero if access to funding in the two currencies is equal, unless there is a higher degree of credit risk imbedded in one index relative to another. However, companies do not have the same access to funding markets in multiple currencies. Financial and credit conditions differ across markets. The cross-currency basis spread therefore represents equilibrium in the supply of and demand for funding across different currencies, adjusted for the creditworthiness of the banks that generate the underlying floating index.”</p>
+
+<p><br /></p>
+
+<p>A cross-currency basis swap hence represent a floating-for-floating exchange of interest rate payments in two different currencies. Unlike other basis swaps, they also exchange notional principals.<br />
+The XCCY Basis Swaps spread is an added value payed by the foreign leg (this spread can be negative).</p>
+
+<p><br /></p>
+<h3 id="bootstrapping">Bootstrapping</h3>
+<p>To bootstrap a XCCY basis swap we should know:</p>
+<ul>
+  <li>The local IBOR zero rate curve used in the XCCY basis swap (generally IBOR 3M),</li>
+  <li>The foreign IBOR zero rate curve used in the XCCY basis swap (generally IBOR 3M),</li>
+  <li>The local OIS curve.</li>
+</ul>
+
+<p>The pricing of a XCCY basis swap is:</p>
+
+\[\begin{cases}
+  NPV_{local}(t, T) &amp;&amp;= N * \sum_{T_i}^{T_n=T} C_i^{local} * \Delta\left(T_{i-1}, T_i\right) * DF_{OIS}^{local}\left(t, T_i\right)\\
+  NPV_{foreign}(t, T) &amp;&amp;= FX(t) * N * \sum_{T_i}^{T_n=T} \left(C_i^{foreign} + s\right) * \Delta\left(T_{i-1}, T_i\right) * DF_{CSA}\left(t, T_i\right)\\
+\end{cases}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(FX(t)\) is the spot FX rate,</li>
+  <li>\(N\) is the swap nominal,</li>
+  <li>\(C_i^{local}\) is the floating (IBOR) coupon (rate) of the local currency between \(\left(T_{i-1}, T_i\right)\),</li>
+  <li>\(C_i^{foreign}\) is the floating (IBOR) coupon (rate) of the foreign currency between \(\left(T_{i-1}, T_i\right)\),</li>
+  <li>\(s\) is the quoted (observable) basis spread</li>
+  <li>\(\Delta\left(T_{i-1}, T_i\right)\) is the year fraction between \(T_{i-1}\) and \(T_i\).</li>
+</ul>
+
+<p>The optimisation solves the following equation:</p>
+
+\[NPV_{local}(t, T) - NPV_{foreign}(t, T) = 0\]
+
+<p>By finding the \(DF_{CSA}\).<br />
+In the XCCY basis swap, the \(C_i^{local}\) and \(C_i^{foreign}\) are already known.</p>
+
+<p><br /></p>
+<h4 id="reference">Reference</h4>
+<p>See:</p>
+<ul>
+  <li><a href="https://canopee-group.com/wp-content/uploads/2021/06/The-Multi-Curve-Framework-AWALEE.pdf">The Multi-Curve Framework: A Practitioner’s Guide</a>,</li>
+  <li><a href="https://www.frontieradvisors.com.au/wp-content/uploads/2021/09/Market-Insights-Cross-currency-basis-swaps-.pdf">Frontier advisors document on XCCY basis Swap</a>,</li>
+  <li><a href="https://www.researchgate.net/publication/46461678_Interest-Rate_Modeling_with_Multiple_Yield_Curves">Interest-Rate Modeling with Multiple Yield Curves by Pallavicini and Tarenghi</a>,</li>
+  <li><a href="https://research-doc.credit-suisse.com/docView?language=ENG&amp;format=PDF&amp;source_id=csplusresearchcp&amp;document_id=1014795411&amp;serialid=49NWiaIfsRfi%2F5%2FWSTVyyURyVRLr2y9VAWKzG04VCOM%3D&amp;cspId=null">Credit Suisse Research: Cross-Currency Basis Swap</a>.</li>
+</ul>
+
+  </body>
+</html>

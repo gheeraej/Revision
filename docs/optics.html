@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>OPTICS</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-machine-learning"><a href="/Revision/machine_learning.html">Back to Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>OPTICS (for Ordering points to identify the clustering structure is a density based clustering) is a clustering method similar to <a href="/Revision/dbscan.html">DBSCAN</a>.</p>
+
+<p>The main difference between DBSCAN and OPTICS is that OPTICS does not require an hyperparameter \(\varepsilon\). It still requires an hyperparameter \(min_{points}\). It also used a optional \(max_\varepsilon\) hyperparameter.</p>
+
+<p><br /></p>
+<h1 id="notation">Notation</h1>
+<ul>
+  <li>Two data points \(p\) and \(q\) are considered neighbours if \(D(p, q) \lt \varepsilon\) where \(D\) is a given distance measure (euclidian distance for example),</li>
+  <li>A point \(p\) is a core point if at least \(min_{points}\) neighbours, ie \(min_{points}\) points which are within a distance \(\varepsilon\) of it (including \(p\)),</li>
+  <li>A point \(q\) is directly reachable from \(p\) if point \(q\) is within distance \(\varepsilon\) from core point \(p\). Points are only said to be directly reachable from core points,</li>
+  <li>A point \(q\) is reachable from \(p\) if there is a path \(p_1, \ldots, p_n\) with \(p_1 = p\) and \(p_n = q\), where each \(p_{i+1}\) is directly reachable from \(p_i\). Note that this implies that the initial point and all points on the path must be core points, with the possible exception of \(q\),</li>
+  <li>\(N_{\varepsilon}(p)\) is the set of neighbours of \(p\),</li>
+  <li>\(min_{distance}(p)\) is the distance from \(p\) to its \(min_{points}\) neighbour,</li>
+  <li>\(core-distance_{\varepsilon, min_{points}}(p)\) is the distance between \(p\) and its \(min_{points}\) neighbour if \(p\) has \(min_{points}\) neighbours otherwise it is undefined,</li>
+  <li>\(reachability-distance_{\varepsilon, min_{points}}(p, q)\) is the smallest distance such as \(p\) would be reachable from \(q\) and \(q\) would be a core point wrt to this distance.</li>
+</ul>
+
+<p><br /></p>
+
+\[\text{core-distance}_{\varepsilon, min_{points}}(p) = \begin{cases}
+                                                    Undefined &amp;&amp; \text{if } \vert N_{\varepsilon}(p) \vert \lt min_{points}\\
+                                                    min_{distance}(p) &amp;&amp; \text{otherwise}
+                                                  \end{cases}\]
+
+<p><br /></p>
+
+\[\text{reachability-distance}_{\varepsilon, min_{points}}(p, q) = \begin{cases}
+                                                              Undefined &amp;&amp; \text{if } \vert N_{\varepsilon}(q) \vert \lt min_{points}\\
+                                                              \max(\text{core-distance}_{\varepsilon, min_{points}}(q), \; D(p,q)) &amp;&amp; \text{otherwise}
+                                                            \end{cases}\]
+
+<p><br /></p>
+
+<p>Note that the \(\text{reachability-distance}\) is not symmetric.</p>
+
+<p><br /></p>
+<h1 id="idea-of-the-algorithm">Idea of the algorithm</h1>
+<p>Using the hyperparameter \(min_{points}\) and the optional hyperparameter \(max_\varepsilon\), OPTICS will create for each point \(p\) a reachability-distance matrix.</p>
+
+<p>If \(max_\varepsilon\) is not defined by the user its default value is \(\infty\). In this setup, every point will have a core-distance and reachability-distance to every points defined. Otherwise some points will have \(undefined\) distances.</p>
+
+<p>Once the reachability-distance matrix is defined, a reachability plot is created.
+The reachability plot has in \(x\)-axis the points and in \(y\)-axis their reachability distance to the closest point.</p>
+
+<p>The reachability plot is ordered and created incrementaly: for each current point the algorithm selects the next point as the point with minimum reachability-distance to the current point (initialisation is random).</p>
+
+<p><br /></p>
+<h1 id="reachability-plot">Reachability plot</h1>
+<p>Here is a visualisation of reachability plot:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/optics.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>Using a reachability-plot (a special kind of dendrogram), the hierarchical structure of the clusters can be obtained easily. It is a 2D plot, with the ordering of the points as processed by OPTICS on the x-axis and the reachability distance on the y-axis. Since points belonging to a cluster have a low reachability distance to their nearest neighbor, the clusters show up as valleys in the reachability plot. The deeper the valley, the denser the cluster.</p>
+
+<p>The image above illustrates this concept. In its upper left area, a synthetic example data set is shown. The upper right part visualizes the spanning tree produced by OPTICS, and the lower part shows the reachability plot as computed by OPTICS. Colors in this plot are labels, and not computed by the algorithm; but it is well visible how the valleys in the plot correspond to the clusters in above data set. The yellow points in this image are considered noise, and no valley is found in their reachability plot. They are usually not assigned to clusters, except the omnipresent “all data” cluster in a hierarchical result. From <a href="https://en.wikipedia.org/wiki/OPTICS_algorithm">OPTICS Wikipedia page</a>.</p>
+
+<p><br /></p>
+<h1 id="selection-of-clusters">Selection of clusters</h1>
+<p>Extracting clusters from this plot can be done manually by selecting a range on the x-axis after visual inspection, by selecting a threshold on the y-axis (the result is then similar to a DBSCAN clustering result with the same
+\(\varepsilon\) and \(min_{points}\) parameters; here a value of 0.1 may yield good results), or by different algorithms that try to detect the valleys by steepness, knee detection, or local maxima. From <a href="https://en.wikipedia.org/wiki/OPTICS_algorithm">OPTICS Wikipedia page</a>.</p>
+
+<p>Algorithms for cluster extraction are Xi and DBSCAN (see <a href="https://scikit-learn.org/stable/modules/clustering.html#optics">OPTICS on Scikit-Learn</a>).</p>
+
+<p><br /></p>
+<h1 id="pros-and-cons">Pros and cons</h1>
+<h3 id="pros">Pros</h3>
+<ul>
+  <li>Can cluster different structure shape,</li>
+  <li>Average complexity \(O(nlog(n))\) if \(max_\varepsilon\) is well selected,</li>
+  <li>Worts complexity of \(O(n^2)\) if \(max_\varepsilon \lt \max{p,q}D(p,q)\),</li>
+  <li>Automatically selects the number of clusters (or can be done manually),</li>
+  <li>Great visualisations,</li>
+  <li>Not sensitive to hyperparameters (see the different reachability plots from <a href="https://www.dbs.ifi.lmu.de/Publikationen/Papers/OPTICS.pdf">OPTICS: Ordering Points To Identify the Clustering Structure by M Ankerst, M M Breunig, H-P Kriegel and J Sander</a>).</li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/OPTICS_algorithm">OPTICS Wikipedia page</a>,</li>
+  <li><a href="https://scikit-learn.org/stable/modules/clustering.html#optics">OPTICS on Scikit-Learn</a>,</li>
+  <li><a href="https://www.dbs.ifi.lmu.de/Publikationen/Papers/OPTICS.pdf">OPTICS: Ordering Points To Identify the Clustering Structure by M Ankerst, M M Breunig, H-P Kriegel and J Sander</a>.</li>
+</ul>
+
+  </body>
+</html>

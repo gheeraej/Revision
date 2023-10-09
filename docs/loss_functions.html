@@ -1,0 +1,274 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Loss functions</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-machine-learning"><a href="/Revision/machine_learning.html">Back to Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="regression">Regression</h1>
+<p>In the regression framework, \(X\) represents the explanatory variables and \(Y\) represents the output that is a continuous variable.</p>
+
+<p><br /></p>
+<h2 id="mean-squared-errors">Mean Squared Errors</h2>
+<p>For a given predictor \(h_\beta\), the MSE loss is:</p>
+
+\[L(h_\beta; (X, Y)) = \left(Y - h_\beta(X)\right)^2\]
+
+<p>Over the whole dataset it is:</p>
+
+\[L(h_\beta) = \frac{1}{n_{pop}}\sum_{j=1}^{n_{pop}} \left(Y^{(j)} - h_\beta(X^{(j)})\right)^2\]
+
+<p><br /></p>
+<h2 id="mean-absolute-errors">Mean Absolute Errors</h2>
+<p>For a given predictor \(h_\beta\), the MAE loss is:</p>
+
+\[L(h_\beta; (X, Y)) = \vert Y - h_\beta(X) \vert\]
+
+<p>Over the whole dataset it is:</p>
+
+\[L(h_\beta) = \frac{1}{n_{pop}}\sum_{j=1}^{n_{pop}} \vert Y^{(j)} - h_\beta(X^{(j)}) \vert\]
+
+<p><br /></p>
+<h2 id="huber-loss">Huber Loss</h2>
+<p>For a given predictor \(h_\beta\), the Huber loss is a loss quatradic for small values and then linear (to avoid being to sensitive to outliers). A value \(\delta\) defines the limit between quadratic and linear.</p>
+
+\[L(h_\beta, \delta; (X, Y)) = \begin{cases}
+                          \frac{1}{2}\left(Y - h_\beta(X)\right)^2 &amp;&amp; \text{if } \vert Y - h_\beta(X) \vert \lt \delta\\
+                          \delta\left(\vert Y - h_\beta(X) \vert -\frac{1}{2} \delta \right) &amp;&amp; \text{otherwise}
+                     \end{cases}\]
+
+<p>Over the whole dataset it is:</p>
+
+\[L(h_\beta) = \frac{1}{n_{pop}}\sum_{j=1}^{n_{pop}} L(h_\beta, \delta; (X^{(j)}, Y^{(j)}))\]
+
+<p><br /><br /></p>
+<h1 id="classification">Classification</h1>
+<p>See <a href="/Revision/sigmoid_and_softmax.html">Sigmoid and Softmax</a> to see how to obtain classification outputs.</p>
+
+<p><br /></p>
+<h2 id="cross-entropy--log-loss">Cross Entropy / Log loss</h2>
+<p>Cross Entropy is a measure of similarity between two probability distributions. When we talk about Cross Entropy loss it is just the Cross Entropy multiplied by -1 to transform it into a loss.
+In learning, we compare the unknown true probability distribution \(p\) to the estimated probability distribution \(h_\beta\).</p>
+
+<p>For one \(X\) we get:</p>
+
+\[L(h_\beta, p; (X, Y)) = - \sum_{i=1}^{n_{class}} p(Y=i) \log\left(h_\beta^{(i)}\left(X\right)\right)\]
+
+<p>Where:</p>
+<ul>
+  <li>\(p(Y=i)\) is a binary indicator if \(Y\) is of class \(i\) or not</li>
+  <li>\(h_\beta^{(i)}\) is the probability of being of class \(i\) (in multiclass classification, \(h_\beta\) outputs a vector of probability, one for each class)</li>
+</ul>
+
+<p>So over the whole dataset we get:</p>
+
+\[l(\beta) = - \sum_{j=1}^{n_{pop}} L(h_\beta, p; (X^{(j)}, Y^{(j)})) = \sum_{j=1}^{n_{pop}} \sum_{i=1}^{n_{class}} p(Y^{(j)}=i) \log\left(h_\beta^{(i)}\left(X^{(j)}\right)\right)\]
+
+<p><br /></p>
+<h3 id="cross-entropy-of-two-distribution-function">Cross Entropy of two distribution function</h3>
+<p>The general definition of cross entropy is applied to two distributions:</p>
+<ul>
+  <li>\(p\) the true distribution,</li>
+  <li>\(q\) the estimated probability distribution</li>
+</ul>
+
+<p>The formula is:</p>
+
+<ul>
+  <li>For discrete distributions:</li>
+</ul>
+
+\[H(p,q)= -\sum_{x \in \mathcal{X}} p(x) \; \log q(x)\]
+
+<ul>
+  <li>For continuous distributions:</li>
+</ul>
+
+\[H(p,q)= -\int_{\mathcal{X}} P(x) \; \log Q(x) \; dx\]
+
+<p><br /></p>
+
+<p>Note that Cross Entropy is not symmetric.</p>
+
+<p><br /></p>
+<h2 id="binary-cross-entropy-loss">Binary cross entropy loss</h2>
+<p>Binary cross entropy loss is a loss function for binary classification.</p>
+
+<p>In the binary case, only two classes are considered: \(p(Y=0)\) and \(p(Y=1)\) and</p>
+
+\[p(Y=0) = 1 - p(Y=1)\]
+
+<p>Also note that for label \(Y\), \(Y = P(Y=1)\).</p>
+
+<p><br /></p>
+<h3 id="formula">Formula</h3>
+
+\[L(h_\beta, p; (X, Y)) = -\left[Y \log\left(h_\beta(X)\right) + (1-Y) (1-\log\left(h_\beta(X))\right)\right]\]
+
+<p>Over the whole dataset we obtain:</p>
+
+\[l(\beta) = \sum_{j=1}^{n_{pop}} Y^{(j)} \log(h_\beta(X^{(j)})) + (1-Y^{(j)}) ( 1-\log( h_\beta( X^{(j)} )))\]
+
+<p><br /></p>
+<h3 id="link-with-cross-entropy">Link with Cross-Entropy</h3>
+<p>Sometimes one might say cross entropy or log loss to refer to binary cross entropy.</p>
+
+<p>In the special case of binary cross entropy, only two classes are considered: \(p(Y=0)\) and \(p(Y=1)\).
+Also :</p>
+
+\[p(Y=0) = 1 - p(Y=1)\]
+
+<p>The formula from cross entropy (multi class cross entropy) can be simplified and the Binary cross entropy loss is for one \(X\):</p>
+
+\[\begin{eqnarray}
+L(h_\beta, p; (X, Y)) &amp;&amp;= -\left[p(Y=1)\log(h_\beta^{(1)}(X)) + p(Y=0)\log(h_\beta^{(0)}(X))\right]\\
+&amp;&amp;= -\left[p(Y=1)\log(h_\beta^{(1)}(X)) + (1-p(Y=1))(1-\log(h_\beta^{(1)}(X)))\right] \\
+&amp;&amp;= -\left[Y \log\left(h_\beta(X)\right) + (1-Y) (1-\log\left(h_\beta(X))\right)\right]
+\end{eqnarray}\]
+
+<p>We obtain here the same formula as for the log likelihood in the logistic regression.</p>
+
+<p><br /></p>
+<h3 id="binary-cross-entropy-without-the-log">Binary cross entropy without the log</h3>
+<p>Sometimes we refer to this loss without the \(log\) which gives:</p>
+
+\[L(h_\beta, p; (X, Y)) = - \left[h_\beta^{(1)}(X)\right]^{p(Y=1)} + \left[h_\beta^{(0)}(X)\right]^{p(Y=0)}\]
+
+<p>The relation between these two formulas is easy to highlight just by applying the log.</p>
+
+<p><br /></p>
+<h2 id="logistic-loss--deviance-loss">Logistic loss / Deviance loss</h2>
+<p>Logistic loss / Deviance loss is a loss function for binary classification.</p>
+
+<p><br /></p>
+<h3 id="formula-1">Formula</h3>
+
+\[L(h_\beta; (X, Y)) = \log \left(1+e^{-Y}\beta X\right)\]
+
+<p><br /></p>
+<h3 id="link-with-binary-cross-entropy">Link with Binary cross entropy</h3>
+<p>Using the alternative notation \(Y \in \{-1, 1\}\), Logistic loss / Deviance loss are the same as Binary cross entropy loss / Log loss.
+Let’s show this and in the special cas of logistic regression:</p>
+
+\[h_\beta(X)=g(\beta X)=\frac{1}{1+e^{-\beta X}}\]
+
+<p>We can write:</p>
+
+\[\begin{cases}
+  P(Y=1 \vert X; \beta)=\frac{1}{1+e^{-\beta X}}\\
+  P(Y=0 \vert X; \beta)=1 - \frac{1}{1+e^{-\beta X}}=\frac{e^{-\beta X}}{1+e^{-\beta X}}=\frac{1}{1+e^{\beta X}}\\
+\end{cases}\]
+
+<p>Remark that the only difference between \(P(Y=1 \vert X; \beta)\) and \(P(Y=0 \vert X; \beta)\) is the sign in the exponential.
+So using the label \(Y \in \{-1, 1\}\) we can rewrite:</p>
+
+\[P(Y \vert X; \beta) = \frac{1}{1+e^{-Y\beta X}}\]
+
+<p>Applying MLE on this we get:</p>
+
+\[\begin{eqnarray}
+L(\beta) &amp;&amp;= P(Y \vert X; \beta) \\
+&amp;&amp;= \prod_{j=1}^{n_{pop}}P(Y^{(j)} \vert X^{(j)}; \beta) \\
+&amp;&amp;= \prod_{j=1}^{n_{pop}}\frac{1}{1+e^{-Y^{(j)}\beta X^{(j)}}} \\
+\end{eqnarray}\]
+
+<p>Applying the log to get log MLE:</p>
+
+\[\begin{eqnarray}
+l(\beta) &amp;&amp;= \log L(\beta) \\
+&amp;&amp;= \log \left[\prod_{j=1}^{n_{pop}}P(Y^{(j)} \vert X^{(j)}; \beta)\right] \\
+&amp;&amp;= \sum_{j=1}^{n_{pop}}Y^{(j)} -\log \left(1+e^{-Y^{(j)}\beta X^{(j)}}\right)
+\end{eqnarray}\]
+
+<p>Logistic loss is a loss so we want to minimise and not maximise so we multiply by -1 and we get the loss:</p>
+
+\[L(h_\beta; (X, Y)) = \log \left(1+e^{-Y}\beta X\right)\]
+
+<p><br /></p>
+<h2 id="focal-loss">Focal loss</h2>
+<p>Focal loss is a binary classification loss used for unbalanced dataset.</p>
+
+<p>First let’s define \(p_t\) such as:</p>
+
+\[p_t = \begin{cases}
+          h_\beta(X) &amp;&amp; \text{if } Y = 1\\
+          1-h_\beta(X) &amp;&amp; \text{otherwise}
+      \end{cases}\]
+
+<p><br /></p>
+<h3 id="formula-2">Formula</h3>
+
+\[L(p_t) = -\alpha (1 - p_t)^\gamma \log(p_t)\]
+
+<p><br /></p>
+<h3 id="link-with-binary-cross-entropy-1">Link with Binary Cross Entropy</h3>
+<p>Using the definition of \(p_t\), the Binary Cross Entropy loss is:</p>
+
+\[L(p_t) = -\log(p_t)\]
+
+<p><br /></p>
+<h3 id="visualisation">Visualisation</h3>
+<p>Here are some visualisation of the focal loss for different \(\gamma\) values and \(\alpha=1\) (and comparison with Binary Cross Entropy):</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/focal_loss.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="exponential-loss">Exponential loss</h2>
+<p>Exponential loss is:</p>
+
+\[L(h_\beta; (X, Y))=e^{- h_\beta(X) \cdot Y}\]
+
+<p>This is the loss used in AdaBoost.</p>
+
+<p><br /></p>
+<h2 id="hinge-loss">Hinge Loss</h2>
+<p>Hinge loss is for binary classification where output \(Y \in \{-1, 1\}\) is:</p>
+
+\[L(h_\beta; (X, Y))=\max(0,1 - h_\beta(X) \cdot Y)\]
+
+<p>Different extensions for multi class classification exist such as Crammer and Singer extension:</p>
+
+\[L(h_\beta; (X, Y))=\max(0,1 + \max_{i \neq Y} h_\beta^i(X) - h_\beta^Y(X))\]
+
+<p>Where:</p>
+<ul>
+  <li>\(Y\) represents the true class (\(Y \in [1, \ldots , n_class]\)),</li>
+  <li>\(h_\beta^i(X)\) represents the output of the model for class \(i\).</li>
+</ul>
+
+<p>This is the loss used in <a href="/Revision/svm.html">SVM</a>.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources:</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://fan-gong.github.io/posts/loss_function/index.html">Loss function in ML by fan gong</a>,</li>
+  <li><a href="https://towardsdatascience.com/what-is-loss-function-1e2605aeb904">Blog post on Toward Data Science on loss functions</a>,</li>
+  <li><a href="https://ml-cheatsheet.readthedocs.io/en/latest/loss_functions.html">ML loss cheat sheet</a>,</li>
+  <li><a href="https://fan-gong.github.io/posts/loss_function/index.html">This page with different losses</a>,</li>
+  <li><a href="http://www.hongliangjie.com/wp-content/uploads/2011/10/logistic.pdf">This document explaining logistic loss</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Loss_functions_for_classification#Logistic_loss">This paragraph on Logistic loss on Wikipedia</a>,</li>
+  <li><a href="https://stats.stackexchange.com/questions/223694/does-log-loss-refer-to-logarithmic-loss-or-logistic-loss">This StackExchange page with link to ressources</a>,</li>
+  <li><a href="https://colah.github.io/posts/2015-09-Visual-Information/">This page on Cross-Entropy with visual explanations</a>,</li>
+  <li><a href="https://arxiv.org/pdf/1708.02002.pdf">Focal Loss for Dense Object Detection by TY Lin et al</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Hinge_loss">Hinge loss on Wikipedia</a>.</li>
+</ul>
+
+  </body>
+</html>

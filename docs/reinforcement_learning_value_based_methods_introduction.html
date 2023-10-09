@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Value based methods - Introduction</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-value-based-methods"><a href="/Revision/reinforcement_learning_value_based_methods.html">Back to Value based methods</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>Value based methods are algorithms based on state and action value functions (\(V_\pi\) and \(Q_\pi\)) that estimate the best possible policy based on these value functions.</p>
+
+<p>As these functions are approximations of the true (unobservable) state and action value functions, the best policy given these approximated functions won’t be optimal in the environment except if the value functions perfeclty approximate the true value functions.</p>
+
+<p>The process to obtain an optimal policy alternate between defining a policy \(\pi\) (at initialisation \(\pi\) is generally a random or equiprobable policy), estimating state and action value functions \(V_\pi\) and \(Q_\pi\) and updating the policy based on these new estimation of the value functions.</p>
+
+<p>Given a policy \(\pi\) we know its associated state and action value functions:</p>
+<ul>
+  <li>Take an initial policy \(\pi\) as input,</li>
+  <li>Use the policy to observed the associated rewards \(R\) (using the environment model configuration if the model is known or using an agent that interact with the environment if the underlying model of the environment is unknown),</li>
+  <li>Update the state and action value functions \(V_\pi\) and \(Q_\pi\),</li>
+  <li>Update the policy \(\pi\).</li>
+</ul>
+
+<p><br /></p>
+<h1 id="type-of-models">Type of models</h1>
+<p>Their exist to type of models:</p>
+
+<p><br /></p>
+<h1 id="model-based-learning">Model based learning</h1>
+<p>Model based learning methods are methods that assume the knowledge of the underlying model of the environment.</p>
+
+<p><br /></p>
+<h2 id="model-free-learning">Model free learning</h2>
+<p>Model free learning methods are methods that do not assume the knowledge of the underlying model of the environment.</p>
+
+  </body>
+</html>

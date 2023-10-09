@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - Selection</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="ml-selection-rules">ML Selection rules</h1>
+<ol>
+  <li>Avoid the state-of-the-art trap:
+    <ul>
+      <li>SOTA on research data != SOTA on your data,</li>
+      <li>Cost,</li>
+      <li>Latency,</li>
+    </ul>
+  </li>
+  <li>Start with the simplest models:
+    <ul>
+      <li>Easier to deploy: deploying early allows validating pipeline,</li>
+      <li>Easier to debug,</li>
+      <li>Easier to improve upon,</li>
+      <li>Simplest models != models with the least effort: BERT is easy to start with pretrained model, but not the simplest,</li>
+    </ul>
+  </li>
+  <li>Avoid human biases in selecting models:
+    <ul>
+      <li>It’s important to evaluate models under comparable conditions (It’s tempting to run more experiments for X because you’re more excited about X),</li>
+      <li>Near-impossible to make blanketed claims that X is always better than Y</li>
+    </ul>
+  </li>
+  <li>Evaluate good performance now vs. good performance later:
+    <ul>
+      <li>Best model now != best model in 2 months</li>
+      <li>Improvement potential with more data</li>
+      <li>Ease of update</li>
+    </ul>
+  </li>
+  <li>Evaluate trade-offs:
+    <ul>
+      <li>False positives vs. false negatives,</li>
+      <li>Accuracy vs. compute/latency,</li>
+      <li>Accuracy vs. interpretability,</li>
+    </ul>
+  </li>
+  <li>Understand your model’s assumptions:
+    <ul>
+      <li>IID</li>
+    </ul>
+    <ul>
+      <li>Neural networks assume that examples are independent and identically distributed
+      - Smoothness</li>
+      <li>Supervised algorithms assume that there’s a set of functions that can transform inputs into outputs such that similar inputs are transformed into similar outputs
+      - Tractability</li>
+      <li>Let X be the input and Z be the latent representation of X. Generative models assume that it’s tractable to compute P(Z|X).
+      - Boundaries</li>
+      <li>Linear classifiers assume that decision boundaries are linear.
+      - Conditional independence</li>
+      <li>Naive Bayes classifiers assume that the attribute values are independent of each other given the class.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+<h2 id="ensemble">Ensemble</h2>
+<h3 id="bagging">Bagging</h3>
+<p>Bagging is an ensemble of predictors that uses as final prediction the average of most voted prediction:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bagging.png" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+<h3 id="boosting">Boosting</h3>
+<p>Boosting is a method that train predictors on the residuals (the errors) of the precedent boosted predictors:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/boosting.png" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+<h3 id="stacking">Stacking</h3>
+<p>Stacking is making a stack of model, the output of one or various models being used as input for another or other models:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/stacking.png" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+<h2 id="auto-ml">Auto-ML</h2>
+<p>Good ML researcher is someone who will automate themselves out of job.</p>
+
+<p><br /></p>
+<h3 id="soft-automl">Soft AutoML</h3>
+<p>Weaker models with well-tuned hyperparameters can outperform fancier models.</p>
+
+<ul>
+  <li>Hyperparameter tuning
+    <ul>
+      <li>Built-in with frameworks
+        <ul>
+          <li>TensorFlow: Keras Turner</li>
+          <li>Scikit-learn: auto-sklearn</li>
+          <li>Ray Tune</li>
+        </ul>
+      </li>
+      <li>Popular algos:
+        <ul>
+          <li>Random search</li>
+          <li>Grid search</li>
+          <li>Bayesian optimization</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h3 id="hard-automl">Hard AutoML</h3>
+<h4 id="neural-architecture-search">Neural architecture search</h4>
+<p>Search space:</p>
+<ul>
+  <li>Set of operations: convolution, fully-connected, pooling</li>
+  <li>How operations can be connected?</li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/nas.png" width="50%" height="50%" />
+</div>
+<p><br /></p>
+
+<p>Performance estimation strategy:</p>
+<ul>
+  <li>How to evaluate many candidate architectures?</li>
+  <li>Ideal: should be done without having to re-construct or re-train them from scratch.</li>
+</ul>
+
+<p>Search strategy</p>
+<ul>
+  <li>Random,</li>
+  <li>Reinforcement learning:
+    <ul>
+      <li>Reward the choices that improve performance estimation,</li>
+    </ul>
+  </li>
+  <li>Evolution:
+    <ul>
+      <li>Mutate an architecture,</li>
+      <li>Choose the best-performing offsprings,</li>
+      <li>So on.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h4 id="learned-optimizer">Learned optimizer</h4>
+<ul>
+  <li>Learn how to learn on a set of tasks,</li>
+  <li>Generalize to new tasks,</li>
+  <li>The learned optimizer can then be used to train a better version of itself.</li>
+</ul>
+
+<p><br /></p>
+
+<p>Learning algorithm:</p>
+<ul>
+  <li>A set of functions that specifies how to update the weights.</li>
+  <li>Also called optimizers: Adam, Momentum, SGD</li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/learned_optimizer.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329, lecture 5</a>.</li>
+</ul>
+
+  </body>
+</html>

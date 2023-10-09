@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>General Mathematics - Algebra</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-general-mathematics"><a href="/Revision/mathematics.html">Back to General Mathematics</a></h2>
+
+<p><br /></p>
+<h1 id="dot-product-or-inner-product">Dot product or Inner product</h1>
+<p>In mathematics, the dot product or scalar product is an algebraic operation that takes two equal-length sequences of numbers and returns a single number.</p>
+
+<p>Algebraically, the dot product is the sum of the products of the corresponding entries of the two sequences of numbers. Geometrically, it is the product of the Euclidean magnitudes of the two vectors and the cosine of the angle between them.</p>
+
+<p><br /></p>
+<h2 id="algebraic-definition">Algebraic definition</h2>
+<p>Let \(X\) and \(Y\) be vectors of \(\mathbb{R}^n\): \(X=(X_1, X_2, ..., X_n)\) and \(Y=(Y_1, Y_2, ..., Y_n)\).
+In an Euclidian space, the dot product is the sum of the products of the corresponding cartesian coordinates of \(X\) and \(Y\).</p>
+
+\[\langle X, Y \rangle = \sum_{i=1}^n X_i \cdot Y_i\]
+
+<p>\(\langle X, Y \rangle\) can also be written \(\langle X \vert Y \rangle\) or \(X \cdot Y\).</p>
+
+<p><br /></p>
+<h2 id="geometric-definition">Geometric definition</h2>
+<p>Dot product of \(X\) and \(Y\) can also be defined using the angle \(\theta\) between the two vectors and their lenghts (obtain using theirs euclidian norms):</p>
+
+\[\langle X, Y \rangle = \Vert X \Vert \Vert Y \Vert \cos \theta\]
+
+<p><br /></p>
+<h3 id="property">Property</h3>
+<p>If the angle between \(X\) and \(Y\) is 90° (or equivalently \(\frac{\pi}{2}\)) then \(X\) and \(Y\) are orthogonal and:</p>
+
+\[\langle X, Y \rangle = \Vert X \Vert \Vert Y \Vert \cos \left(\frac{\pi}{2}\right) = 0\]
+
+<p><br /></p>
+<h1 id="norm">Norm</h1>
+<p>The notion of norm is the extension of absolute value in dimension greater than 1.</p>
+
+<p>It defines a length for vectors and can be used as a distance measure.</p>
+
+<p>Different norm exists, the natural norm being the euclidian norm.</p>
+
+<p><br /></p>
+<h2 id="types-of-norm">Types of norm</h2>
+<p>Let \(X\) be a vector of \(\mathbb{R}^n\): \(X=(X_1, X_2, ..., X_n)\).</p>
+
+<p><br /></p>
+<h2 id="manhattan-norm-norm-1">Manhattan norm (norm 1)</h2>
+
+\[\Vert X \Vert_1 = \sum_{i=1}^n \vert X_i \vert\]
+
+<p>The norm 1 of a vector is the sum of the absolute value of each of its composants.</p>
+
+<p><br /></p>
+<h2 id="euclidian-norm-norm-2">Euclidian norm (norm 2)</h2>
+
+\[\Vert X \Vert_2 = \sqrt{\sum_{i=1}^n X_i^2}\]
+
+<p>The Euclian norm of a vector is the square root of the sum of the composants of \(X\) squared.</p>
+
+<p><br /></p>
+<h3 id="link-with-the-dot-product">Link with the dot product</h3>
+<p>The Euclidian norm can also be defined as the square root of the dot product of itself and itself:</p>
+
+\[\Vert X \Vert_2 = \sqrt{\langle X, X \rangle}\]
+
+<p>Or:</p>
+
+\[\Vert X \Vert_2^2 = \langle X, X \rangle\]
+
+<p><br /></p>
+<h2 id="p-norm">\(p\)-norm</h2>
+
+\[\Vert X \Vert_p = \left( \sum_{i=1}^n X_i^p \right)^{1/p}\]
+
+<p><br /></p>
+<h2 id="maximum-norm-or-infinity-norm-of-supremum-norm">Maximum norm (or infinity norm of supremum norm)</h2>
+
+\[\Vert X \Vert_\infty = \max(\vert X_1 \vert, \vert X_2 \vert, ..., \vert X_n \vert)\]
+
+<p>The maximum norm of a vector is the maximum of the absolute value of its composants.</p>
+
+<p><br /></p>
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Norm_(mathematics)">Wikipedia page on norms</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="determinant">Determinant</h1>
+
+<p><br /></p>
+<h1 id="characteristic-polynomial">Characteristic polynomial</h1>
+<p>A polynomial can be factorized using its roots: if \(\lambda_i\) are root of \(f\) then:</p>
+
+\[f(x)=\prod_{i=1}^{n_{roots}}(x-\lambda_i)\]
+
+<p><br /></p>
+<h2 id="resources-1">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Factor_theorem">Factor Theorem on Wikipedia</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/Polynôme_caractéristique">Polynome Caractéristique on Wikipedia (in french)</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Leibniz_formula_for_determinants">Leibniz Formula on Wikipedia</a>,</li>
+  <li><a href="https://math.stackexchange.com/questions/507641/show-that-the-determinant-of-a-is-equal-to-the-product-of-its-eigenvalues">This StackExchange question</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="diagonalisation">Diagonalisation</h1>
+
+  </body>
+</html>

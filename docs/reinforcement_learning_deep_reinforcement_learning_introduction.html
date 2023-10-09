@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Deep Reinforcement Learning - Introduction</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-deep-reinforcement-learning"><a href="/Revision/reinforcement_learning_deep_reinforcement_learning.html">Back to Deep Reinforcement Learning</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>Deep Reinforcement Learning is the application of (deep) neural network for reinforcement learning.</p>
+
+<p><br /></p>
+<h2 id="motivation">Motivation</h2>
+<p>The classical approaches deal with finite Markov Decision Process with a finite number of states and actions. However in real applications, the number of states and actions can be infinite if the states and actions are continuous values.</p>
+
+<p>They use tables to store state value function and action value function (the \(Q\)-table for example). The term function is used in these method to refer to state and action value functions but these functions must be seen as mapping or tables. In continuous environment using mapping or tables is no longer possible.</p>
+
+<p>Deep Reinforcement methods can deal continuous (inifinite) states space and (for some) continuous action space.</p>
+
+<p>\(v_\pi\) and \(q_\pi\) are now true unknown continuous functions that we need to approximate. We thus seek \(\hat{v}\) and \(\hat{q}\) that will approximate \(v_\pi\) and \(q_\pi\).</p>
+
+<p>Typically \(\hat{v}\) and \(\hat{q}\) will be parametrized by weights \(w\) and will be neural networks:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/RL_FA.png" width="25%" height="25%" />
+</div>
+
+<p><br /></p>
+
+<div style="text-align: center">
+<img src="assets/images/FA.png" width="20%" height="20%" />
+</div>
+<p><br /></p>
+
+<p>Also in Deep Reinforcement Learning the steps of estimating the value functions (state or action or both) and then updating the policy using the \(\varepsilon\)-greedy method is done at the same time. The value functions are updated and the policy is also updated at the same time.</p>
+
+<p><br /></p>
+<h3 id="real-example-of-continuous-state-and-action-spaces">Real example of continuous state and action spaces</h3>
+<p>A car moves in a continuous environment with continuous actions:</p>
+
+<ul>
+  <li>The position of the car is continous, its speed is continuous and the angle of the car is continuous,</li>
+  <li>The agent can choose to accelerate or decelerate but it can also decides how much to accelerate or decelerate,</li>
+  <li>It can decide to go left or right but can also decide the exact angle.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="notation">Notation</h2>
+<p>Let’s introduce some notations:</p>
+<ul>
+  <li>\(\hat{v}(s, w)\) represents the approximation of the state value function, \(s\) being a state and \(w\) the parameters of the approximation function,</li>
+  <li>\(\hat{a}(s, a, w)\) represents the approximation of the action value function, \(s\) being a state, \(a\) being an action and \(w\) the parameters of the approximation function,</li>
+  <li>\(x(s)=(x_1(s), x_2(s), \ldots, x_n(s))\) represents the \(n\) features of state \(s\): position, speed, angle, quantities of anything, etc. (or image of the visible environment),</li>
+  <li>\(x(s, a)=(x_1(s, a), x_2(s, a), \ldots, x_n(s, a))\) represents the \(n\) features of state \(s\) and action \(a\): position, speed, angle, quantities of anything, etc. (or image of the visible environment).</li>
+</ul>
+
+  </body>
+</html>

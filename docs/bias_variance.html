@@ -1,0 +1,277 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bias Variance tradeoff</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-machine-learning"><a href="/Revision/machine_learning.html">Back to Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>Bias and variance are two phenomenon that explains a part of the error of a predictor on the test set.</p>
+
+<p>The error of a predictor may be split in:</p>
+<ul>
+  <li>Irreducible error,</li>
+  <li>Bias,</li>
+  <li>Variance.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="preliminary-remark">Preliminary remark</h1>
+<p>An important observation is that a model trained on a given dataset is random since it depends on the random impredictible values (the \(\varepsilon_i\)) from the training set.</p>
+
+<p>That’s why talking about the bias and the variance of an estimator makes sense.</p>
+
+<p><br /></p>
+<h1 id="bias-variance-tradeoff">Bias-Variance tradeoff</h1>
+<h2 id="bias">Bias</h2>
+<p>Statistical bias measures whereby the expected value of the results differs from the true underlying quantitative parameter being estimated. It hence represents an additional error of our estimated learner compare to the true parameter.</p>
+
+<p>Bias comes from erroneous assumptions in the learning algorithm and is linked to underfitting.</p>
+
+<p><br /></p>
+<h3 id="formal-definition">Formal definition</h3>
+<p>Let \(\hat{\theta}\) be an estimator on \(S\) of a parameter \(\theta\) then the biais of \(\hat{\theta}\) is defined as follow:</p>
+
+\[Biais(\hat{\theta}) = \theta - \mathbb{E}(\hat{\theta})\]
+
+<p><br /></p>
+<h2 id="variance">Variance</h2>
+<p>The error due to variance comes from sensitivity to small fluctuations in the training set.</p>
+
+<p>High variance may result from an algorithm modeling the random noise in the training data and is linked to overfitting. A model with high variance will have generalisation problem as it sticks too much to the training data.</p>
+
+<p><br /></p>
+<h3 id="formal-definition-1">Formal definition</h3>
+<p>Let \(\hat{\theta}\) be an estimator on \(S\) of a parameter \(\theta\) then the biais of \(\hat{\theta}\) is defined as follow:</p>
+
+\[Var(\hat{\theta}) = \mathbb{E}\left[(\bar{\theta} - \mathbb{E}_S[\hat{\theta}])^2\right]\]
+
+<p>Where:</p>
+<ul>
+  <li>\(S\) is a dataset used to calibrate \(\hat{\theta}\).</li>
+</ul>
+
+<p>Hence the variance of \(\hat{\theta}\) is the variance of the estimator with respect to the training dataset \(S\).</p>
+
+<p><br /></p>
+<h2 id="error-decomposition">Error decomposition</h2>
+<p>Let a dataset \(\hat{D}=\{(X^{(j)}, Y^{(j)})\}_{j=1}^m\).
+Assume \(Y=f(X)+\varepsilon\).
+Let \(\hat{f}_m\) be an estimator from the dataset \(\hat{D}\).</p>
+
+<p>For a new unseen sample pair \((X^{*}, Y^{*})\), the expected MSE is:</p>
+
+\[\begin{eqnarray}
+MSE(\hat{f}_m) &amp;&amp;= \mathrm{E}\left[\left(Y^{*}-\hat{f}_m(X^{*})\right)^2\right] \\
+&amp;&amp;= \mathrm{E}\left[\left(\varepsilon+f(X^{*})-\hat{f}_m(X^{*})\right)^2\right] \\
+&amp;&amp;= \mathrm{E}[\varepsilon^2] + \mathrm{E}\left[\left(f(X^{*})-\hat{f}_m(X^{*})\right)^2\right]+ \mathrm{E}\left[2\varepsilon\left(f(X^{*})-\hat{f}_m(X^{*})\right)\right] \\
+&amp;&amp;= \mathrm{E}[\varepsilon^2] + \mathrm{E}\left[\left(f(X^{*})-\hat{f}_m(X^{*})\right)^2\right]+ \mathrm{E}\left[\varepsilon\right]\mathrm{E}\left[2\left(f(X^{*})-\hat{f}_m(X^{*})\right)\right] \;\;\;\;\; &amp;&amp; \mathrm{E}\left[\varepsilon\right]=0\\
+&amp;&amp;= \mathrm{E}[\varepsilon^2] + \mathrm{E}\left[\left(f(X^{*})-\hat{f}_m(X^{*})\right)^2\right] \\
+&amp;&amp;= \mathrm{E}[\varepsilon^2] + \mathrm{E}\left[f(X^{*})-\hat{f}_m(X^{*})\right]^2 + \mathrm{V}\left[f(X^{*})-\hat{f}_m(X^{*})\right] \;\;\;\;\; &amp;&amp; \left(\mathrm{E}[X^2]=\mathrm{E}[X]^2+\mathrm{V}[X]\right) \\
+&amp;&amp;= \mathrm{E}[\varepsilon^2] + \mathrm{E}\left[f(X^{*})-\hat{f}_m(X^{*})\right]^2 + \mathrm{V}\left[\hat{f}_m(X^{*})\right]  \;\;\;\;\; &amp;&amp; \left(\mathrm{V}[a-X]=\mathrm{V}[X]\right)
+\end{eqnarray}\]
+
+<p>On the final line:</p>
+<ul>
+  <li>The first term is the irreducible error</li>
+  <li>The second term is the bias squared</li>
+  <li>The third term is the Variance</li>
+</ul>
+
+<p>Such a clean decomposition into Bias and Variance terms exists only for the squared error loss.</p>
+
+<p><br /></p>
+<h1 id="link-with-model-estimation-problems">Link with model estimation problems</h1>
+<h2 id="overfitting">Overfitting</h2>
+<p>Overfitting relates to having a high variance model or estimator. To fight overfitting, we need to focus on reducing the Variance of the estimator, such as: increase regularization, obtain larger data set, decrease number of features, use a smaller model, etc.</p>
+
+<p><br /></p>
+<h2 id="underfitting">Underfitting</h2>
+<p>Underfitting relates to having a high bias model or estimator. To fight underfitting, we need to focus on reducing the Bias in the estimator, such as: decrease regularization, use more features, use a larger model or more complex model, etc.</p>
+
+<p><br /></p>
+<h2 id="summary-on-fitting">Summary on fitting</h2>
+<p>This chart from <a href="https://www.kaggle.com/getting-started/166897">Kaggle</a> summarizes the fitting problems:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/fitting.jpg" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<h1 id="generalisation-error">Generalisation error</h1>
+<h2 id="notation">Notation</h2>
+<p>Assume we are in a binomial classification setting.</p>
+
+<p>Let \(S\) be a training dataset from a population distribution \(\mathcal{D}\).</p>
+
+<p>Let \(\mathcal{H}\) be the family of the considered algorithms (linear models, svm, …).</p>
+
+<p>Let \(\hat{\varepsilon}_D(h)\) represent the loss on the dataset \(\hat{D}\) for a predictor h:</p>
+
+\[\hat{\varepsilon}_S(h) = \frac{1}{m} \sum_{j=1}{m} \mathrm{1}_{h(x^{(j)}) \neq y^{(j)}}\]
+
+<p>Let \(\hat{h}\) be the best predictor of the family \(\mathcal{H}\) given the training dataset \(S\) and the loss \(\hat{\varepsilon}\):</p>
+
+\[\hat{h} = arg\min_{h \in \mathcal{H}} \hat{\varepsilon}_S(h)\]
+
+<p>Let \(\varepsilon(h)=P_{(x,y) \sim \mathcal{D}}(h(x) \neq y)\) be the generalization error.</p>
+
+<p>Let \(h^{*}\) be the best possible predictor from \(\mathcal{H}\) on the whole population \(\mathcal{D}\) ie let \(h^{*}\) be the predictor that minimizes the loss \(\varepsilon\):</p>
+
+\[h^{*} = arg\min_{h \in \mathcal{H}} \varepsilon(h)\]
+
+<p><br /></p>
+<h2 id="hoeffding-inequality">Hoeffding inequality</h2>
+<p>Let \(Z_1, \ldots, Z_m\) be \(m\) independent and identically distributed (iid) random variables drawn from a Bernoulli distribution:</p>
+<ul>
+  <li>\(P(Z_i=1)=\phi\),</li>
+  <li>\(P(Z_i=0)=1-\phi\).</li>
+</ul>
+
+<p><br /></p>
+
+<p>\(\phi\) is the true parameter of the distribution. Now let \(\hat{\phi}\) be an estimator of \(\phi\) from \(m\) sample randomly drawn from this population, ie:</p>
+
+\[\hat{\phi}=\frac{1}{m}\sum_{i=1}^{m}Z_i\]
+
+<p><br /></p>
+
+<p>Then the Hoeffding inequality says:</p>
+
+\[P(\vert \phi - \hat{\phi} \vert \gt \gamma) \leq 2 \exp(-2 \gamma^2 m)\]
+
+<p>The probability that the estimators \(\hat{\phi}\) be farther from \(\phi\) by more than \(\gamma\) is less than an expression depending on \(\gamma\) and the quantity \(m\) of training data.</p>
+
+<p><br /></p>
+<h2 id="applying-the-hoeffding-inequality">Applying the Hoeffding inequality</h2>
+<p>Remark that \(Z = \mathrm{1}_{h(x^{(j)}) \neq y^{(j)}}\) is a Bernouilli variable. Then the Hoeffding inequality can be applied to the estimation \(\hat{\varepsilon}_S\) of the true error \(\varepsilon\):</p>
+
+\[P(\vert \varepsilon(h) - \hat{\varepsilon}_S(h) \vert \gt \gamma) \leq 2 \exp(-2 \gamma^2 m)\]
+
+<p>The probability that the error \(\hat{\varepsilon}_S\) estimated on \(S\) be farther from the generalisation error \(\varepsilon\) by more than \(\gamma\) is less than an expression depending on \(\gamma\) and the quantity \(m\) of training data.</p>
+
+<p><br /></p>
+<h2 id="case-of-finite-mathcalh">Case of finite \(\mathcal{H}\)</h2>
+<p>Assume that \(\mathcal{H}\) is finite, ie their exist a finite number of predictors (of possible parametrization) of \(\mathcal{H}\). Let the number of predictors of \(\mathcal{H}\) be \(k\), ie \(\vert \mathcal{H} \vert = k\).</p>
+
+<p><br /></p>
+<h3 id="extension-from-one-h-to-every-h-in-mathcalh">Extension from one \(h\) to every \(h \in \mathcal{H}\)</h3>
+<p>Using union bounds lemma we can generalize from one \(h\) to every \(h \in \mathcal{H}\) (see <a href="https://cs229.stanford.edu/notes2021fall/error-analysis.pdf">CS229 course - Biais Variance</a> for computation details):</p>
+
+\[P(\exists h \in \mathcal{H} \;\; \vert \varepsilon(h) - \hat{\varepsilon}_S(h) \vert \gt \gamma) \leq 2k \exp(-2 \gamma^2 m)\]
+
+<p>Where:</p>
+<ul>
+  <li>\(k\) is the number of predictor of \(\mathcal{H}\)</li>
+</ul>
+
+<p>We can also write:</p>
+
+\[P(\not \exists h \in \mathcal{H} \;\; \vert \varepsilon(h) - \hat{\varepsilon}_S(h) \vert \gt \gamma) \geq 1 - 2k \exp(-2 \gamma^2 m)\]
+
+<p><br /></p>
+<h3 id="inverting-the-inequality">Inverting the inequality</h3>
+<p>We can also invert the inequality and express the bound using the different variables.</p>
+
+<p>First let define \(\delta\) such as:</p>
+
+\[\delta := P(\exists h \in \mathcal{H} \;\; \vert \varepsilon(h) - \hat{\varepsilon}_S(h) \vert \gt \gamma)\]
+
+<p><br /></p>
+<h4 id="inverting-for-m">Inverting for m</h4>
+<p>We can ask the following question: for a given \(\gamma\) and a choosen probability \(\delta\) how large must \(m\) be before we can guarantee that with probability at least \(1 − \delta\) that the training error will be within \(\gamma\) of generalization error?</p>
+
+<p>For:</p>
+
+\[m \geq \frac{1}{2 \gamma^2} \log \frac{2k}{\delta}\]
+
+<p>we have that \(\vert \varepsilon(h) - \hat{\varepsilon}_S(h) \vert \gt \gamma \forall h \in \mathcal{H}\) with probability at least \(1 - \delta\).</p>
+
+<p><br /></p>
+<h4 id="inverting-for-vert-varepsilonh---hatvarepsilon_sh-vert">Inverting for \(\vert \varepsilon(h) - \hat{\varepsilon}_S(h) \vert\)</h4>
+<p>Recall that \(\vert \varepsilon(h) - \hat{\varepsilon}_S(h) \vert \gt \gamma\). Hence a bound on \(\gamma\) gives a bound on \(\vert \varepsilon(h) - \hat{\varepsilon}_S(h) \vert\).</p>
+
+<p>For a given \(m\) and a choosen probability \(\delta\) how small can be the generalization error \(\gamma\)?</p>
+
+<p>Hence with probability at least \(1 - \delta\) we have that:</p>
+
+\[\vert \varepsilon(h) - \hat{\varepsilon}_S(h) \vert \leq \gamma \leq \sqrt{\frac{1}{2 m} \log \frac{2k}{\delta}}\]
+
+<p><br /></p>
+<h2 id="generalization-error-with-respect-to-h">Generalization error with respect to \(h^{*}\)</h2>
+<p>We can computes bound on the generalization error of out best estimator \(\hat{h}\) on \(S\) against the best estimator \(h^{*}\) of the true population:</p>
+
+<p>Recall that: \(\vert \varepsilon(h) - \hat{\varepsilon}_S(h) \vert \leq \gamma\) with probability \(1 - \delta\).
+Hence \(\varepsilon(h) \leq \hat{\varepsilon}_S(h) + \gamma\).</p>
+
+\[\begin{eqnarray}
+\varepsilon(\hat{h}) &amp;&amp; \leq \hat{\varepsilon}_S(\hat{h}) + \gamma \\
+&amp;&amp; \leq \hat{\varepsilon}_S(h^{*}) + \gamma \\
+&amp;&amp; \leq \varepsilon(h^{*}) + 2 \gamma
+\end{eqnarray}\]
+
+<ul>
+  <li>The first line use the recall that we made applied to \(\hat{h}\),</li>
+  <li>The second line use the fact that \(\hat{h} = arg\min_{h \in \mathcal{H}} \hat{\varepsilon}_S(h)\)</li>
+  <li>The third line use the recall that we made applied to \(h^{*}\),</li>
+</ul>
+
+<p>Using the bound on \(\gamma\) that we get from inverting the inequality, we finally get:</p>
+
+\[\varepsilon(\hat{h}) \leq h^{*} + 2 \sqrt{\frac{1}{2 m} \log \frac{2k}{\delta}}\]
+
+<p>Or</p>
+
+\[\varepsilon(\hat{h}) \leq \left(arg\min_{h \in \mathcal{H}} \varepsilon(h) \right) + 2 \sqrt{\frac{1}{2 m} \log \frac{2k}{\delta}}\]
+
+<p><br /></p>
+<h3 id="talking-in-term-of-complexity-bounds">Talking in term of complexity bounds</h3>
+<p>We can replace the bound by complexity bounds, for example for \(m\) we get:</p>
+
+\[\begin{eqnarray}
+m &amp;&amp; \geq \frac{1}{2 \gamma^2} \log \frac{2k}{\delta} \\
+&amp;&amp; = \mathcal{O} \left(\frac{1}{\gamma^2} \log \frac{k}{\delta}\right)
+\end{eqnarray}\]
+
+<p>that implies \(\vert \varepsilon(h) - \hat{\varepsilon}_S(h) \vert \gt \gamma \forall h \in \mathcal{H}\) with probability at least \(1 - \delta\).</p>
+
+<p><br /></p>
+<h2 id="case-of-infinite-mathcalh">Case of infinite \(\mathcal{H}\)</h2>
+<p>For infinite family of models \(\mathcal{H}\). The number of model is replaced by the <a href="/Revision/vapnik_dimension.html">Vapnik-Chervonenkis dimension</a> of the family \(\mathcal{H}\). Let \(d\) be the VC of \(\mathcal{H}\).</p>
+
+<p>We also talk in term of complexity bound using \(\mathcal{O}\) notation:</p>
+
+\[\vert \varepsilon(h) - \hat{\varepsilon}_S(h) \vert \leq \mathcal{O} \left(\sqrt{\frac{d}{m} \log \frac{m}{d} + \frac{1}{m} \log \frac{1}{\delta}}\right)\]
+
+<p>Or also:</p>
+
+\[\varepsilon(\hat{h}) \leq \varepsilon(h^{*}) + \mathcal{O} \left(\sqrt{\frac{d}{m} \log \frac{m}{d} + \frac{1}{m} \log \frac{1}{\delta}}\right)\]
+
+<p><br /><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://cs229.stanford.edu/notes2021fall/error-analysis.pdf">CS229 course - Biais Variance</a>,</li>
+  <li><a href="https://cs229.stanford.edu/notes_archive/cs229-notes4.pdf">CS229 cours - Learning Theory</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Bias–variance_tradeoff">Wikipedia page on Biais Variance tradeoff</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Bias_(statistics)">Wikipedia page on Biais</a>,</li>
+  <li><a href="https://suzyahyah.github.io/machine%20learning/2020/09/04/bias-variance.html">This github page</a>.</li>
+</ul>
+
+  </body>
+</html>

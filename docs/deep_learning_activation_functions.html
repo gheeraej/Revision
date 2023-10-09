@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Deep Learning - Activation function</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-deep-learning"><a href="/Revision/deep_learning.html">Back to Deep Learning</a></h2>
+
+<p><br /></p>
+<h1 id="activation-function">Activation function</h1>
+<p>The activation function is very important in a neural network. Without activation function, an ANN would be just a serie of linear regressions (which is equivalent to a single linear regression).</p>
+
+<p>The non linear activation function allows the ANN to represent non linear output.</p>
+
+<p><br /><br /></p>
+<h2 id="relu">ReLU</h2>
+<p>ReLU for Rectified Linear Unit is a commonly used activation function. It’s a really simple function.</p>
+
+<div style="text-align: center">
+<img src="assets/images/ReLU.png" width="25%" height="25%" />
+</div>
+
+\[ReLU(x) = \max(0, x)\]
+
+<p><br /></p>
+
+\[ReLU'(x) =  \begin{cases}
+                1 &amp;&amp; \text{if } x \gt 0\\
+                0 &amp;&amp; \text{if } x \leq 0
+            \end{cases}\]
+
+<p>\(ReLU\) works well in general but is prone to vanishing gradient.</p>
+
+<p><br /><br /></p>
+<h2 id="leaky-relu">Leaky ReLU</h2>
+<p>Leaky ReLU (Rectified Linear Unit) is a little twick of the ReLU activation function.</p>
+
+<div style="text-align: center">
+<img src="assets/images/LeakyReLU.png" width="25%" height="25%" />
+</div>
+
+\[LeakyReLU(x) = \max(\alpha x, x)\]
+
+<p><br /></p>
+
+\[LeakyReLU'(x) =  \begin{cases}
+                    1 &amp;&amp; \text{if } x \gt 0\\
+                    \alpha &amp;&amp; \text{if } x \leq 0
+                \end{cases}\]
+
+<p>Leaky ReLU is not prone to vanishing gradient as the original ReLu activation function as it does not have a null gradient for negative values.</p>
+
+<p><br /><br /></p>
+<h2 id="elu">ELU</h2>
+<p>ELU (exponential linear unit) is another alternative to ReLU.</p>
+
+<div style="text-align: center">
+<img src="assets/images/LeakyReLU.png" width="25%" height="25%" />
+</div>
+
+\[ELU(x) = \begin{cases}
+            x &amp;&amp; \text{if } x \gt 0\\
+            \alpha (e^x - 1) &amp;&amp; \text{if } x \leq 0
+          \end{cases}\]
+
+<p><br /></p>
+
+\[ELU'(x) =  \begin{cases}
+                1 &amp;&amp; \text{if } x \gt 0\\
+                ELU(x) + \alpha &amp;&amp; \text{if } x \leq 0
+            \end{cases}\]
+
+<p>ELUis not prone to vanishing gradient as the original ReLu activation function as it does not have a null gradient for negative values.</p>
+
+<p><br /><br /></p>
+<h2 id="selu">SELU</h2>
+<p>SELU for Scaled Exponential Linear Unit is a self normalizing activation function.
+That means that this activation function preserves the mean and variance of its input.</p>
+
+<p>It is particularly useful for network initialized with a gaussian distribution \(\mathcal{N}(0,1)\) as the activation function will preserve the normality all along.</p>
+
+<p>It may be used with AlphaDropout which is a dropout method that also preserves the normality of the network.</p>
+
+<div style="text-align: center">
+<img src="assets/images/SELU.png" width="25%" height="25%" />
+</div>
+
+\[SELU(x) = \lambda \begin{cases}
+                        x &amp;&amp; \text{if } x \gt 0\\
+                        \alpha e^x - \alpha &amp;&amp; \text{if } x \leq 0
+                  \end{cases}\]
+
+<p><br /></p>
+
+\[SELU'(x) = \lambda \begin{cases}
+                        1 &amp;&amp; \text{if } x \gt 0\\
+                        \alpha e^x &amp;&amp; \text{if } x \leq 0
+                    \end{cases}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\lambda = 1.0507009873554804934193349852946\),</li>
+  <li>\(\alpha = 1.6732632423543772848170429916717\).</li>
+</ul>
+
+<p>\(\lambda\) and \(\alpha\) have be computed by the author of the method in <a href="https://arxiv.org/pdf/1706.02515.pdf">their paper</a>.</p>
+
+<p><br /><br /></p>
+<h2 id="gelu">GELU</h2>
+<p>Gaussian Error Linear Unit is an activation function that has been used in the Transformer models BERT and GPT-2.</p>
+
+<div style="text-align: center">
+<img src="assets/images/GELU.png" width="25%" height="25%" />
+</div>
+
+\[GELU(x) = \frac{1}{2} x \left(1 + \tanh \left( \frac{\sqrt{2}}{\pi} \left(x + 0.044715
+x^3 \right)\right)\right)\]
+
+<p><br /></p>
+
+\[GELU'(x) = \frac{1}{2} \tanh (0.0356774x^3 + 0.797885 x) + (0.0535161 x^3 + 0.398942 x) sech^2 (0.0356774 x^3 + 0.797885 x ) + \frac{1}{2}\]
+
+<p><br /><br /></p>
+<h2 id="tanh">Tanh</h2>
+<p>Tanh is another activation function but which is less used.</p>
+
+<div style="text-align: center">
+<img src="assets/images/Tanh.png" width="25%" height="25%" />
+</div>
+
+\[Tanh(x) = \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}\]
+
+<p><br /></p>
+
+\[Tanh'(x) = 1 - \tanh^2(x)\]
+
+<p><br /><br /></p>
+<h2 id="sigmoid">Sigmoid</h2>
+<p>Sigmoid is another activation function but which is less used (it is widely used as an output function to map value between 0 and 1). See also <a href="/Revision/logistic_regression.html#sigmoid_function">Sigmoid in Logistic Regression</a>.</p>
+
+<div style="text-align: center">
+<img src="assets/images/Sigmoid_nn.png" width="25%" height="25%" />
+</div>
+
+\[Sigmoid(x) = \frac{1}{1+e^{-x}} = \frac{e^{x}}{e^{x}+1}\]
+
+<p><br /></p>
+
+\[Sigmoid'(x) =  = Sigmoid(x)\left(1-Sigmoid(x)\right)\]
+
+<p><br /><br /></p>
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://mlfromscratch.com/activation-functions-explained/">this exhaustive presentation of activation function by Casper Hanser</a>,</li>
+  <li><a href="https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity">the Pytorch documentation</a>.</li>
+</ul>
+
+  </body>
+</html>

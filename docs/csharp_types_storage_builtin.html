@@ -1,0 +1,624 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>C# Data Storage Built-in Types</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-c---types"><a href="/Revision/csharp_types.html">Back to C# - Types</a></h2>
+
+<p><br /></p>
+<h1 id="arrays"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/arrays/">Arrays</a></h1>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="m">2</span><span class="p">];</span> <span class="c1">// creates array of length 2, default values</span>
+  <span class="kt">string</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span> <span class="p">};</span> <span class="c1">// creates populated array of length 2</span>
+  <span class="kt">string</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="p">{</span> <span class="s">"A"</span> <span class="p">,</span> <span class="s">"B"</span> <span class="p">};</span> <span class="c1">// creates populated array of length 2</span>
+  <span class="kt">string</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span> <span class="p">};</span> <span class="c1">// creates populated array of length 2</span>
+
+  <span class="k">const</span> <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="kt">string</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="c1">// OK only if i is a constant</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+
+  <span class="kt">int</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="n">Enumerable</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">).</span><span class="nf">ToArray</span><span class="p">();</span> <span class="c1">// creates array of length 10 populated with 1</span>
+  <span class="kt">int</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="n">Enumerable</span><span class="p">.</span><span class="nf">Range</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">).</span><span class="nf">ToArray</span><span class="p">();</span> <span class="c1">// creates array from 1 to 10 (included)</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="operations-on-arrays">Operations on Arrays</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="n">Enumerable</span><span class="p">.</span><span class="nf">Range</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">).</span><span class="nf">ToArray</span><span class="p">();</span>
+
+
+  <span class="cm">/**** Basic Operations ****/</span>
+  <span class="kt">int</span> <span class="n">length</span> <span class="p">=</span> <span class="n">array</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="c1">// 10 - Size of array</span>
+
+
+  <span class="cm">/**** Access, Slicing, Search and Insertion ****/</span>
+  <span class="kt">int</span> <span class="n">index</span> <span class="p">=</span> <span class="m">3</span><span class="p">,</span> <span class="n">indexStart</span> <span class="p">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">indexEnd</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span> <span class="n">distanceFromEnd</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span> <span class="n">valSearch</span> <span class="p">=</span> <span class="m">7</span><span class="p">,</span> <span class="n">valInsert</span> <span class="p">=</span> <span class="m">9</span><span class="p">;</span>
+
+  <span class="kt">int</span> <span class="n">val</span> <span class="p">=</span> <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">];</span> <span class="c1">// Access - 4</span>
+  <span class="kt">int</span> <span class="n">val</span> <span class="p">=</span> <span class="n">array</span><span class="p">[^</span><span class="n">index</span><span class="p">];</span> <span class="c1">// Access - Access element (array.Length - index) - 7</span>
+  <span class="kt">int</span><span class="p">[]</span> <span class="n">subArray</span> <span class="p">=</span> <span class="n">array</span><span class="p">[</span><span class="n">indexStart</span><span class="p">..</span><span class="n">indexEnd</span><span class="p">];</span> <span class="c1">// Slicing - From indexStart to indexEnd - excluded) - [3, 4, 5]</span>
+  <span class="kt">int</span><span class="p">[]</span> <span class="n">subArray</span> <span class="p">=</span> <span class="n">array</span><span class="p">[</span><span class="n">indexStart</span><span class="p">..^</span><span class="n">distanceFromEnd</span><span class="p">];</span> <span class="c1">// Slicing - From indexStart to index (array.Length - distanceFromEnd) included - [3, 4, 5, 6, 7, 8, 9]</span>
+
+  <span class="kt">bool</span> <span class="n">b</span> <span class="p">=</span> <span class="n">array</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">valSearch</span><span class="p">);</span> <span class="c1">// Contains - Can also use Array.Exists(array, x =&gt; x == valSearch) that requires a predicate (slower) - true</span>
+  <span class="kt">int</span> <span class="n">indexOf</span> <span class="p">=</span> <span class="n">Array</span><span class="p">.</span><span class="nf">IndexOf</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">valSearch</span><span class="p">);</span> <span class="c1">// Search - Returns -1 if not found - 6</span>
+
+  <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="p">=</span> <span class="n">valInsert</span><span class="p">;</span> <span class="c1">// Insertion - Replace an existing value</span>
+
+
+  <span class="cm">/**** Comparison Operations ****/</span>
+  <span class="kt">int</span> <span class="n">min</span> <span class="p">=</span> <span class="n">array</span><span class="p">.</span><span class="nf">Min</span><span class="p">();</span> <span class="c1">// 1 - Minimum of array - Note: Faster using for loop</span>
+  <span class="kt">int</span> <span class="n">max</span> <span class="p">=</span> <span class="n">array</span><span class="p">.</span><span class="nf">Max</span><span class="p">();</span> <span class="c1">// 10 - Maximum of array - Note: Faster using for loop</span>
+
+
+  <span class="cm">/**** Aggregation Operations ****/</span>
+  <span class="kt">int</span> <span class="n">sum</span> <span class="p">=</span> <span class="n">array</span><span class="p">.</span><span class="nf">Sum</span><span class="p">();</span> <span class="c1">// 60 - Sum of array</span>
+  <span class="kt">double</span> <span class="n">average</span> <span class="p">=</span> <span class="n">array</span><span class="p">.</span><span class="nf">Average</span><span class="p">();</span> <span class="c1">// 6 - Average of array</span>
+
+
+  <span class="cm">/**** Sort/Reverse Operations ****/</span>
+  <span class="n">Array</span><span class="p">.</span><span class="nf">Sort</span><span class="p">(</span><span class="n">array</span><span class="p">);</span> <span class="c1">// Sort the array - 1 2 3 5 6 7 8 9 9 10</span>
+  <span class="n">Array</span><span class="p">.</span><span class="nf">Reverse</span><span class="p">(</span><span class="n">array</span><span class="p">);</span> <span class="c1">// Reverse the array - 10 9 9 8 7 6 5 3 2 1</span>
+
+
+  <span class="cm">/**** Copy Operations ****/</span>
+  <span class="kt">int</span><span class="p">[]</span> <span class="n">array2</span> <span class="p">=</span> <span class="n">array</span><span class="p">;</span> <span class="c1">// Copy by reference (change to one modifies other)</span>
+  <span class="kt">int</span><span class="p">[]</span> <span class="n">array3</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">[])</span> <span class="n">array</span><span class="p">.</span><span class="nf">Clone</span><span class="p">();</span> <span class="c1">// Copy by value (change to one does not modify other)</span>
+
+
+  <span class="cm">/**** Print Operation ****/</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="s">"; "</span><span class="p">,</span> <span class="n">array</span><span class="p">));</span> <span class="c1">// 10; 9; 9; 8; 7; 6; 5; 3; 2; 1</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="ressources">Ressources</h4>
+<ul>
+  <li>To see the new Rnage type go to the <a href="https://learn.microsoft.com/en-us/dotnet/api/system.range?view=netcore-3.0">Microsoft documentation page on Range</a></li>
+  <li>For a comparison of time to find min and max of an array check <a href="https://code-maze.com/csharp-array-maximum-value/">this page on Code Maze</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="multi-dimensional-arrays"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/arrays/multidimensional-arrays">Multi Dimensional Arrays</a></h1>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">string</span><span class="p">[</span> <span class="p">,</span> <span class="p">]</span> <span class="n">marray</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[</span><span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">];</span> <span class="c1">// Create an empty array with 2 rows and 3 columns</span>
+  <span class="kt">int</span><span class="p">[</span> <span class="p">,</span> <span class="p">]</span> <span class="n">marray</span> <span class="p">=</span> <span class="p">{</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span> <span class="p">},</span> <span class="p">{</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span> <span class="p">}</span> <span class="p">};</span> <span class="c1">// Create an array with 2 rows and 3 columns</span>
+  <span class="kt">int</span><span class="p">[</span> <span class="p">,</span> <span class="p">]</span> <span class="n">marray</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">]{</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span> <span class="p">},</span> <span class="p">{</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span> <span class="p">}</span> <span class="p">};</span> <span class="c1">// Create an array with 2 rows and 3 columns</span>
+  <span class="kt">int</span><span class="p">[</span> <span class="p">,</span> <span class="p">,</span> <span class="p">]</span> <span class="n">marray</span> <span class="p">=</span> <span class="p">{</span> <span class="p">{</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">5</span> <span class="p">},</span> <span class="p">{</span> <span class="m">2</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">6</span> <span class="p">}</span> <span class="p">},</span> <span class="p">{</span> <span class="p">{</span> <span class="m">2</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">9</span> <span class="p">},</span> <span class="p">{</span> <span class="m">5</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">11</span> <span class="p">}</span> <span class="p">}</span> <span class="p">};</span> <span class="c1">// 3 dimensional array</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="operations-on-multi-dimensional-arrays">Operations on Multi Dimensional Arrays</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+
+  <span class="kt">int</span><span class="p">[</span> <span class="p">,</span> <span class="p">]</span> <span class="n">marray</span> <span class="p">=</span> <span class="p">{</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span> <span class="p">},</span> <span class="p">{</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span> <span class="p">}</span> <span class="p">};</span> <span class="c1">// Create an array with 2 rows and 3 columns</span>
+
+
+  <span class="cm">/**** Basic Operations ****/</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">marray</span><span class="p">.</span><span class="nf">GetLength</span><span class="p">(</span><span class="m">0</span><span class="p">));</span> <span class="c1">// 2 - Number of Rows (1st dimension)</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">marray</span><span class="p">.</span><span class="nf">GetLength</span><span class="p">(</span><span class="m">1</span><span class="p">));</span> <span class="c1">// 3 - Number of Columns (2nd dimension)</span>
+
+
+  <span class="cm">/**** Extract Columns and Rows ****/</span>
+  <span class="c1">// Get Column of a marray using Linq</span>
+  <span class="k">public</span> <span class="n">T</span><span class="p">[]</span> <span class="nf">GetColumn</span><span class="p">(</span><span class="n">T</span><span class="p">[,]</span> <span class="n">marray</span><span class="p">,</span> <span class="kt">int</span> <span class="n">columnNumber</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">Enumerable</span><span class="p">.</span><span class="nf">Range</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">marray</span><span class="p">.</span><span class="nf">GetLength</span><span class="p">(</span><span class="m">0</span><span class="p">))</span>
+              <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">marray</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">columnNumber</span><span class="p">])</span>
+              <span class="p">.</span><span class="nf">ToArray</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Get Row of a marray using Linq</span>
+  <span class="k">public</span> <span class="n">T</span><span class="p">[]</span> <span class="nf">GetRow</span><span class="p">(</span><span class="n">T</span><span class="p">[,]</span> <span class="n">marray</span><span class="p">,</span> <span class="kt">int</span> <span class="n">rowNumber</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">Enumerable</span><span class="p">.</span><span class="nf">Range</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">marray</span><span class="p">.</span><span class="nf">GetLength</span><span class="p">(</span><span class="m">1</span><span class="p">))</span>
+              <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">marray</span><span class="p">[</span><span class="n">rowNumber</span><span class="p">,</span> <span class="n">x</span><span class="p">])</span>
+              <span class="p">.</span><span class="nf">ToArray</span><span class="p">();</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="jagged-arrays"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/arrays/jagged-arrays">Jagged Arrays</a></h1>
+<p>A jagged array is an array whose elements are arrays, possibly of different sizes. A jagged array is sometimes called an “array of arrays.”. It can also be used with multi dimensional arrays.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span><span class="p">[][]</span> <span class="n">jaggedArray</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="m">3</span><span class="p">][];</span> <span class="c1">// Create an empty jagged array of 3 arrays of different undefined sizes</span>
+  <span class="n">jaggedArray</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="m">5</span><span class="p">];</span> <span class="c1">// Set size of first array to 5</span>
+  <span class="n">jaggedArray</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="m">4</span><span class="p">];</span> <span class="c1">// Set size of second array to 4</span>
+  <span class="n">jaggedArray</span><span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="m">2</span><span class="p">];</span> <span class="c1">// Set size of third array to 2</span>
+
+  <span class="kt">int</span><span class="p">[][]</span> <span class="n">jaggedArray</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="m">3</span><span class="p">][];</span> <span class="c1">// Create an empty jagged array of 3 arrays of different undefined sizes</span>
+  <span class="n">jaggedArray</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[]</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">9</span> <span class="p">};</span> <span class="c1">// Define first array</span>
+  <span class="n">jaggedArray</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[]</span> <span class="p">{</span> <span class="m">0</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">6</span> <span class="p">};</span> <span class="c1">// Define second array</span>
+  <span class="n">jaggedArray</span><span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[]</span> <span class="p">{</span> <span class="m">11</span><span class="p">,</span> <span class="m">22</span> <span class="p">};</span> <span class="c1">// Define third array</span>
+
+  <span class="kt">int</span><span class="p">[][]</span> <span class="n">jaggedArray</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[][]</span>
+  <span class="p">{</span>
+    <span class="k">new</span> <span class="kt">int</span><span class="p">[]</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">9</span> <span class="p">},</span>
+    <span class="k">new</span> <span class="kt">int</span><span class="p">[]</span> <span class="p">{</span> <span class="m">0</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">6</span> <span class="p">},</span>
+  <span class="p">};</span>
+
+  <span class="kt">int</span><span class="p">[][]</span> <span class="n">jaggedArray</span> <span class="p">=</span>
+  <span class="p">{</span>
+    <span class="k">new</span> <span class="kt">int</span><span class="p">[]</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">9</span> <span class="p">},</span>
+    <span class="k">new</span> <span class="kt">int</span><span class="p">[]</span> <span class="p">{</span> <span class="m">0</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">6</span> <span class="p">},</span>
+  <span class="p">};</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="operations-on-jagged-arrays">Operations on Jagged Arrays</h2>
+
+<p><br /></p>
+<h1 id="list"><a href="https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1?view=net-7.0">List</a></h1>
+<p>C# <code class="language-plaintext cs highlighter-rouge">List</code> are Linked List (ie with variable size).<br />
+To use <code class="language-plaintext cs highlighter-rouge">List</code>, you need to import <code class="language-plaintext cs highlighter-rouge">System.Collections.Generic</code>.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+
+  <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">?&gt;</span> <span class="n">list</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">?&gt;();</span> <span class="c1">// creates an empty List</span>
+  <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">?&gt;</span> <span class="n">list</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">?&gt;(){</span><span class="k">null</span><span class="p">,</span> <span class="m">2</span><span class="p">};</span> <span class="c1">// creates populated List of length 2</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+
+  <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">list</span> <span class="p">=</span> <span class="n">Enumerable</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">).</span><span class="nf">ToList</span><span class="p">();</span> <span class="c1">// creates a List of length 10 populated with 1</span>
+  <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">list</span> <span class="p">=</span> <span class="n">Enumerable</span><span class="p">.</span><span class="nf">Range</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">).</span><span class="nf">ToList</span><span class="p">();</span> <span class="c1">// creates List from 1 to 10 (included)</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="operations-on-list">Operations on List</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+
+
+  <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">list</span> <span class="p">=</span> <span class="n">Enumerable</span><span class="p">.</span><span class="nf">Range</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">).</span><span class="nf">ToList</span><span class="p">();</span>
+
+
+  <span class="cm">/**** Basic Operations ****/</span>
+  <span class="kt">int</span> <span class="n">length</span> <span class="p">=</span> <span class="n">list</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="c1">// 10 - Size of List</span>
+
+
+  <span class="cm">/**** Access, Slicing, Search, Insertion and Deletion ****/</span>
+  <span class="kt">int</span> <span class="n">index</span> <span class="p">=</span> <span class="m">3</span><span class="p">,</span> <span class="n">indexStart</span> <span class="p">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">indexEnd</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span> <span class="n">valSearch</span> <span class="p">=</span> <span class="m">7</span><span class="p">,</span> <span class="n">valToInsertAdd</span> <span class="p">=</span> <span class="m">9</span><span class="p">,</span> <span class="n">valToInsertReplace</span> <span class="p">=</span> <span class="m">6</span><span class="p">,</span> <span class="n">nbElements</span> <span class="p">=</span> <span class="m">4</span><span class="p">;</span>
+
+  <span class="kt">int</span> <span class="n">val</span> <span class="p">=</span> <span class="n">list</span><span class="p">[</span><span class="n">index</span><span class="p">];</span> <span class="c1">// Access - 4</span>
+  <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">subList</span> <span class="p">=</span> <span class="n">list</span><span class="p">.</span><span class="nf">GetRange</span><span class="p">(</span><span class="n">indexStart</span><span class="p">,</span> <span class="n">nbElements</span><span class="p">);</span> <span class="c1">// Slicing - nbElements starting at indexStart - [3, 4, 5, 6]</span>
+
+  <span class="kt">bool</span> <span class="n">b</span> <span class="p">=</span> <span class="n">list</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">valSearch</span><span class="p">);</span> <span class="c1">// Contains - true</span>
+  <span class="kt">int</span> <span class="n">indexOf</span> <span class="p">=</span> <span class="n">list</span><span class="p">.</span><span class="nf">IndexOf</span><span class="p">(</span><span class="n">valSearch</span><span class="p">);</span> <span class="c1">// Search - Returns -1 if not found - 6</span>
+
+  <span class="n">list</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">valToInsertAdd</span><span class="p">);</span> <span class="c1">// Insertion - Add a new value</span>
+  <span class="n">list</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="p">=</span> <span class="n">valToInsertReplace</span><span class="p">;</span> <span class="c1">// Insertion - Replace an existing value</span>
+  <span class="n">list</span><span class="p">.</span><span class="nf">InsertRange</span><span class="p">(</span><span class="n">indexStart</span><span class="p">,</span> <span class="n">subList</span><span class="p">);</span> <span class="c1">// Insertion - Insert the list subList at index indexStart</span>
+
+  <span class="n">list</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="n">valSearch</span><span class="p">);</span> <span class="c1">// Remove - Remove first occurence</span>
+  <span class="n">list</span><span class="p">.</span><span class="nf">RemoveAt</span><span class="p">(</span><span class="n">index</span><span class="p">);</span> <span class="c1">// Remove by index</span>
+  <span class="n">list</span><span class="p">.</span><span class="nf">RemoveRange</span><span class="p">(</span><span class="n">indexStart</span><span class="p">,</span> <span class="n">nbElements</span><span class="p">);</span><span class="c1">// Remove Range - Remove nbElements elements starting at indexStart</span>
+
+
+  <span class="cm">/**** Comparison Operations ****/</span>
+  <span class="kt">int</span> <span class="n">min</span> <span class="p">=</span> <span class="n">list</span><span class="p">.</span><span class="nf">Min</span><span class="p">();</span> <span class="c1">// 1 - Minimum of List</span>
+  <span class="kt">int</span> <span class="n">max</span> <span class="p">=</span> <span class="n">list</span><span class="p">.</span><span class="nf">Max</span><span class="p">();</span> <span class="c1">// 10 - Maximum of List</span>
+
+
+  <span class="cm">/**** Aggregation Operations ****/</span>
+  <span class="kt">int</span> <span class="n">sum</span> <span class="p">=</span> <span class="n">list</span><span class="p">.</span><span class="nf">Sum</span><span class="p">();</span> <span class="c1">// 56 - Sum of List</span>
+  <span class="kt">double</span> <span class="n">average</span> <span class="p">=</span> <span class="n">list</span><span class="p">.</span><span class="nf">Average</span><span class="p">();</span> <span class="c1">// 6.22 - Average of List</span>
+
+
+  <span class="cm">/**** Sort/Reverse Operations ****/</span>
+  <span class="n">list</span><span class="p">.</span><span class="nf">Sort</span><span class="p">();</span> <span class="c1">// Sort the list - 1 2 5 6 6 8 9 9 10</span>
+  <span class="n">list</span><span class="p">.</span><span class="nf">Reverse</span><span class="p">();</span> <span class="c1">// Reverse the list - 10 9 9 8 6 6 5 2 1</span>
+
+
+  <span class="cm">/**** Copy Operations ****/</span>
+  <span class="cm">/** Shallow Copy **/</span>
+  <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">listCopy</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="n">list</span><span class="p">);</span> <span class="c1">// For value types List, change to one list does not modify the other (not true for reference types list)</span>
+
+  <span class="cm">/** Deep Copy **/</span>
+  <span class="n">List</span><span class="p">&lt;</span><span class="n">ReferenceType</span><span class="p">&gt;</span> <span class="n">listDeepCopy</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">ReferenceType</span><span class="p">&gt;(</span><span class="n">list</span><span class="p">.</span><span class="n">Count</span><span class="p">);</span>
+  <span class="n">list</span><span class="p">.</span><span class="nf">ForEach</span><span class="p">((</span><span class="n">item</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">listDeepCopy</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">ReferenceType</span><span class="p">(</span><span class="n">item</span><span class="p">));</span> <span class="p">});</span> <span class="c1">// Requires a copy constructor for ReferenceType</span>
+
+
+  <span class="cm">/**** Print Operation ****/</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="s">"; "</span><span class="p">,</span> <span class="n">list</span><span class="p">));</span> <span class="c1">// 10; 9; 9; 8; 6; 6; 5; 2; 1</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="sortedlist"><a href="https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.sortedlist-2?view=net-7.0">SortedList</a></h2>
+<p>To use <code class="language-plaintext cs highlighter-rouge">SortedList</code> (<code class="language-plaintext cs highlighter-rouge">SortedList&lt;TKey, TValue&gt;</code>), you need to import <code class="language-plaintext cs highlighter-rouge">System.Collections.Generic</code>.<br />
+<code class="language-plaintext cs highlighter-rouge">SortedList&lt;TKey, TValue&gt;</code> is a collection class that can store key-value pairs that are sorted by the keys based on the associated IComparer implementation (see <a href="https://www.tutorialsteacher.com/csharp/csharp-sortedlist">Tutorial Teacher on Sorted Lists</a>)</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+
+  <span class="n">SortedList</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">sortedList</span> <span class="p">=</span> <span class="k">new</span> <span class="n">SortedList</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;();</span>
+  <span class="n">sortedList</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="s">"Three"</span><span class="p">);</span>
+  <span class="n">sortedList</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="s">"One"</span><span class="p">);</span>
+  <span class="n">sortedList</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="s">"Two"</span><span class="p">);</span>
+
+  <span class="n">SortedList</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">sortedList</span> <span class="p">=</span> <span class="k">new</span> <span class="n">SortedList</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;()</span>
+                                                <span class="p">{</span>
+                                                  <span class="p">{</span><span class="m">3</span><span class="p">,</span> <span class="s">"Three"</span><span class="p">},</span>
+                                                  <span class="p">{</span><span class="m">5</span><span class="p">,</span> <span class="s">"Five"</span><span class="p">},</span>
+                                                  <span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="s">"One"</span><span class="p">}</span>
+                                                <span class="p">};</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="operations-on-sortedlist">Operations on SortedList</h2>
+
+<p><br /></p>
+<h2 id="difference-with-heap">Difference with Heap</h2>
+<p>See <a href="https://www.geeksforgeeks.org/difference-between-heaps-and-sorted-array/">this Geeks for Geeks page</a>.
+A Heap is stored as a Binary tree where the parents are always greater (MaxHeap) or lower (MinHeap) than their children. A Heap does not have rules for left and right children (it is not a binary search tree).</p>
+
+<p>Time Complexity comparison between a MinHeap and a SortedList (ascending order):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Operation</th>
+      <th style="text-align: center">SortedList</th>
+      <th style="text-align: center">Heap</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Insert</td>
+      <td style="text-align: center">O(n)</td>
+      <td style="text-align: center">O(log(n))</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Search</td>
+      <td style="text-align: center">O(log(n))</td>
+      <td style="text-align: center">O(n)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Find Min</td>
+      <td style="text-align: center">O(1)</td>
+      <td style="text-align: center">O(1)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Delete Min</td>
+      <td style="text-align: center">O(n)</td>
+      <td style="text-align: center">O(log(n))</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+<h1 id="hashset"><a href="https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.hashset-1?view=net-7.0">HashSet</a></h1>
+<p>To use <code class="language-plaintext cs highlighter-rouge">HashSet</code>, you need to import <code class="language-plaintext cs highlighter-rouge">System.Collections.Generic</code>.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+
+  <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">hashset</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;();</span>
+  <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">hashset</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span> <span class="p">};</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="operations-on-hashset">Operations on HashSet</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+
+  <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">hashset</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span> <span class="p">};</span>
+
+
+  <span class="cm">/**** Basic Operations ****/</span>
+  <span class="kt">int</span> <span class="n">size</span> <span class="p">=</span> <span class="n">hashset</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="c1">// Get number of elements of hashset - Can use .Count()</span>
+
+  <span class="kt">int</span> <span class="n">val</span> <span class="p">=</span> <span class="m">4</span><span class="p">,</span> <span class="n">valAlreadyInHashet</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="n">hashset</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">val</span><span class="p">);</span> <span class="c1">// Add val to hashset</span>
+  <span class="n">hashset</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">valAlreadyInHashet</span><span class="p">);</span> <span class="c1">// If val already in hashset, do Nothing</span>
+
+  <span class="kt">bool</span> <span class="n">b</span> <span class="p">=</span> <span class="n">hashset</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">val</span><span class="p">);</span> <span class="c1">// Check if key already in hashset</span>
+
+
+  <span class="cm">/**** Extract Values ****/</span>
+  <span class="kt">int</span><span class="p">[]</span> <span class="n">arrayValues</span> <span class="p">=</span> <span class="n">hashset</span><span class="p">.</span><span class="nf">ToArray</span><span class="p">();</span> <span class="c1">// Requires Systel.Linq</span>
+  <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">listValues</span> <span class="p">=</span> <span class="n">hashset</span><span class="p">.</span><span class="nf">ToList</span><span class="p">();</span> <span class="c1">// Requires Systel.Linq</span>
+
+
+  <span class="cm">/**** Comparison Operations ****/</span>
+  <span class="kt">int</span> <span class="n">min</span> <span class="p">=</span> <span class="n">hashset</span><span class="p">.</span><span class="nf">Min</span><span class="p">();</span>
+  <span class="kt">var</span> <span class="n">max</span> <span class="p">=</span> <span class="n">hashset</span><span class="p">.</span><span class="nf">Max</span><span class="p">();</span>
+
+
+  <span class="cm">/**** Intersection and Union Operations ****/</span>
+  <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">hashset2</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">9</span> <span class="p">};</span>
+  <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">hashsetOutIntersection</span> <span class="p">=</span> <span class="n">hashset</span><span class="p">.</span><span class="nf">Intersect</span><span class="p">(</span><span class="n">hashset2</span><span class="p">).</span><span class="nf">ToHashSet</span><span class="p">();</span> <span class="c1">// { 1 } - Requires System.Linq</span>
+  <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">hashsetOutUnion</span> <span class="p">=</span> <span class="n">hashset</span><span class="p">.</span><span class="nf">Union</span><span class="p">(</span><span class="n">hashset2</span><span class="p">).</span><span class="nf">ToHashSet</span><span class="p">();</span> <span class="c1">// { 1, 2, 3, 4, 7, 8, 9 } - Requires System.Linq</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="dictionary"><a href="https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2?view=net-7.0">Dictionary</a></h1>
+<p>To use <code class="language-plaintext cs highlighter-rouge">Dictionary</code>, you need to import <code class="language-plaintext cs highlighter-rouge">System.Collections.Generic</code>.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+
+  <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="n">dictionary</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;();</span>
+  <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="n">dictionary</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;()</span>
+  <span class="p">{</span>
+      <span class="p">{</span> <span class="s">"1"</span><span class="p">,</span> <span class="m">1</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="s">"2"</span><span class="p">,</span> <span class="m">2</span> <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="c1">// Key and Value may be System.ValueTuple</span>
+  <span class="n">Dictionary</span><span class="p">&lt;(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">),</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">)&gt;</span> <span class="n">dictionary</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">),</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">)&gt;();</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="operations-on-dictionnary">Operations on Dictionnary</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+
+  <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="n">dictionary</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;();</span>
+
+
+  <span class="cm">/**** Basic Operations ****/</span>
+  <span class="kt">int</span> <span class="n">size</span> <span class="p">=</span> <span class="n">dictionary</span><span class="p">.</span><span class="nf">Count</span><span class="p">();</span> <span class="c1">// Get number of elements of dictionary</span>
+
+  <span class="kt">string</span> <span class="n">key</span> <span class="p">=</span> <span class="s">"1"</span><span class="p">;</span> <span class="kt">int</span> <span class="n">val</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="n">dictionary</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span> <span class="c1">// Add key and value - if key already in dictionary, throw error</span>
+
+  <span class="kt">var</span> <span class="n">extractedValue</span> <span class="p">=</span> <span class="n">dictionary</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="c1">// Exctract Value associated with key</span>
+
+  <span class="kt">bool</span> <span class="n">b</span> <span class="p">=</span> <span class="n">dictionary</span><span class="p">.</span><span class="nf">ContainsKey</span><span class="p">(</span><span class="n">key</span><span class="p">);</span> <span class="c1">// Check if key already in dictionary</span>
+
+
+  <span class="cm">/**** Extract Keys and Values ****/</span>
+  <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">keys</span> <span class="p">=</span> <span class="n">dictionary</span><span class="p">.</span><span class="n">Keys</span><span class="p">.</span><span class="nf">ToList</span><span class="p">();</span> <span class="c1">// Get Keys in List - Can also cast to array - Requires System.Linq</span>
+  <span class="kt">int</span><span class="p">[]</span> <span class="n">values</span> <span class="p">=</span> <span class="n">dictionary</span><span class="p">.</span><span class="n">Values</span><span class="p">.</span><span class="nf">ToArray</span><span class="p">();</span> <span class="c1">// Get Values in array - Can also cast to List - Requires System.Linq</span>
+
+
+  <span class="cm">/**** Comparison Operations ****/</span>
+  <span class="kt">string</span> <span class="n">minKey</span> <span class="p">=</span> <span class="n">dictionary</span><span class="p">.</span><span class="n">Keys</span><span class="p">.</span><span class="nf">Min</span><span class="p">();</span> <span class="c1">// Get minimum Key</span>
+  <span class="kt">var</span> <span class="n">maxKey</span> <span class="p">=</span> <span class="n">dictionary</span><span class="p">.</span><span class="n">Keys</span><span class="p">.</span><span class="nf">Max</span><span class="p">();</span> <span class="c1">// Get maximum Key</span>
+
+  <span class="kt">var</span> <span class="n">minValue</span> <span class="p">=</span> <span class="n">dictionary</span><span class="p">.</span><span class="n">Values</span><span class="p">.</span><span class="nf">Min</span><span class="p">();</span> <span class="c1">// Get minimum Value</span>
+  <span class="kt">int</span> <span class="n">maxValue</span> <span class="p">=</span> <span class="n">dictionary</span><span class="p">.</span><span class="n">Values</span><span class="p">.</span><span class="nf">Max</span><span class="p">();</span> <span class="c1">// Get maximum Value</span>
+
+  <span class="kt">string</span> <span class="n">minKeyByValue</span> <span class="p">=</span> <span class="n">dictionary</span><span class="p">.</span><span class="nf">MinBy</span><span class="p">(</span><span class="n">kvp</span> <span class="p">=&gt;</span> <span class="n">kvp</span><span class="p">.</span><span class="n">Value</span><span class="p">).</span><span class="n">Key</span><span class="p">;</span> <span class="c1">// Get Key with min Value - Requires System.Linq - Work with .Net 6</span>
+  <span class="kt">string</span> <span class="n">maxKeyByValue</span> <span class="p">=</span> <span class="n">dictionary</span><span class="p">.</span><span class="nf">MaxBy</span><span class="p">(</span><span class="n">kvp</span> <span class="p">=&gt;</span> <span class="n">kvp</span><span class="p">.</span><span class="n">Value</span><span class="p">).</span><span class="n">Key</span><span class="p">;</span> <span class="c1">// Get Key with max Value - Requires System.Linq - Work with .Net 6</span>
+
+
+  <span class="cm">/**** Loop ****/</span>
+  <span class="k">foreach</span><span class="p">(</span><span class="n">KeyValuePair</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="n">entry</span> <span class="k">in</span> <span class="n">dictionary</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// do something with entry.Value or entry.Key</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="tuples">Tuples</h1>
+<h2 id="systemvaluetuple-vs-systemtuple">System.ValueTuple vs System.Tuple</h2>
+<p>C# tuples, which are backed by <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-tuples">System.ValueTuple</a> types, are different from tuples that are represented by <a href="https://learn.microsoft.com/en-us/dotnet/api/system.tuple?view=net-7.0">System.Tuple</a> types.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span> <span class="n">t1</span> <span class="p">=</span> <span class="p">(</span><span class="s">"test"</span><span class="p">,</span> <span class="m">3</span><span class="p">);</span> <span class="c1">// System.ValueTuple</span>
+  <span class="n">Tuple</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="n">t2</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Tuple</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="p">(</span><span class="s">"test"</span><span class="p">,</span> <span class="m">3</span><span class="p">);</span> <span class="c1">// System.Tuple</span></code></pre></figure>
+
+<p><br /></p>
+
+<p>Here are their main differences:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">System.ValueTuple</th>
+      <th style="text-align: left">System.Tuple</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">value types</td>
+      <td style="text-align: left">reference types</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">mutable</td>
+      <td style="text-align: left">immutable</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Data members are fields.</td>
+      <td style="text-align: left">Data members are properties.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<p><a href="https://stackoverflow.com/questions/73739668/using-tuples-in-c-a-b-c-vs-tuplestring-string-string">This StackOverflow post</a> says that in general, using System.ValueTuple is preferable to reference-type System.Tuple, because:</p>
+<ul>
+  <li>They don’t add pressure to the garbage collector,</li>
+  <li>There is language support for naming the members of a value-tuple.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="systemvaluetuple"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-tuples">System.ValueTuple</a></h2>
+<h5 id="basic-initialization">Basic initialization</h5>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span> <span class="n">t1</span> <span class="p">=</span> <span class="p">(</span><span class="s">"test"</span><span class="p">,</span> <span class="m">3</span><span class="p">);</span>
+  <span class="p">(</span><span class="kt">double</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span> <span class="n">t</span> <span class="p">=</span> <span class="p">(</span><span class="m">4.5</span><span class="p">,</span> <span class="m">3</span><span class="p">);</span>
+  <span class="kt">var</span> <span class="n">t</span> <span class="p">=</span>  <span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">9</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span></code></pre></figure>
+
+<p><br /></p>
+<h5 id="using-field-names">Using field names</h5>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">var</span> <span class="n">t1</span> <span class="p">=</span> <span class="p">(</span><span class="n">tupleSum</span><span class="p">:</span> <span class="m">4.5</span><span class="p">,</span> <span class="n">tupleCount</span><span class="p">:</span> <span class="m">3</span><span class="p">);</span>
+  <span class="p">(</span><span class="kt">double</span> <span class="n">tupleSum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">tupleCount</span><span class="p">)</span> <span class="n">t2</span> <span class="p">=</span> <span class="p">(</span><span class="m">4.5D</span><span class="p">,</span> <span class="m">3</span><span class="p">);</span>
+  <span class="p">(</span><span class="kt">double</span> <span class="n">tupleSum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">tupleCount</span><span class="p">)</span> <span class="n">t3</span> <span class="p">=</span> <span class="p">(</span><span class="n">Sum</span><span class="p">:</span> <span class="m">4.5D</span><span class="p">,</span> <span class="n">Count</span><span class="p">:</span> <span class="m">3</span><span class="p">);</span>
+
+  <span class="kt">double</span> <span class="n">tupleSum</span> <span class="p">=</span> <span class="m">4.5</span><span class="p">;</span> <span class="kt">int</span> <span class="n">tupleCount</span> <span class="p">=</span> <span class="m">3</span><span class="p">;</span>
+  <span class="kt">var</span> <span class="n">t4</span> <span class="p">=</span> <span class="p">(</span><span class="n">tupleSum</span><span class="p">,</span> <span class="n">tupleCount</span><span class="p">);</span>
+
+  <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span> <span class="n">t5</span> <span class="p">=</span> <span class="p">(</span><span class="n">tupleSum</span><span class="p">:</span> <span class="m">1.2</span><span class="p">,</span> <span class="n">tupleCount</span><span class="p">:</span> <span class="m">6</span><span class="p">);</span> <span class="c1">// Sum and Count will be ignored. It will have the default Item1, Item2</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="operations-on-systemvaluetuple">Operations on System.ValueTuple</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span> <span class="n">t1</span> <span class="p">=</span> <span class="p">(</span><span class="s">"test"</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">7</span><span class="p">);</span>
+  <span class="p">(</span><span class="kt">double</span> <span class="n">tupleSum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">tupleCount</span><span class="p">)</span> <span class="n">t2</span> <span class="p">=</span> <span class="p">(</span><span class="m">4.5</span><span class="p">,</span> <span class="m">3</span><span class="p">);</span>
+
+
+  <span class="cm">/**** Access ****/</span>
+  <span class="kt">var</span> <span class="n">s</span> <span class="p">=</span> <span class="n">t1</span><span class="p">.</span><span class="n">Item1</span><span class="p">;</span> <span class="c1">// "test"</span>
+  <span class="kt">int</span> <span class="n">i1</span> <span class="p">=</span> <span class="n">t1</span><span class="p">.</span><span class="n">Item2</span><span class="p">;</span> <span class="c1">// 3</span>
+  <span class="kt">dynamic</span> <span class="n">i2</span> <span class="p">=</span> <span class="n">t1</span><span class="p">.</span><span class="n">Item3</span><span class="p">;</span> <span class="c1">// 7</span>
+
+  <span class="kt">double</span> <span class="n">d</span> <span class="p">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">tupleSum</span><span class="p">;</span> <span class="c1">// 4.5</span>
+  <span class="kt">var</span> <span class="n">i3</span> <span class="p">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">tupleCount</span><span class="p">;</span> <span class="c1">// 3</span>
+
+
+  <span class="cm">/**** ToTuple ****/</span>
+  <span class="kt">var</span> <span class="n">t3</span> <span class="p">=</span> <span class="n">t1</span><span class="p">.</span><span class="nf">ToTuple</span><span class="p">();</span>
+  <span class="n">Tuple</span><span class="p">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="n">t4</span> <span class="p">=</span> <span class="n">t2</span><span class="p">.</span><span class="nf">ToTuple</span><span class="p">();</span>
+
+
+  <span class="cm">/**** Function returning Tuple ****/</span>
+  <span class="k">public</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">)</span> <span class="nf">FunctionReturnTuple</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="s">"example"</span><span class="p">);</span> <span class="p">}</span>
+  <span class="kt">var</span> <span class="n">tuple</span> <span class="p">=</span> <span class="nf">FunctionReturnTuple</span><span class="p">();</span> <span class="c1">// tuple.Item1 = 0 ; tuple.Item2 = 1 ; tuple.Item = "example" ;</span>
+
+  <span class="c1">// Deconstruct with field names</span>
+  <span class="p">(</span><span class="kt">int</span> <span class="n">firstInt</span><span class="p">,</span> <span class="kt">int</span> <span class="n">secondInt</span><span class="p">,</span> <span class="kt">string</span> <span class="n">firstString</span><span class="p">)</span> <span class="p">=</span> <span class="nf">FunctionReturnTuple</span><span class="p">();</span>
+  <span class="kt">var</span> <span class="p">(</span><span class="n">firstInt</span><span class="p">,</span> <span class="n">secondInt</span><span class="p">,</span> <span class="n">firstString</span><span class="p">)</span> <span class="p">=</span> <span class="nf">FunctionReturnTuple</span><span class="p">();</span>
+
+  <span class="c1">// Declare with fields names</span>
+  <span class="k">public</span> <span class="p">(</span><span class="kt">int</span> <span class="n">firstInt</span><span class="p">,</span> <span class="kt">int</span> <span class="n">secondInt</span><span class="p">,</span> <span class="kt">string</span> <span class="n">firstString</span><span class="p">)</span> <span class="nf">FunctionReturnTuple</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="s">"example"</span><span class="p">);</span> <span class="p">}</span>
+  <span class="kt">var</span> <span class="n">tuple</span> <span class="p">=</span> <span class="nf">FunctionReturnTuple</span><span class="p">();</span> <span class="c1">// tuple.firstInt = 0 ; tuple.secondInt = 1 ; tuple.firstString = "example" ;</span>
+
+  <span class="k">public</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">)</span> <span class="nf">FunctionReturnTuple</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="n">firstInt</span><span class="p">:</span> <span class="m">0</span><span class="p">,</span> <span class="n">secondInt</span><span class="p">:</span> <span class="m">1</span><span class="p">,</span> <span class="n">firstString</span><span class="p">:</span> <span class="s">"example"</span><span class="p">);</span> <span class="p">}</span>
+  <span class="kt">var</span> <span class="n">tuple</span> <span class="p">=</span> <span class="nf">FunctionReturnTuple</span><span class="p">();</span> <span class="c1">// tuple.firstInt = 0 ; tuple.secondInt = 1 ; tuple.firstString = "example" ;</span>
+
+  <span class="c1">// Declared fields names can be overrided by other field names at deconstruction</span>
+  <span class="k">public</span> <span class="p">(</span><span class="kt">int</span> <span class="n">firstInt</span><span class="p">,</span> <span class="kt">int</span> <span class="n">secondInt</span><span class="p">,</span> <span class="kt">string</span> <span class="n">firstString</span><span class="p">)</span> <span class="nf">FunctionReturnTuple</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="s">"example"</span><span class="p">);</span> <span class="p">}</span>
+  <span class="kt">var</span> <span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">,</span> <span class="n">third</span><span class="p">)</span> <span class="p">=</span> <span class="nf">FunctionReturnTuple</span><span class="p">();</span> <span class="c1">// OK</span>
+  <span class="kt">var</span> <span class="p">(</span><span class="n">secondInt</span><span class="p">,</span> <span class="n">second</span><span class="p">,</span> <span class="n">third</span><span class="p">)</span> <span class="p">=</span> <span class="nf">FunctionReturnTuple</span><span class="p">();</span> <span class="c1">// OK - secondInt = 0 - if same field names are used but in another order, order prevail</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="systemtuple"><a href="https://learn.microsoft.com/en-us/dotnet/api/system.tuple?view=net-7.0">System.Tuple</a></h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">var</span> <span class="n">t1</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Tuple</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="p">(</span><span class="s">"test"</span><span class="p">,</span> <span class="m">3</span><span class="p">);</span>
+  <span class="n">Tuple</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="n">t2</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Tuple</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="p">(</span><span class="s">"test"</span><span class="p">,</span> <span class="m">3</span><span class="p">);</span>
+
+  <span class="kt">var</span> <span class="n">t3</span> <span class="p">=</span> <span class="n">Tuple</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">"test"</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="s">"7"</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span></code></pre></figure>
+
+<p><br /></p>
+
+<p>System.Tuple can’t have custom field names.</p>
+
+<p><br /></p>
+<h3 id="operations-on-systemtuple">Operations on System.Tuple</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="n">Tuple</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="n">t1</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Tuple</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="p">(</span><span class="s">"test"</span><span class="p">,</span> <span class="m">3</span><span class="p">);</span>
+
+
+  <span class="cm">/**** Access ****/</span>
+  <span class="kt">var</span> <span class="n">s</span> <span class="p">=</span> <span class="n">t1</span><span class="p">.</span><span class="n">Item1</span><span class="p">;</span> <span class="c1">// "test"</span>
+  <span class="kt">int</span> <span class="n">i1</span> <span class="p">=</span> <span class="n">t1</span><span class="p">.</span><span class="n">Item2</span><span class="p">;</span> <span class="c1">// 3</span>
+
+
+  <span class="cm">/**** ToValueTuple ****/</span>
+  <span class="kt">var</span> <span class="n">t2</span> <span class="p">=</span> <span class="n">t1</span><span class="p">.</span><span class="nf">ToValueTuple</span><span class="p">();</span>
+  <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span> <span class="n">t3</span> <span class="p">=</span> <span class="n">t1</span><span class="p">.</span><span class="nf">ToValueTuple</span><span class="p">();</span>
+  <span class="p">(</span><span class="kt">string</span> <span class="n">Name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">tupleCount</span><span class="p">)</span> <span class="n">t4</span> <span class="p">=</span> <span class="n">t1</span><span class="p">.</span><span class="nf">ToValueTuple</span><span class="p">();</span> <span class="c1">// Can transform in ValueTuple with name fields</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="queue"><a href="https://learn.microsoft.com/fr-fr/dotnet/api/system.collections.generic.queue-1?view=net-7.0">Queue</a></h1>
+<p>To use <code class="language-plaintext cs highlighter-rouge">Queue</code>, you need to import <code class="language-plaintext cs highlighter-rouge">System.Collections.Generic</code>.<br />
+Queue is a FIFO (or LILO) data structure.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Collection.Generic</span><span class="p">;</span>
+
+  <span class="n">Queue</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">queue</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Queue</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+  <span class="n">Queue</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">queue</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Queue</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;();</span>
+  <span class="n">Queue</span><span class="p">&lt;(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">)&gt;</span> <span class="n">queue</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Queue</span><span class="p">&lt;(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">)&gt;();</span>
+
+  <span class="n">Queue</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">queue</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Queue</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span> <span class="p">});</span> <span class="c1">// Initialization with value</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="operations-on-queue">Operations on Queue</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Collection.Generic</span><span class="p">;</span>
+  <span class="n">Queue</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">queue</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Queue</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;();</span>
+
+
+  <span class="cm">/**** Size ****/</span>
+  <span class="kt">int</span> <span class="n">length</span> <span class="p">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="c1">// 0</span>
+
+
+  <span class="cm">/**** Insertion: Enqueue ****/</span>
+  <span class="n">queue</span><span class="p">.</span><span class="nf">Enqueue</span><span class="p">(</span><span class="m">1</span><span class="p">);</span> <span class="c1">// Add to the Queue</span>
+  <span class="n">queue</span><span class="p">.</span><span class="nf">Enqueue</span><span class="p">(</span><span class="m">2</span><span class="p">);</span> <span class="c1">// Add to the Queue</span>
+
+
+  <span class="cm">/**** Comparison Operations ****/</span>
+  <span class="kt">int</span> <span class="n">min</span> <span class="p">=</span> <span class="n">queue</span><span class="p">.</span><span class="nf">Min</span><span class="p">();</span> <span class="c1">// 1 - Minimum of Queue</span>
+  <span class="kt">int</span> <span class="n">max</span> <span class="p">=</span> <span class="n">queue</span><span class="p">.</span><span class="nf">Max</span><span class="p">();</span> <span class="c1">// 2 - Maximum of Queue</span>
+
+
+  <span class="cm">/**** Aggregation Operations ****/</span>
+  <span class="kt">int</span> <span class="n">sum</span> <span class="p">=</span> <span class="n">queue</span><span class="p">.</span><span class="nf">Sum</span><span class="p">();</span> <span class="c1">// 3 - Sum of Queue</span>
+  <span class="kt">double</span> <span class="n">average</span> <span class="p">=</span> <span class="n">queue</span><span class="p">.</span><span class="nf">Average</span><span class="p">();</span> <span class="c1">// 1.5 - Average of Queue</span>
+
+
+  <span class="cm">/**** Access: Dequeue ****/</span>
+  <span class="kt">int</span> <span class="n">i1</span> <span class="p">=</span> <span class="n">queue</span><span class="p">.</span><span class="nf">Dequeue</span><span class="p">();</span> <span class="c1">// 1 - Dequeue oldest element</span>
+  <span class="kt">int</span> <span class="n">i2</span> <span class="p">=</span> <span class="n">queue</span><span class="p">.</span><span class="nf">Dequeue</span><span class="p">();</span> <span class="c1">// 2 - Dequeue oldest element - Dequeue empty Queue throw error</span>
+
+
+  <span class="cm">/**** While Loop ****/</span>
+  <span class="k">while</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">){</span>
+    <span class="c1">// Do something</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="stack"><a href="https://learn.microsoft.com/en-us/dotnet/api/system.collections.stack?view=net-7.0">Stack</a></h1>
+<p>To use <code class="language-plaintext cs highlighter-rouge">Stack</code>, you need to import <code class="language-plaintext cs highlighter-rouge">System.Collections.Generic</code>.<br />
+Stack is a FILO (or LIFO) data structure.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Collection.Generic</span><span class="p">;</span>
+
+  <span class="n">Stack</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">stack</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+  <span class="n">Stack</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">stack</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;();</span>
+  <span class="n">Stack</span><span class="p">&lt;(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">)&gt;</span> <span class="n">stack</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="p">&lt;(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">)&gt;();</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="operations-on-stack">Operations on Stack</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Collection.Generic</span><span class="p">;</span>
+  <span class="n">Stack</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">stack</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;();</span>
+
+
+  <span class="cm">/**** Size ****/</span>
+  <span class="kt">int</span> <span class="n">length</span> <span class="p">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="c1">// 0</span>
+
+
+  <span class="cm">/**** Insertion: Push ****/</span>
+  <span class="n">stack</span><span class="p">.</span><span class="nf">Push</span><span class="p">(</span><span class="m">1</span><span class="p">);</span> <span class="c1">// Add to the Stack</span>
+  <span class="n">stack</span><span class="p">.</span><span class="nf">Push</span><span class="p">(</span><span class="m">2</span><span class="p">);</span> <span class="c1">// Add to the Stack</span>
+
+
+  <span class="cm">/**** Comparison Operations ****/</span>
+  <span class="kt">int</span> <span class="n">min</span> <span class="p">=</span> <span class="n">stack</span><span class="p">.</span><span class="nf">Min</span><span class="p">();</span> <span class="c1">// 1 - Minimum of Stack</span>
+  <span class="kt">int</span> <span class="n">max</span> <span class="p">=</span> <span class="n">stack</span><span class="p">.</span><span class="nf">Max</span><span class="p">();</span> <span class="c1">// 2 - Maximum of Stack</span>
+
+
+  <span class="cm">/**** Aggregation Operations ****/</span>
+  <span class="kt">int</span> <span class="n">sum</span> <span class="p">=</span> <span class="n">stack</span><span class="p">.</span><span class="nf">Sum</span><span class="p">();</span> <span class="c1">// 3 - Sum of Stack</span>
+  <span class="kt">double</span> <span class="n">average</span> <span class="p">=</span> <span class="n">stack</span><span class="p">.</span><span class="nf">Average</span><span class="p">();</span> <span class="c1">// 1.5 - Average of Stack</span>
+
+
+  <span class="cm">/**** Access: Pop ****/</span>
+  <span class="kt">int</span> <span class="n">i1</span> <span class="p">=</span> <span class="n">stack</span><span class="p">.</span><span class="nf">Pop</span><span class="p">();</span> <span class="c1">// 1 - Pop newest element</span>
+  <span class="kt">int</span> <span class="n">i2</span> <span class="p">=</span> <span class="n">stack</span><span class="p">.</span><span class="nf">Pop</span><span class="p">();</span> <span class="c1">// 2 - Pop newest element - Pop empty Stack throw error</span>
+
+
+  <span class="cm">/**** While Loop ****/</span>
+  <span class="k">while</span><span class="p">(</span><span class="n">stack</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">){</span>
+    <span class="c1">// Do something</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="ressources-1">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://programmingwithmosh.com/net/csharp-collections/">This blogpost on C# collections</a>,</li>
+  <li><a href="https://fr.wikibooks.org/wiki/Programmation_C_sharp">The Wikibooks page on C#</a>,</li>
+  <li><a href="https://www.tutorialsteacher.com/csharp/csharp-sortedlist">Tutorial Teacher on Sorted Lists</a>,</li>
+  <li><a href="https://www.programiz.com/csharp-programming/multidimensional-arrays">Multi Dimensional Arrays on Programiz</a>,</li>
+  <li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-tuples">System.ValueTuple on Microsoft Website</a>,</li>
+  <li><a href="https://learn.microsoft.com/en-us/dotnet/api/system.tuple?view=net-7.0">System.Tuple on Microsoft Website</a>.</li>
+</ul>
+
+  </body>
+</html>

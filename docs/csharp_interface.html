@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>C# - Interface</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-c---class-struct-and-interface"><a href="/Revision/csharp_class_struct_and_interface.html">Back to C# - Class, Struct and Interface</a></h2>
+
+<p><br /></p>
+<h1 id="interface"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/interface">Interface</a></h1>
+<p>An <code class="language-plaintext cs highlighter-rouge">interface</code> is a structure that defines a template that class or interface that will inherit from must follow. It has similarities with <code class="language-plaintext cs highlighter-rouge">abstract</code> classes. It is created using the <code class="language-plaintext cs highlighter-rouge">interface</code> keyword.</p>
+
+<p><br /></p>
+<h2 id="interface-caracteristics">Interface caracteristics</h2>
+<ul>
+  <li>Like abstract classes, interfaces cannot be used to create objects,</li>
+  <li>Interface methods do not have a body - the body is provided by the “implement” class</li>
+  <li>On implementation of an interface, you must override all of its methods</li>
+  <li>Interfaces can contain properties and methods, but not fields/variables</li>
+  <li>Interface members are by default abstract and public</li>
+  <li>An interface cannot contain a constructor (as it cannot be used to create objects)</li>
+</ul>
+
+<p><br /></p>
+<h2 id="difference-between-interface-and-abstract-class">Difference between Interface and Abstract Class</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"><code class="language-plaintext cs highlighter-rouge">abstract</code></th>
+      <th style="text-align: left"><code class="language-plaintext cs highlighter-rouge">interface</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Does not provide full abstraction.</td>
+      <td style="text-align: left">Provides full abstraction.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Can have fields.</td>
+      <td style="text-align: left">Can’t have fields.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Can have implementations for some of its members (methods).</td>
+      <td style="text-align: left">Can’t have implementation for any of its members.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Members can have access modifiers.</td>
+      <td style="text-align: left">Members can’t have access modifiers.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Members are <code class="language-plaintext cs highlighter-rouge">private</code> by default but can be changed.</td>
+      <td style="text-align: left">Members are <code class="language-plaintext cs highlighter-rouge">public</code> by default and can’t be changed.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Can inherit from another abstract class or another interface.</td>
+      <td style="text-align: left">Can inherit from another interface only and cannot inherit from an abstract class.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+<h2 id="creation">Creation</h2>
+<p>A simple interface is created like this:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">interface</span> <span class="nc">IMyInterface</span>
+  <span class="p">{</span>
+    <span class="c1">// Code of your interface</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>It generally contains template methods and some properties:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">interface</span> <span class="nc">IMyInterface</span>
+  <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">MyInterfaceProperty</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// interface can have properties</span>
+    <span class="k">void</span> <span class="nf">interfaceMethod</span><span class="p">();</span> <span class="c1">// interface method (does not have a body)</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="creation-with-inheritance">Creation with inheritance</h3>
+<p><code class="language-plaintext cs highlighter-rouge">interface</code> can inherites from one or multiple interface.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">interface</span> <span class="nc">IMyInterfaceParent1</span>
+  <span class="p">{</span>
+    <span class="kt">bool</span> <span class="nf">interfaceParent1Method</span><span class="p">();</span> <span class="c1">// interface method (does not have a body)</span>
+  <span class="p">}</span>
+
+  <span class="k">interface</span> <span class="nc">IMyInterfaceParent2</span>
+  <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">MyInterfaceParent2Property</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// interface can have properties</span>
+    <span class="kt">int</span> <span class="nf">interfaceParent2Method</span><span class="p">();</span> <span class="c1">// interface method (does not have a body)</span>
+  <span class="p">}</span>
+
+  <span class="k">interface</span> <span class="nc">IMyInterface</span><span class="p">:</span> <span class="n">IMyInterfaceParent1</span><span class="p">,</span> <span class="n">IMyInterfaceParent2</span>
+  <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">MyInterfaceProperty</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// interface can have properties</span>
+    <span class="k">void</span> <span class="nf">interfaceMethod</span><span class="p">();</span> <span class="c1">// interface method (does not have a body)</span>
+  <span class="p">}</span>
+
+  <span class="cm">/* A class that inherits from IMyInterface must override every methods and properties from the interface and its parents */</span>
+  <span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span> <span class="n">IMyInterface</span>
+  <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">MyInterfaceParent2Property</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">MyInterfaceProperty</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="nf">MyClass</span><span class="p">()</span> <span class="p">{</span> <span class="n">MyInterfaceParent2Property</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="n">MyInterfaceProperty</span> <span class="p">=</span> <span class="s">"1"</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">bool</span> <span class="nf">interfaceParent1Method</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="k">false</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="nf">interfaceParent2Method</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">interfaceMethod</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="boxing-and-unboxing">Boxing and Unboxing</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">interface</span> <span class="nc">ISampleInterface</span> <span class="p">{</span>
+    <span class="k">void</span> <span class="nf">SampleMethod</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">class</span> <span class="nc">ImplementationClass</span> <span class="p">:</span> <span class="n">ISampleInterface</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">SampleMethod</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Implementation of interface method."</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">ISampleInterface</span> <span class="n">obj</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ImplementationClass</span><span class="p">();</span> <span class="c1">// Implicit Boxing - Equivalent to 'ISampleInterface obj = (ISampleInterface) new ImplementationClass()'</span>
+  <span class="n">ImplementationClass</span> <span class="n">obj2</span> <span class="p">=</span> <span class="p">(</span><span class="n">ImplementationClass</span><span class="p">)</span><span class="n">obj</span><span class="p">;</span> <span class="c1">// Unboxing</span>
+  <span class="n">obj2</span><span class="p">.</span><span class="nf">SampleMethod</span><span class="p">();</span> <span class="c1">// "Implementation of interface method."</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://www.w3schools.com/cs/cs_interface.php">Geeks for Geeks page on Interface</a>,</li>
+  <li><a href="https://www.geeksforgeeks.org/c-sharp-inheritance-in-interfaces/">Geeks for Geeks page on inheritance in Interface</a>.</li>
+  <li><a href="https://www.c-sharpcorner.com/article/abstract-class-vs-interface-c-sharp/">C-Sharp Corner article on difference between abstract class and interface</a>.</li>
+</ul>
+
+  </body>
+</html>

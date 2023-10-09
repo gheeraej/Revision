@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Projects</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <p><br /></p>
+<h2 id="bnp-paribas">BNP Paribas</h2>
+<h3 id="long-term-value-at-risk-var">Long-Term Value-at-Risk (VaR)</h3>
+<ul>
+  <li>In C++ using Eclipse,</li>
+  <li>Historical Risk (hence historical calibration),</li>
+  <li>Projections:
+    <ul>
+      <li>Equity : Black Scholes and Heston,</li>
+      <li>Interest Rates : Vasicek, Hull and White, CIR, CIR++,</li>
+      <li>Dependence of variables taken into account using copula (Gaussian, Student, Cook, Frank).</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h2 id="quantcube-technology">QuantCube Technology</h2>
+<h3 id="trading-strategy-based-on-usda-corn-quality-prediction">Trading Strategy based on USDA Corn Quality Prediction</h3>
+<ul>
+  <li><a href="https://usda.library.cornell.edu/concern/publications/8336h188j">USDA publishes weekly a report on Crop Quality in the different US states</a>,</li>
+  <li>This report contains, for each crop during its growing period, an estimate of its quality as a percentage of Very Poor, Poor, Fair and Good,</li>
+  <li>Market reacts to these reports,</li>
+  <li>We apply a simple trend following on the quality (if the quality raised during past weeks, predicts it will continue and vice versa),</li>
+  <li>We only apply to Corn as it was the most impacted by this report (US production and export of Corn is high),</li>
+  <li>Technology : Python (Web Scrapping to extract reports, data extraction from reports and prediction),</li>
+  <li>Sharpe was 1.4 with 57% hit ratio but we could take just few positions in a year as the growing period of corn only last few months.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="extraction-of-information-from-satellite-or-aerial-images">Extraction of information from satellite or aerial images</h3>
+<ul>
+  <li>Trained and Tested methodology on <a href="https://www.kaggle.com/c/noaa-fisheries-steller-sea-lion-population-count">Kaggle Sea Lions Count Dataset</a>,</li>
+  <li>Goal of this Kaggle was to count the number of sea lions in aerial images + tell the category of the sea lion among male, female, child, newborn (same methodology could later be used to count cars of buildings),</li>
+  <li>For this project we set up our own Computing Machine (with an Nvidia 1080 Ti),</li>
+  <li>We used Python: Pytorch, OpenCV, Numpy, …,</li>
+  <li>We used a modified version of the <a href="https://pjreddie.com/media/files/papers/yolo_1.pdf">YOLO model</a>: we modified the loss to add a sigmoid,</li>
+  <li>We finish in the top 10% of the Kaggle competition.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="esa-satellite-images-analysis">ESA Satellite Images analysis</h3>
+<ul>
+  <li>ESA (European Space Agency) freely publish images of the Copernicus Sentinel mission (Sentinel-2 and other satellites),</li>
+  <li>I start developing the infrastructure to read, download, reconstruct and analyse the images,</li>
+  <li>Reconstruction was particularly tricky as it requires learning <a href="https://en.wikipedia.org/wiki/Military_Grid_Reference_System">Military Grid Reference System</a> and needed <a href="https://gis.stackexchange.com/questions/310282/how-are-satellite-images-mapped-to-terrain-coordinates-so-precisely">various angles corrections</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="société-générale">Société Générale</h2>
+<h3 id="nlp-for-political-risk">NLP for political risk</h3>
+<ul>
+  <li>The economists of the Bank track the risk of the countries where SG have or may have investment,</li>
+  <li>Goal of the project was to give an indicator of political risk in different countries,</li>
+  <li>Historical data source of data came from Factiva as well as live data,</li>
+  <li>As we did not have labeling capacity (and that zero shot learning model were not available at the time) we used a mixed approach:
+    <ul>
+      <li>Train a W2V model on 300K historical news,</li>
+      <li>Create a word dictionary of positive and negative word (with the help of the economists),</li>
+      <li>Augment this dictionary using the W2V representation of the words (for example expand the label to the 10 closest words - or with a decreasing weight of the label wrt to the distance of the initial word)</li>
+      <li>This dictionary augmentation helped not having sparse result (ie lot of news with no label because it contains no word in the dictionary),</li>
+      <li>Second benefice was that the economists could modified the base dictionary to add or remove words as well as the augmented dictionary.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h3 id="financial-derivatives-clustering">Financial derivatives clustering</h3>
+<ul>
+  <li>Trading desk limits are set by product type,</li>
+  <li>Each product is normally defined internally via a template (each product has its own template),</li>
+  <li>However sometimes wrong templates are used and tricked to define a product + the products evolve during their life and they can change of category (for example an Autocall that hit its autocall barrier or a Lock-in that hit its lock-in barrier),</li>
+  <li>The goal of the project was then to rediscover the categories of 20K products using their sensitives and risk metrics,</li>
+  <li>Sensitives were the Greeks (Delta, Gamma, Vega, Theta) as well as shifted Greeks,</li>
+  <li>Risk Metrics were mainly VaR for different levels (shifted?),</li>
+  <li>We used some preprocessing methods (standardization, outlier detection, …),</li>
+  <li>We used clustering methods (Hierarchical Clustering, DBSCAN, K-Means),</li>
+  <li>Best results were obtained using the spectral (DBSCAN) method: the products families were clearly identifiable and some wrongly categorized product could be identified.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="auto-ml-for-unsupervised-learning">Auto-ML for unsupervised learning</h3>
+<ul>
+  <li>The Financial derivatives clustering led to a broader project of Auto-ML for unsupervised learning which take the form of a fork of the internal library AiKit,</li>
+  <li>The difficulty of Auto-ML for unsupervised learning is the metrics to optimized and the similarity of the output of some methods: we used a mix of different unsupervised metrics to score the models and applied a similarity detection among models (more or less count the number of products that are equally clustered)</li>
+  <li>Also it was important to respect the style and logic of the library and to test every part of the code,</li>
+  <li>This library was later used for other clustering projects.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="intraday-liquidity-prediction">Intraday Liquidity Prediction</h3>
+<ul>
+  <li>Every days, the treasurers of the Bank make and receive interbank payments (example if I send from my SG account money to my BNP Paribas friend’s account, SG will send this money to BNP Paribas) as well as payments from other institution (especially Clearning Houses),</li>
+  <li>They do this through interbank payment plateforms such as <a href="https://fr.wikipedia.org/wiki/Society_for_Worldwide_Interbank_Financial_Telecommunication">SWIFT</a>,</li>
+  <li>If the Bank make a lot of payments but do not receive payments in return, we have what we call a liquidity gap: the bank is short of liquidity,</li>
+  <li>The treasurers can retain some payments (they generally do not retain too much the payments otherwise the counterparties will do the same and pay at the end of the day - everyone looses),</li>
+  <li>They wanted some informations on the risk of having a liquidity gap during the day,</li>
+  <li>We develop an time series analysis using RNN on the historical intraday balance of the bank (5 years of daily SWIFT orders),</li>
+  <li>We cross this analysis with other information (market tension, view of the treasurers),</li>
+  <li>We predict for every day the liquidity gap of the bank during the day: the prediction was updated live during the day (every 5mn) with new information,</li>
+  <li>Using this information, treasurers could reduce the buffer from €10B to €8B,</li>
+  <li>I did not work on the update of the model once it runs live: as the model impact the environment, retraining would require an non impacted environment ie ask the treasurers to label if a payments has been retained because of the model (and it still won’t be perfect as our payments impact our counterparties payments and we can’t know if they retain a payments because we did the same),</li>
+  <li>Another solution would be to use RL: a model which interacts with the environment, each decision change the environment and each decision is taken given the current environment. Each day is an episode and the model can be updated live or at the end of each day.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="aviva-investors---ofi-invest">Aviva Investors - OFI Invest</h2>
+<h3 id="pair-trading">Pair Trading</h3>
+<ul>
+  <li>Pair Trading is a well known trading strategy: buy one stock and sell one stock and expect that the difference of performance between these 2 stocks generate a benefit (the stock buyed over perform compare to the one sold),</li>
+  <li>Classic setting use decision rules to define pair trading opportunities,</li>
+  <li>I used ML methods on historical times series to predict pair trades opportunities,</li>
+  <li>Universe : Bond,</li>
+  <li>Separate by: Region (Europe, US, Other), Maturity (&lt;2Y, &lt;5Y, &lt;10Y, &lt;15Y, &gt;15Y), Rating (High Yield, Investment Grade),</li>
+  <li>Test every couple in every cluster,</li>
+  <li>Data was the spread of the Bonds,</li>
+  <li>Data used was statistics on the time series: moments on spreads, moments on gap, difference between mean and current values, standardized difference between mean and current values, cointegration statistic <a href="https://www.statsmodels.org/dev/generated/statsmodels.tsa.stattools.coint.html">Engle-Granger two-step cointegration test</a>,</li>
+  <li>Lot of computation time, used algorithmic optimisation to accelerate computation (mainly use dict rather than dataframe to make the computations),</li>
+  <li>Backtest was also tricky because I had to respect temporality (train on older data and test on newer) but I also had to split training and test on pairs hence using unseen pairs on future data for testing,</li>
+  <li>For validation I just split on pairs without checking temporality</li>
+</ul>
+
+<p><br /></p>
+<h3 id="neural-network-calibration-of-volatility-cube">Neural Network Calibration of Volatility Cube</h3>
+<ul>
+  <li>Everyday we calibrate volatility surface for interest rate, equity and FX,</li>
+  <li>For IR products, we use Black formula to get Implied Volatility and then we use SABR model to smooth the smiles,</li>
+  <li>SABR calibration is slow as it requires an optimisation of the parameters (a, r, rho - b=0.5): it computes the volatilities for different points for the current parameters and update these parameters wrt to the error to the implied vol,</li>
+  <li>Idea was to make a direct mapping from the current implied volatility surface + forward rate to the parameters,</li>
+  <li>Difficulty came from the generation of data to train the Neural Network model (Shallow Network)</li>
+</ul>
+
+<p><br /></p>
+
+<p>For NN SABR calibration done on LIBOR curves (on 3 years of data filtered on maturity + tenor &gt; 50Y), steps were:</p>
+<ol>
+  <li>Retrieve Swaption Implied Volatilities:
+    <ul>
+      <li>Get a Series with index as Valuation Date, Tenor, Expiry (Maturity), Strike with value being the implied volatility of the Swaption</li>
+    </ul>
+  </li>
+  <li>Retrieve SABR model parameters calibrated on these Swaption:
+    <ul>
+      <li>Get a DataFrame with index as Valuation Date, Tenor, Expiry and values as SABR parameters:</li>
+    </ul>
+    <ul>
+      <li>Each (Valuation Date x) Tenor x Expiry has its SABR parameters but these parameters are the same for the different Strikes</li>
+    </ul>
+  </li>
+  <li>Retrieve the Forward Swap Rates:
+    <ul>
+      <li>We only store in Database the zero rate curves (LIBOR and OIS),</li>
+      <li>We will use these zero rate curves to reverse engineer the bootstrapping method and extract the Forward Swap Rates:</li>
+    </ul>
+    <ul>
+      <li>Using the LIBOR zero curve we deduct every forward rate that represents the floating leg expected coupons,</li>
+      <li>Using the OIS zero curve we extract all the spot and forward DF,</li>
+      <li>We can deduct the fair fix rate of the forward swaps (we use Quantlib)
+      - Get a Series with index as Valuation Date, Tenor, Expiry and values as the Forward Swap Rate</li>
+    </ul>
+  </li>
+  <li>Compute errors between implied volatility and SABR volatility
+    <ul>
+      <li>Merge the Serie of Implied Volatility with DataFrame of SABR parameters and Series of Forward Rate (by Valuation Date)</li>
+    </ul>
+    <ul>
+      <li>Some data will be duplicated (SABR parameters as they are the same for the different Strikes and Forward Rate as they are also the same for different Strikes)
+      - Reshape the obtained DataFrame to have as index the Valuation Date x the Tenor and Columns the Expiry x (Strikes + Strikes Error) and values are implied volatilities and errors (between implied vol and SABR vol)</li>
+    </ul>
+  </li>
+  <li>Generation of noisy data (the historical data is not sufficient to calibrate a NN model)
+    <ul>
+      <li>For every Tenor (one tenor represents one volatility surface):</li>
+    </ul>
+    <ul>
+      <li>Takes for each Valuation Data and Maturity:
+        <ul>
+          <li>The 3 SABR parameters (\(\alpha\), \(v\), \(\rho\) - \(\beta\) is set to 0.5),</li>
+          <li>The error between implied and SABR volatilities (9 Strikes hence 9 errors),</li>
+          <li>The forward curve,</li>
+        </ul>
+      </li>
+      <li>We obtain a matrix of with N(Valuation Dates) rows and (3 + 9 + 1) * M(Maturity) columns,</li>
+      <li>We want to compute the correlation among this variables:
+        <ul>
+          <li>Preprocessing: apply log to the \(\alpha\) and then standardised every columns</li>
+          <li>Compute the covariance (correlation) matrix (size (3 + 9 + 1)<em>M * (3 + 9 + 1)</em>M)</li>
+        </ul>
+      </li>
+      <li>Generate N samples using the gaussian distribution with mean 0 and covariance the obtained covariance matrix (using numpy random multivariate normal)</li>
+      <li>Generate M SABR volatility smiles and add the errors to recreate implied volatilities smiles</li>
+      <li>These M implied volatility smiles represent an implied volatility surfaces associated with M*3 generated parameters and M forward rate</li>
+      <li>Get a matrix of N generated implied surface volatilities with the associated SABR parameters and forward rate</li>
+      <li>Do this for every Tenor</li>
+    </ul>
+  </li>
+  <li>Train the model to predict the 3*M SABR parameters for a volatility surface:
+    <ul>
+      <li>The model will predict the 3*M parameters of a SABR surface volatility using the surface implied volatility and forward Rates</li>
+      <li>Y = 3*M SABR parameters,</li>
+      <li>X = 9*M implied volatilities (for 9 Strikes and M Maturities) and M forward rates</li>
+      <li>We do not specify the Tenor (surface volatility for each tenor will be predicted the same way)</li>
+    </ul>
+  </li>
+  <li>For new implied volatilities and forward rates, quickly predict the SABR parameters</li>
+</ol>
+
+  </body>
+</html>

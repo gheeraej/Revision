@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mean Shift</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="description">Description</h2>
+<p>Mean shift algorithms seeks clusters in a dataset.
+It is a centroid based algorithm (like K-means).
+Unlike K-means the update of the centroids are not done based on the points associated to this centroid but on the points within a given region (ie at a distance smaller than a max distance).</p>
+
+<p>Mean shift starts by defining each point of the dataset as an initial cluster centroid and then update each of them until convergence. Each centroid being independent from the others, this step can be parallelised.</p>
+
+<p>At the end overlapping clusters are merged.</p>
+
+<h4 id="pseudo-code">Pseudo code</h4>
+
+<ul>
+  <li>
+    <p>Create a sliding window/cluster for each data-point</p>
+  </li>
+  <li>
+    <p>Each of the sliding windows is shifted towards higher density regions by shifting their centroid (center of the sliding window) to the data-points’ mean within the sliding window. This step will be repeated until no shift yields a higher density (number of points in the sliding window)</p>
+  </li>
+  <li>
+    <p>Selection of sliding windows by deleting overlapping windows. When multiple sliding windows overlap, the window containing the most points is preserved, and the others are deleted.</p>
+  </li>
+  <li>
+    <p>Assigning the data points to the sliding window in which they reside.</p>
+  </li>
+</ul>
+
+<h2 id="pros-and-cons">Pros and cons</h2>
+<h4 id="pros">Pros</h4>
+<ul>
+  <li>Automatically selects the number of clusters,</li>
+  <li>Independent on the initialization.</li>
+</ul>
+
+<h4 id="cons">Cons</h4>
+<ul>
+  <li>Complexity of \(O(N^2)\): not highly scalable, as it requires multiple nearest neighbor searches during its execution</li>
+  <li>Sensitive to hyperparameters</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://ml-explained.com/blog/mean-shift-explained">this page from ml-explained</a></li>
+  <li><a href="http://vision.stanford.edu/teaching/cs131_fall1617/lectures/lecture13_kmeans_mean_shift_cs131_2016">this Stanford course</a></li>
+</ul>
+
+  </body>
+</html>

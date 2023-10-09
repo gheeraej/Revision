@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mathematics - Time Series - AIC and BIC</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-time-series"><a href="/Revision/mathematics_time_series.html">Back to Time series</a></h2>
+
+<p><br /></p>
+<h1 id="aic-and-bic">AIC and BIC</h1>
+<p>AIC and BIC are two information criteria that measures the quality of a model as a tradeof between its goodness of fit and its simplicity.</p>
+
+<p><br /></p>
+<h2 id="aic">AIC</h2>
+<p>The AIC or Akaike information criterion is a quality measure of a model. It is based on the likelihood function and it deals with the trade-off between the goodness of fit of the model and the simplicity of the model.</p>
+
+<p>Suppose that we have a statistical model of some data. Let \(k\) be the number of estimated parameters in the model. Let \(\hat{L}\) be the maximum value of the likelihood function for the model. Then the AIC value of the model is the following:</p>
+
+\[AIC = 2k - 2 \log(\hat{L})\]
+
+<p>A lower AIC is better.</p>
+
+<p><br /></p>
+<h2 id="bic">BIC</h2>
+<p>The BIC or Bayesian information criterion is a quality measure of a model. It is based on the likelihood function and it deals with the trade-off between the goodness of fit of the model and the simplicity of the model.</p>
+
+<p>Suppose that we have a statistical model of some data. Let \(k\) be the number of estimated parameters in the model and \(n\) the number of data points. Let \(\hat{L}\) be the maximum value of the likelihood function for the model. Then the BIC value of the model is the following:</p>
+
+\[BIC = k \log(n) - 2 \log(\hat{L})\]
+
+<p>A lower BIC is better.</p>
+
+<p><br /></p>
+<h2 id="usage-for-time-series">Usage for time series</h2>
+<p>AIC and BIC are generally used in time series as there are the best quality metric for models. Cross-validation is more complex in time series (due to time dependance) and time series models are more computationally intensive thant other types of models.</p>
+
+<p>See:</p>
+<ul>
+  <li><a href="https://stats.stackexchange.com/questions/523485/why-is-aic-or-bic-commonly-used-in-model-selections-for-time-series-forecasting">this StackExchange page</a>,</li>
+  <li><a href="https://timeseriesreasoning.com/contents/akaike-information-criterion/">this blog post</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Akaike_information_criterion">AIC page on Wikipedia</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Bayesian_information_criterion">BIC page on Wikipedia</a>.</li>
+</ul>
+
+  </body>
+</html>

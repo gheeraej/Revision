@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>DQN</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-deep-reinforcement-learning"><a href="/Revision/reinforcement_learning_deep_reinforcement_learning.html">Back to Deep Reinforcement Learning</a></h2>
+
+<p><br /></p>
+<h1 id="deep-q-network-introduction">Deep Q Network: Introduction</h1>
+<p>Deep Q Network (DQN) is a value based model.</p>
+
+<p>In 2015, Deep Mind developed a new type of Reinforcement Learning model that only took raw pixels as input.</p>
+
+<p>The heart of the model was a <a href="/Revision/deep_learning_cnn.html">Convolutional Neural Network (CNN)</a>.</p>
+
+<p>The Deep Q Network (DQN) is still a value based method as it estimates the action value function in order to estimate the policy, hence it can’t deal with actions with continuous spaces:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/DQN_value_based.png" width="50%" height="50%" />
+</div>
+
+<p>The update of the parameter is done using a temporal differences method.</p>
+
+<h2 id="policy-estimation">Policy estimation</h2>
+<p>The policy is estimated taking the best action ie the action that maximise the futur returns. It is done in a \(\varepsilon\)-greedy fashion:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/DQN_policy.png" width="50%" height="50%" />
+</div>
+<p>Here the best action is the action “jump”. With \(\varepsilon\)-greedy method, the model would choose the action “jump” with probability \(1-\varepsilon\) and any other action with probability \(\varepsilon\) (\(\varepsilon/(nb_{actions}-1)\)).</p>
+
+<p><br /></p>
+<h2 id="introduction-example-pong-example">Introduction example: Pong example</h2>
+<p>To play pong game the DQN model tooks a sequence of 4 frames as input (4 frames of 84X84 greyscaled pixels) and output the expected return for each action, the best policy is then to choose (in an \(\varepsilon\)-greedy fashion) the action that leads to the best returns:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/pong.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h1 id="training">Training</h1>
+<p>The goal of the DQN is to update its parameters \(w\) to fit the action value function \(q_\pi^*\).
+The model interacts with the environment and take advantage of the obtained information to update its network.</p>
+
+<p>The update rules is the same as the update rule in temporal differences: the total return \(G_t\) is unobserved and is approximate by the observed reward and the returns of the next state (estimated using our current DQN).</p>
+
+<p>Let \(\Delta(w)\) be the update of the parameters:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/deltaW.png" width="30%" height="30%" />
+</div>
+
+<p>Remark that DQN uses the best action for state \(s'\) like in Sarsamax.</p>
+
+<p>Also remark that this update rule is exactly the result of applying <a href="/Revision/mathematics_optimization.html#gradient-descent">Gradient Descent</a> in order to optimize the <a href="/Revision/loss_functions.html#mean-squared-errors">Mean Square Error</a> loss between the result of our DQN and \(q_\pi^*\) using the approximation \(R + \gamma \max_{a}\hat{q}(S',a,w)\) of \(q_\pi^*\):</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/DQN_GD.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h2 id="tricks">Tricks</h2>
+<p>In order to helps the convergence of the network calibration, the DQN uses some tricks.</p>
+
+<p><br /></p>
+<h3 id="experience-replay">Experience replay</h3>
+<p>Experience replay separate the exploration part of the agent from the training part where the model is updated.</p>
+
+<p>An experience is an ensemble of 4 values \(\{S_t, A_t, R_{t+1}, S_{t+1}\}\) that can be used to update the models.</p>
+
+<p>Experience replay uses the current model to interacts with the environment (from a state, choose an action, observe next reward and next states) and stores these interactions in a replay buffer. After a batch of time the model can use this replay buffer to call back the experiences in whatever order to update its parameters. Once the model is updated it returns interacting with the environment to stores new experiences.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ER.png" width="40%" height="40%" />
+</div>
+<p>The agent stores the experience and uses it later to update the model.</p>
+
+<p><br /></p>
+
+<p>Here is another visualisation of experience replay. The replay buffer collects different experience and then each mini batch is composed of randomly choosen experiences from replay buffer:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/replay_buffer.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+
+<p>Experience replays avoid to stay stuck in a configuration where one action gave a good reward and hence the agent always choose this action.</p>
+
+<p>Also it transforms the reinforcement learning problem in a series of supervised problems.</p>
+
+<p><br /></p>
+<h4 id="prioritized-experience-replay">Prioritized Experience replay</h4>
+<p>It is possible to prioritized the experience replay in order to select the experiences with high error more often in an <a href="/Revision/adaboost.html">AdaBoost</a> fashion:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/PER.png" width="50%" height="50%" />
+</div>
+<p><br /></p>
+
+<p>The different steps to use Prioritized Experience replay are:</p>
+<ul>
+  <li>Compute the error \(\delta_t\) of the experience,</li>
+  <li>Compute its associated priority \(p_t=\delta_t+\varepsilon\) where \(\varepsilon\) is small value to avoid getting null priority (that would associated a null probability to select this experience),</li>
+  <li>Compute the sampling priority using a modified softmax function using an hyperparameter \(0 \leq a \leq 1\) where \(a\) gives more or less importance to experience with important error (\(a=0\) is uniform and \(a=1\) relies totally on priority),</li>
+  <li>Modify the update rule as a non uniform sampling of batch is not an estimate of the population (see <a href="https://arxiv.org/pdf/1511.05952.pdf">Prioritized Experience replay paper</a> for details).</li>
+</ul>
+
+<p><br /></p>
+<h3 id="fixed-target">Fixed target</h3>
+<p>The problem with our update rule is that the objective value (that is an approximation of the true objective function \(q_\pi\)) is dependent on the same variables as the network we want to update. We call this a moving target.</p>
+
+<p>In order to avoid this problem and to fix the target we use the parameters from last iteration in the estimation of the next state/action return:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/FT.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>Then DQN maintains two networks, the ‘regular’ network and the ‘target’ network which is a lagged copy of the regular network. It is well reprsented in this image:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/DQN_FT.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h3 id="double-q-learning">Double Q-Learning</h3>
+<p>The approximation \(R + \gamma \max_{a}\hat{q}(S',a,w)\) of the true action function \(q_\pi\) over estimates \(q_\pi\). We take the best action possible to make this proxy but the benefits of each action are estimated. By taking the maximum of unstable values we overestimate the true \(q_\pi\).</p>
+
+<p>The idea of Double Q-Learning is to estimate the best action using one network and to compute the associated return using a second network:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/Double_Q_Learning.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>For the DQN model we already keep a second set of parameters \(w^{-}\) in the fixed target.</p>
+
+<p>Hence we evaluate the best action using \(w\) and compute its return using \(w^{-}\):
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/Double_DQN.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<h3 id="dueling-network">Dueling Network</h3>
+<p>Dueling Network modifies the structure of the classic DQN to estimate the state value function from one part and defined the action value function as the state value function + an adjustment (an advantage value) coming from the action.</p>
+
+<p>Using this, all actions from a state share a common basis value which seem logical:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/Dueling_Network.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>The advantage function \(A_\pi(s,a)\) is the advantage of an action \(a\) with respect to a state \(s\). It is the difference between the action value function \(Q_\pi(s,a)\) and the state value function \(V_\pi(s)\):</p>
+
+\[A_\pi(s,a) = Q_\pi(s,a) - V_\pi(s)\]
+
+<p>Equivalently:</p>
+
+\[Q_\pi(s,a) = V_\pi(s) + A_\pi(s,a)\]
+
+<p>Which is used in the Dueling Network.</p>
+
+<p><br /></p>
+<h1 id="limitations">Limitations</h1>
+<ul>
+  <li>Finite number of actions,</li>
+  <li>Non native stochastic policy (stochasticity comes from the \(\varepsilon\)-greedy method).</li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li>DQN: UDRLN videos 2.5.1, 2.5.3,</li>
+  <li>Experience replay: UDRLN videos 2.5.4, 3.4.9,</li>
+  <li>Fixed target: UDRLN videos 2.5.5,</li>
+  <li>Double DQN: UDRLN videos 2.5.7,</li>
+  <li>Prioritized Experience replay: UDRLN videos 2.5.8.</li>
+</ul>
+
+  </body>
+</html>

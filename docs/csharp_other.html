@@ -1,0 +1,567 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>C# - Others</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-c"><a href="/Revision/csharp.html">Back to C#</a></h2>
+
+<p><br /></p>
+<h1 id="namespace">Namespace</h1>
+<p>In C# there is no import of file. Import of code is done using namespaces.</p>
+
+<p>Import a namespace using:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">MyNamespace</span><span class="p">;</span></code></pre></figure>
+
+<p>Create a namespace using:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="n">MyNamespace</span> <span class="p">{</span>
+    <span class="c1">// Code of my MyNamespace</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>You can use the same namespace in different files. Every code block inside the same namespace can access information from this namespace from other files:</p>
+
+<p>In file1.cs:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="n">MyNamespace</span> <span class="p">{</span>
+    <span class="k">class</span> <span class="nc">MyClassFile1</span><span class="p">{</span>
+      <span class="c1">// Code of my MyClassFile1</span>
+    <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>In file2.cs:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="n">MyNamespace</span> <span class="p">{</span>
+    <span class="k">class</span> <span class="nc">MyClassFile2</span><span class="p">{</span>
+      <span class="n">mcf1</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyClassFile1</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="console-print">Console print</h1>
+<p>Print in console using:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Hello World"</span><span class="p">);</span> <span class="c1">// Add breakline after text</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"Hello World"</span><span class="p">);</span> <span class="c1">// Does not add breakline after text</span></code></pre></figure>
+
+<p>You can write variable values using <code class="language-plaintext highlighter-rouge">{}</code> and using a <code class="language-plaintext highlighter-rouge">$</code> at the beginning of the string:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">j</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"</span><span class="p">{</span><span class="n">i</span><span class="p">.</span><span class="nf">ToString</span><span class="p">()}</span><span class="s"> is smaller than </span><span class="p">{</span><span class="n">j</span><span class="p">.</span><span class="nf">ToString</span><span class="p">()}</span><span class="s">"</span><span class="p">);</span></code></pre></figure>
+
+<p><code class="language-plaintext cs highlighter-rouge">ToString()</code> is used to cast variable to string.</p>
+
+<p><br /></p>
+<h1 id="ternary-operator"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/conditional-operator">Ternary Operator</a></h1>
+<p>A Ternary Operator syntax is <code class="language-plaintext cs highlighter-rouge">condition ? statement 1 : statement 2</code>.<br />
+It returns statement 1 if condition is true and statement 2 otherwise.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span> <span class="n">x</span> <span class="p">=</span> <span class="m">20</span><span class="p">,</span> <span class="n">y</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>
+  <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">x</span> <span class="p">&gt;</span> <span class="n">y</span> <span class="p">?</span> <span class="s">"x is greater than y"</span> <span class="p">:</span> <span class="s">"x is less than y"</span><span class="p">;</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">result</span><span class="p">);</span> <span class="c1">// x is greater than y</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="switch"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/selection-statements">Switch</a></h1>
+<p>The <code class="language-plaintext cs highlighter-rouge">switch</code> statement can be used instead of if else statement when you want to test a variable against three or more conditions.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span> <span class="n">x</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>
+
+  <span class="k">switch</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="m">5</span><span class="p">:</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Value of x is 5"</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="m">10</span><span class="p">:</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Value of x is 10"</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="m">15</span><span class="p">:</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Value of x is 15"</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">default</span><span class="p">:</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Unknown value"</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="c1">// Value of x is 10</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="loop">Loop</h1>
+<h2 id="for-loop">For loop</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="m">10</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span> <span class="p">{</span>
+    <span class="c1">//code block</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="while-loop">while loop</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="p">&lt;</span> <span class="m">10</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//code block</span>
+    <span class="n">i</span><span class="p">++;</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="do-while-loop">do while loop</h2>
+<p>The do while loop is the same as while loop except that it executes the code block at least once.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">do</span> <span class="p">{</span>
+    <span class="c1">//code block</span>
+    <span class="n">i</span><span class="p">++;</span>
+  <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="p">&lt;</span> <span class="m">5</span><span class="p">);</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="foreach-loop">foreach loop</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">char</span><span class="p">[]</span> <span class="n">charArray</span> <span class="p">=</span> <span class="p">{</span><span class="sc">'H'</span><span class="p">,</span><span class="sc">'e'</span><span class="p">,</span><span class="sc">'l'</span><span class="p">,</span><span class="sc">'l'</span><span class="p">,</span><span class="sc">'o'</span><span class="p">};</span>
+  <span class="k">foreach</span><span class="p">(</span><span class="kt">char</span> <span class="n">c</span> <span class="k">in</span> <span class="n">charArray</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//code block</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="try---catch---finally"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/try-catch-finally">try - catch - finally</a></h1>
+<p>See also <a href="https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/exceptions/exception-handling">this Microsoft C# documentation page on exceptions handling</a>.</p>
+
+<p>A <code class="language-plaintext cs highlighter-rouge">try</code> block is used by C# programmers to partition code that might be affected by an exception.<br />
+The <code class="language-plaintext cs highlighter-rouge">catch</code> block deals with exceptional circumstances (errors).<br />
+The <code class="language-plaintext cs highlighter-rouge">finally</code> block is used to release the resources regradless that an error occured or no.</p>
+
+<p><br /></p>
+<h2 id="example">Example</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.IO</span>
+
+  <span class="k">void</span> <span class="nf">ReadFile</span><span class="p">(</span><span class="kt">string</span> <span class="n">path</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="n">reader</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StreamReader</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+      <span class="kt">string</span><span class="p">?</span> <span class="n">line</span> <span class="p">=</span> <span class="n">reader</span><span class="p">.</span><span class="nf">ReadLine</span><span class="p">();</span>
+      <span class="k">while</span> <span class="p">(</span><span class="n">line</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+      <span class="p">{</span>
+          <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
+          <span class="n">line</span> <span class="p">=</span> <span class="n">reader</span><span class="p">.</span><span class="nf">ReadLine</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Error: </span><span class="p">{</span><span class="n">e</span><span class="p">.</span><span class="n">Message</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">finally</span> <span class="p">{</span>
+      <span class="c1">// if reader could open the file but error occurs after</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">reader</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+        <span class="n">reader</span><span class="p">.</span><span class="nf">Close</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="enum"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/enums">Enum</a></h1>
+<p><code class="language-plaintext cs highlighter-rouge">Enum</code> is a simple data structure used to declare a set of named constants. <code class="language-plaintext cs highlighter-rouge">Enum</code> is based on types byte or sbyte or short or ushort or int or uint or long or ulong or int.<br />
+An enum declaration that does not explicitly declare an underlying type has an underlying type of int.</p>
+
+<p><br /></p>
+<h2 id="creation">Creation</h2>
+<h5 id="basic-enum-creation">Basic Enum creation</h5>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs"><span class="k">enum</span> <span class="n">Color</span> <span class="p">{</span>
+    <span class="n">Red</span><span class="p">,</span> <span class="c1">// 0</span>
+    <span class="n">Green</span><span class="p">,</span> <span class="c1">// 1</span>
+    <span class="n">Blue</span> <span class="c1">// 2</span>
+<span class="p">}</span>
+
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">Green</span><span class="p">);</span> <span class="c1">// Green</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span> <span class="n">Color</span><span class="p">.</span><span class="n">Green</span><span class="p">);</span> <span class="c1">// 1</span></code></pre></figure>
+
+<p><br /></p>
+<h5 id="other-enum-creation">Other Enum creation</h5>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs"><span class="k">enum</span> <span class="n">Color</span><span class="p">:</span> <span class="kt">long</span> <span class="p">{</span>
+    <span class="n">Red</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">,</span>
+    <span class="n">Green</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span>
+    <span class="n">Blue</span> <span class="p">=</span> <span class="m">8</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Assigned values does not require to be unique. This is valid:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs"><span class="k">enum</span> <span class="n">Color</span><span class="p">:</span> <span class="kt">long</span> <span class="p">{</span>
+    <span class="n">Red</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">,</span>
+    <span class="n">Green</span> <span class="p">=</span> <span class="m">5</span><span class="p">,</span>
+    <span class="n">Blue</span> <span class="p">=</span> <span class="m">5</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="mutable-and-immutable">Mutable and Immutable</h1>
+<p>Mutable and immutable are English words that mean “can change” and “cannot change” respectively. The meaning of these words is the same in C# programming language; that means the mutable types are those whose data members can be changed after the instance is created but Immutable types are those whose data members can not be changed after the instance is created.</p>
+
+<p><br /></p>
+
+<p>Both structs and classes can be either mutable or immutable. All four combinations are possible. If a struct or class has non-readonly public fields, public properties with setters, or methods which set private fields, it is mutable because you can change its state without creating a new instance of that type.</p>
+
+<p><br /></p>
+<h1 id="multitasking">Multitasking</h1>
+<h2 id="multi-threading-vs-multi-processing">Multi-Threading vs Multi-Processing</h2>
+<p>From <a href="https://towardsdatascience.com/multithreading-and-multiprocessing-in-10-minutes-20d9b3c6a867">this Toward Data Science blog post</a>.</p>
+
+<p><br /></p>
+
+<p>Multitasking is the simultaneous execution of multiple tasks or processes over a certain time interval. Multithreading and multiprocessing are two ways to achieve multitasking.</p>
+
+<p><br /></p>
+
+<p>Multithreading refers to the ability of a processor to execute multiple threads concurrently, where each thread runs a process. Whereas multiprocessing refers to the ability of a system to run multiple processors concurrently, where each processor can run one or more threads.</p>
+
+<div style="text-align: center">
+  <img src="assets/images/threading_vs_processing.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="multi-threading">Multi-Threading</h2>
+<p>Multithreading is a way to achieve multitasking by executing multiple threads concurrently on a processor, where each thread runs a process.</p>
+
+<p><br /></p>
+<h3 id="examples">Examples</h3>
+<h4 id="example-specifying-different-thread">Example specifying different thread</h4>
+<p>Example from <a href="https://www.geeksforgeeks.org/c-sharp-multithreading/">Geeks for Geeks</a>:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.Threading</span><span class="p">;</span>
+
+  <span class="k">public</span> <span class="k">class</span> <span class="nc">GFG</span>
+  <span class="p">{</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">method1</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span>  <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;=</span> <span class="m">5</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span> <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Method1 is : {0}"</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">==</span> <span class="m">3</span><span class="p">)</span>
+                <span class="n">Thread</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="m">6000</span><span class="p">);</span> <span class="c1">// 6s</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">method2</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;=</span> <span class="m">5</span><span class="p">;</span> <span class="n">j</span><span class="p">++)</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Method2 is : {0}"</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">static</span> <span class="k">public</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span> <span class="p">{</span>
+      <span class="n">Thread</span> <span class="n">thr1</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Thread</span><span class="p">(</span><span class="n">method1</span><span class="p">);</span>
+      <span class="n">Thread</span> <span class="n">thr2</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Thread</span><span class="p">(</span><span class="n">method2</span><span class="p">);</span>
+      <span class="n">thr1</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
+      <span class="n">thr2</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>The output will look like something like this (Method2 does not wait Method1 to finish for starting):</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="n">Method1</span> <span class="k">is</span> <span class="p">:</span> <span class="m">0</span>
+  <span class="n">Method1</span> <span class="k">is</span> <span class="p">:</span> <span class="m">1</span>
+  <span class="n">Method2</span> <span class="k">is</span> <span class="p">:</span> <span class="m">0</span>
+  <span class="n">Method1</span> <span class="k">is</span> <span class="p">:</span> <span class="m">2</span>
+  <span class="n">Method1</span> <span class="k">is</span> <span class="p">:</span> <span class="m">3</span>
+  <span class="n">Method2</span> <span class="k">is</span> <span class="p">:</span> <span class="m">1</span>
+  <span class="n">Method2</span> <span class="k">is</span> <span class="p">:</span> <span class="m">2</span>
+  <span class="n">Method2</span> <span class="k">is</span> <span class="p">:</span> <span class="m">3</span>
+  <span class="n">Method2</span> <span class="k">is</span> <span class="p">:</span> <span class="m">4</span>
+  <span class="n">Method2</span> <span class="k">is</span> <span class="p">:</span> <span class="m">5</span>
+  <span class="n">Method1</span> <span class="k">is</span> <span class="p">:</span> <span class="m">4</span>
+  <span class="n">Method1</span> <span class="k">is</span> <span class="p">:</span> <span class="m">5</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="example-using-parallelfor">Example using Parallel.For</h4>
+<p><code class="language-plaintext cs highlighter-rouge">Parallel.For</code> syntax is <code class="language-plaintext cs highlighter-rouge">Parallel.For(from, to, function)</code>. <code class="language-plaintext cs highlighter-rouge">Parallel.For</code> will apply on multiple threads the function <code class="language-plaintext cs highlighter-rouge">function</code> for every values between from and to (exclude).</p>
+
+<p>It is equivalent to the classic</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">=</span><span class="k">from</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">to</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+    <span class="nf">function</span><span class="p">(</span><span class="n">i</span><span class="p">);</span></code></pre></figure>
+
+<p>Example from <a href="https://dotnettutorials.net/lesson/parallel-for-method-csharp/">Dot Net Tutorials</a>:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+
+  <span class="n">Parallel</span><span class="p">.</span><span class="nf">For</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">11</span><span class="p">,</span> <span class="n">number</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">number</span><span class="p">);</span> <span class="c1">// 1 2 3 4 5 6 7 8 10 9</span>
+  <span class="p">});</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="example-using-parallelforeach">Example using Parallel.ForEach</h4>
+<p><code class="language-plaintext cs highlighter-rouge">Parallel.For</code> syntax is <code class="language-plaintext cs highlighter-rouge">Parallel.For(from, to, function)</code>. <code class="language-plaintext cs highlighter-rouge">Parallel.For</code> will apply on multiple threads the function <code class="language-plaintext cs highlighter-rouge">function</code> for every values between from and to (exclude).</p>
+
+<p>Example from <a href="https://dotnettutorials.net/lesson/parallel-foreach-method-csharp/">Dot Net Tutorials</a>:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+
+  <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">integerList</span> <span class="p">=</span> <span class="n">Enumerable</span><span class="p">.</span><span class="nf">Range</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">).</span><span class="nf">ToList</span><span class="p">();</span>
+  <span class="n">Parallel</span><span class="p">.</span><span class="nf">ForEach</span><span class="p">(</span><span class="n">integerList</span><span class="p">,</span> <span class="n">i</span> <span class="p">=&gt;</span>
+  <span class="p">{</span>
+      <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0}"</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="c1">// 3 7 4 8 5 1 6 9 2 10</span>
+  <span class="p">});</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="multi-processing">Multi-Processing</h2>
+<p>C# does not really have Multiprocessing feature (from <a href="https://stackoverflow.com/questions/72892401/does-c-sharp-have-the-concept-of-multiprocessing-in-addition-to-multithreading">this StackOverflow post</a>).</p>
+
+<p><br /></p>
+<h1 id="boxing-and-unboxing"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/types/boxing-and-unboxing?source=recommendations">Boxing and Unboxing</a></h1>
+<h2 id="boxing">Boxing</h2>
+<p>Boxing converts a Value Type variable into a Reference Type variable that has the type object or to any interface type implemented by this value type.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">123</span><span class="p">;</span>
+
+  <span class="kt">object</span> <span class="n">o</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// boxing  -&gt; reference type</span>
+  <span class="kt">object</span> <span class="n">p</span> <span class="p">=</span> <span class="p">(</span><span class="kt">object</span><span class="p">)</span><span class="n">i</span><span class="p">;</span> <span class="c1">// -&gt; reference type - explicit boxing  also valid</span></code></pre></figure>
+
+<p>The result of this statement is creating an object reference o, on the stack, that references a value of the type int, on the heap.</p>
+
+<div style="text-align: center">
+  <img src="assets/images/boxing.gif" width="15%" height="15%" />
+</div>
+
+<p><br /></p>
+<h2 id="unboxing">Unboxing</h2>
+<p>Unboxing converts a Reference Type variable into a Value Type variable by extracting the value from the object.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">123</span><span class="p">;</span>      <span class="c1">// a value type</span>
+  <span class="kt">object</span> <span class="n">o</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span>     <span class="c1">// boxing -&gt; reference type</span>
+  <span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">o</span><span class="p">;</span>   <span class="c1">// unboxing -&gt; value type</span></code></pre></figure>
+
+<p>The result of this statement is creating an int value type j, on the stack, that has the value of the references of the object o.</p>
+
+<div style="text-align: center">
+  <img src="assets/images/unboxing.gif" width="15%" height="15%" />
+</div>
+
+<p><br /></p>
+<h2 id="boxing-and-unboxing-class-examples">Boxing and Unboxing Class Examples</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">public</span> <span class="k">class</span> <span class="nc">Cache</span> <span class="p">{</span> <span class="p">}</span>
+  <span class="k">public</span> <span class="k">class</span> <span class="nc">DiskCache</span> <span class="p">:</span> <span class="n">Cache</span> <span class="p">{</span> <span class="p">}</span>
+  <span class="k">public</span> <span class="k">class</span> <span class="nc">MemoryCache</span> <span class="p">:</span> <span class="n">Cache</span> <span class="p">{</span> <span class="p">}</span>
+  <span class="k">public</span> <span class="k">class</span> <span class="nc">OptimizedDiskCache</span> <span class="p">:</span> <span class="n">DiskCache</span> <span class="p">{</span> <span class="p">}</span>
+
+  <span class="cm">/**** Valid ****/</span>
+  <span class="cm">/** 1 **/</span>
+  <span class="n">OptimizedDiskCache</span> <span class="n">optimizedDiskCache</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">OptimizedDiskCache</span><span class="p">();</span>
+  <span class="n">Cache</span> <span class="n">cache</span> <span class="p">=</span> <span class="p">(</span><span class="n">Cache</span><span class="p">)</span> <span class="n">optimizedDiskCache</span><span class="p">;</span> <span class="c1">// Boxing - Cache is parent of OptimizedDiskCache</span>
+
+  <span class="cm">/** 2 **/</span>
+  <span class="n">OptimizedDiskCache</span> <span class="n">optimizedDiskCache</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">OptimizedDiskCache</span><span class="p">();</span>
+  <span class="n">DiskCache</span> <span class="n">diskCache</span> <span class="p">=</span> <span class="p">(</span><span class="n">DiskCache</span><span class="p">)</span> <span class="n">optimizedDiskCache</span><span class="p">;</span> <span class="c1">// Boxing - DiskCache is parent of OptimizedDiskCache</span>
+
+  <span class="cm">/** 3 **/</span>
+  <span class="n">OptimizedDiskCache</span> <span class="n">optimizedDiskCache</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">OptimizedDiskCache</span><span class="p">();</span>
+  <span class="n">Cache</span> <span class="n">cache</span> <span class="p">=</span> <span class="p">(</span><span class="n">Cache</span><span class="p">)</span> <span class="n">optimizedDiskCache</span><span class="p">;</span> <span class="c1">// Boxing - Cache is parent of OptimizedDiskCache</span>
+  <span class="n">DiskCache</span> <span class="n">diskCache</span> <span class="p">=</span> <span class="p">(</span><span class="n">DiskCache</span><span class="p">)</span> <span class="n">cache</span><span class="p">;</span> <span class="c1">// Unboxing - DiskCache child of Cache and cache boxed reference type child of DiskCache object</span>
+
+
+  <span class="cm">/**** Not Valid ****/</span>
+  <span class="cm">/** 1 **/</span>
+  <span class="n">MemoryCache</span> <span class="n">memoryCache</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MemoryCache</span><span class="p">();</span>
+  <span class="n">Cache</span> <span class="n">cache</span> <span class="p">=</span> <span class="p">(</span><span class="n">Cache</span><span class="p">)</span> <span class="n">memoryCache</span><span class="p">;</span> <span class="c1">// OK</span>
+  <span class="n">DiskCache</span> <span class="n">diskCache</span> <span class="p">=</span> <span class="p">(</span><span class="n">DiskCache</span><span class="p">)</span> <span class="n">cache</span><span class="p">;</span> <span class="c1">// ERROR - DiskCache child of Cache, cache boxed reference of MemoryCache object but MemoryCache not DiskCache (or children)</span>
+
+  <span class="cm">/** 2 **/</span>
+  <span class="n">DiskCache</span> <span class="n">diskCache</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DiskCache</span><span class="p">();</span>
+  <span class="n">OptimizedDiskCache</span> <span class="n">optimizedDiskCache</span> <span class="p">=</span> <span class="p">(</span><span class="n">OptimizedDiskCache</span><span class="p">)</span> <span class="n">diskCache</span><span class="p">;</span> <span class="c1">// ERROR - Not a boxed reference of OptimizedDiskCache (or children) -&gt; can't unbox</span>
+
+  <span class="cm">/** 3 **/</span>
+  <span class="n">Cache</span> <span class="n">cache</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Cache</span><span class="p">();</span>
+  <span class="n">MemoryCache</span> <span class="n">memoryCache</span> <span class="p">=</span> <span class="p">(</span><span class="n">MemoryCache</span><span class="p">)</span> <span class="n">cache</span><span class="p">;</span> <span class="c1">// ERROR - Not a boxed reference of MemoryCache (or children) -&gt; can't unbox</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="generic-type-parameters"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/generic-type-parameters">Generic type parameters</a></h1>
+<p>A generic type parameter allows you to specify an arbitrary type T to a method at compile-time, without specifying a concrete type in the method or class declaration.</p>
+
+<p><br /></p>
+<h2 id="generic-type-class">Generic type class</h2>
+<h3 id="generic-type-built-in-class">Generic type Built-in class</h3>
+<p><code class="language-plaintext cs highlighter-rouge">List</code>, <code class="language-plaintext cs highlighter-rouge">SortedList</code>, <code class="language-plaintext cs highlighter-rouge">HashSet</code>, <code class="language-plaintext cs highlighter-rouge">Dictionary</code>, <code class="language-plaintext cs highlighter-rouge">Tuple</code>, <code class="language-plaintext cs highlighter-rouge">Queue</code> and <code class="language-plaintext cs highlighter-rouge">Stack</code> all used generic type parameters.<br />
+<code class="language-plaintext cs highlighter-rouge">List</code> is <code class="language-plaintext cs highlighter-rouge">List&lt;T&gt;</code>, <code class="language-plaintext cs highlighter-rouge">Dictionary</code> is <code class="language-plaintext cs highlighter-rouge">Dictionary&lt;TKey, TValue&gt;</code>, etc.</p>
+
+<p><br /></p>
+<h3 id="generic-type-class-1">Generic type class</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">public</span> <span class="k">class</span> <span class="nc">GenericList</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Add</span><span class="p">(</span><span class="n">T</span> <span class="n">input</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span> <span class="c1">// Here do nothing but can be used to store input</span>
+  <span class="p">}</span>
+
+  <span class="n">GenericList</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">list1</span> <span class="p">=</span> <span class="k">new</span> <span class="n">GenericList</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;();</span>
+  <span class="n">list1</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
+
+  <span class="n">GenericList</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">list2</span> <span class="p">=</span> <span class="k">new</span> <span class="n">GenericList</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+  <span class="n">list2</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="s">""</span><span class="p">);</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="generic-type-methods">Generic type methods</h2>
+<h3 id="generic-type-built-in-methods">Generic type Built-in methods</h3>
+<p>The built-in <code class="language-plaintext cs highlighter-rouge">Compare</code> method use generic type.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">public</span> <span class="k">abstract</span> <span class="kt">int</span> <span class="nf">Compare</span> <span class="p">(</span><span class="n">T</span><span class="p">?</span> <span class="n">x</span><span class="p">,</span> <span class="n">T</span><span class="p">?</span> <span class="n">y</span><span class="p">);</span> <span class="c1">// return "&lt; 0" if x&lt;y, "= 0" if x=y and "&gt; 0" if x&gt;y</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="example-of-compare-override">Example of <code class="language-plaintext cs highlighter-rouge">Compare</code> override</h4>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">public</span> <span class="k">class</span> <span class="nc">Box</span>
+  <span class="p">{</span>
+      <span class="k">public</span> <span class="kt">double</span> <span class="n">Length</span><span class="p">;</span>
+      <span class="k">public</span> <span class="kt">double</span> <span class="n">Height</span><span class="p">;</span>
+      <span class="k">public</span> <span class="kt">double</span> <span class="n">Width</span><span class="p">;</span>
+
+      <span class="k">public</span> <span class="nf">Box</span><span class="p">(</span><span class="kt">double</span> <span class="n">l</span><span class="p">,</span> <span class="kt">double</span> <span class="n">h</span><span class="p">,</span> <span class="kt">double</span> <span class="n">w</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">Length</span> <span class="p">=</span> <span class="n">l</span><span class="p">;</span> <span class="n">Height</span> <span class="p">=</span> <span class="n">h</span><span class="p">;</span> <span class="n">Width</span> <span class="p">=</span> <span class="n">w</span><span class="p">;</span>
+      <span class="p">}</span>
+
+  <span class="p">}</span>
+
+  <span class="k">public</span> <span class="k">class</span> <span class="nc">BoxCompare</span> <span class="p">:</span> <span class="n">Comparer</span><span class="p">&lt;</span><span class="n">Box</span><span class="p">&gt;</span>
+  <span class="p">{</span>
+      <span class="k">public</span> <span class="k">override</span> <span class="kt">int</span> <span class="nf">Compare</span><span class="p">(</span><span class="n">Box</span> <span class="n">x</span><span class="p">,</span> <span class="n">Box</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">Length</span> <span class="p">*</span> <span class="n">x</span><span class="p">.</span><span class="n">Height</span> <span class="p">*</span> <span class="n">x</span><span class="p">.</span><span class="n">Width</span> <span class="p">&gt;</span> <span class="n">y</span><span class="p">.</span><span class="n">Length</span> <span class="p">*</span> <span class="n">y</span><span class="p">.</span><span class="n">Height</span> <span class="p">*</span> <span class="n">y</span><span class="p">.</span><span class="n">Width</span><span class="p">)</span>
+              <span class="k">return</span> <span class="p">(</span><span class="m">1</span><span class="p">);</span>
+          <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">Length</span> <span class="p">*</span> <span class="n">x</span><span class="p">.</span><span class="n">Height</span> <span class="p">*</span> <span class="n">x</span><span class="p">.</span><span class="n">Width</span> <span class="p">&lt;</span> <span class="n">y</span><span class="p">.</span><span class="n">Length</span> <span class="p">*</span> <span class="n">y</span><span class="p">.</span><span class="n">Height</span> <span class="p">*</span> <span class="n">y</span><span class="p">.</span><span class="n">Width</span><span class="p">)</span>
+              <span class="k">return</span> <span class="p">(-</span><span class="m">1</span><span class="p">);</span>
+          <span class="k">else</span>
+              <span class="k">return</span> <span class="p">(</span><span class="m">0</span><span class="p">);</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">Box</span> <span class="n">box1</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Box</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">);</span>
+  <span class="n">Box</span> <span class="n">box2</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Box</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">1</span><span class="p">);</span>
+  <span class="n">BoxCompare</span> <span class="n">boxCompare</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BoxCompare</span><span class="p">();</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">boxCompare</span><span class="p">.</span><span class="nf">Compare</span><span class="p">(</span><span class="n">box1</span><span class="p">,</span> <span class="n">box2</span><span class="p">));</span> <span class="c1">// -1</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="generic-type-methods-1">Generic type methods</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">static</span> <span class="k">void</span> <span class="n">Swap</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="k">ref</span> <span class="n">T</span> <span class="n">lhs</span><span class="p">,</span> <span class="k">ref</span> <span class="n">T</span> <span class="n">rhs</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">T</span> <span class="n">temp</span><span class="p">;</span>
+      <span class="n">temp</span> <span class="p">=</span> <span class="n">lhs</span><span class="p">;</span>
+      <span class="n">lhs</span> <span class="p">=</span> <span class="n">rhs</span><span class="p">;</span>
+      <span class="n">rhs</span> <span class="p">=</span> <span class="n">temp</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kt">int</span> <span class="n">a</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">b</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
+  <span class="n">Swap</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="k">ref</span> <span class="n">a</span><span class="p">,</span> <span class="k">ref</span> <span class="n">b</span><span class="p">);</span> <span class="c1">// Swap(ref a, ref b) also works</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">a</span> <span class="p">+</span> <span class="s">" "</span> <span class="p">+</span> <span class="n">b</span><span class="p">);</span> <span class="c1">// 2 1</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="indexers"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/indexers/">Indexers</a></h1>
+<p>Indexers allow instances of a class or struct to be indexed just like arrays. The indexed value can be set or retrieved without explicitly specifying a type or instance member.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">SampleCollection</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="n">T</span><span class="p">[]</span> <span class="n">arr</span> <span class="p">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="m">100</span><span class="p">];</span>
+
+    <span class="k">public</span> <span class="n">T</span> <span class="k">this</span><span class="p">[</span><span class="kt">int</span> <span class="n">i</span><span class="p">]</span> <span class="p">{</span>
+      <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="p">}</span>
+      <span class="k">set</span> <span class="p">{</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="p">}</span>
+   <span class="p">}</span>
+ <span class="p">}</span>
+
+ <span class="kt">var</span> <span class="n">stringCollection</span> <span class="p">=</span> <span class="k">new</span> <span class="n">SampleCollection</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+ <span class="n">stringCollection</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="s">"First line"</span><span class="p">;</span>
+ <span class="n">stringCollection</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">=</span> <span class="s">"Second line"</span><span class="p">;</span>
+
+ <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">stringCollection</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span> <span class="c1">// First line</span>
+ <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">stringCollection</span><span class="p">[</span><span class="m">1</span><span class="p">]);</span> <span class="c1">// Second line</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="delegate"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/delegates/">Delegate</a></h1>
+<p>A delegate is a type that represents references to methods with a particular parameter list and return type.<br />
+In other word, a delegate represents a template (signature and return type) that a function called by another function must respect.</p>
+
+<p><br /></p>
+
+<p>Example from <a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/delegates/using-delegates?source=recommendations">Windows page on Delegate examples</a>:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> <span class="nf">Del</span><span class="p">(</span><span class="kt">string</span> <span class="n">message</span><span class="p">);</span> <span class="c1">// delegate</span>
+  <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">DelegateMethod</span><span class="p">(</span><span class="kt">string</span> <span class="n">message</span><span class="p">)</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">message</span><span class="p">);</span> <span class="p">}</span> <span class="c1">// function that respects delegate template</span>
+
+  <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">MethodWithCallback</span><span class="p">(</span><span class="kt">int</span> <span class="n">param1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">param2</span><span class="p">,</span> <span class="n">Del</span> <span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">callback</span><span class="p">(</span><span class="s">"The number is: "</span> <span class="p">+</span> <span class="p">(</span><span class="n">param1</span> <span class="p">+</span> <span class="n">param2</span><span class="p">).</span><span class="nf">ToString</span><span class="p">());</span>
+  <span class="p">}</span>
+
+  <span class="nf">MethodWithCallback</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="n">DelegateMethod</span><span class="p">);</span> <span class="c1">// The number is: 3</span>
+
+  <span class="c1">// Alternative</span>
+  <span class="n">Del</span> <span class="n">handler</span> <span class="p">=</span> <span class="n">DelegateMethod</span><span class="p">;</span>
+  <span class="nf">MethodWithCallback</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="n">handler</span><span class="p">);</span> <span class="c1">// The number is: 3</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="func">Func</h2>
+<p><code class="language-plaintext cs highlighter-rouge">Func</code> is a generic delegate included in the System namespace. It has zero or more input parameters and one out parameter. The last parameter specified in the brackets “&lt;&gt;” is the out parameter.</p>
+
+<p><br /></p>
+<h3 id="examples-1">Examples</h3>
+<h5 id="basic-example">Basic Example</h5>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">static</span> <span class="kt">int</span> <span class="nf">Sum</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">x</span> <span class="p">+</span> <span class="n">y</span><span class="p">;</span> <span class="p">}</span>
+
+  <span class="n">Func</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="k">add</span> <span class="p">=</span> <span class="n">Sum</span><span class="p">;</span> <span class="c1">// Assign method to delegate - Last int represents the return type</span>
+
+  <span class="kt">int</span> <span class="n">result</span> <span class="p">=</span> <span class="k">add</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">result</span><span class="p">);</span></code></pre></figure>
+
+<p><br /></p>
+<h5 id="example-of-integral-computation">Example of integral computation</h5>
+<p>Compute numerically the integral of any function is done by calling a function integral that take in argument the mathematical function we want to compute its integral. This function used as parameter is in C# a delegate that can be represente using <code class="language-plaintext cs highlighter-rouge">Func</code>.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="c1">// Integrate takes in input a method that takes a double in input and returns a double</span>
+  <span class="kt">double</span> <span class="nf">Integrate</span><span class="p">(</span><span class="n">Func</span><span class="p">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="kt">double</span><span class="p">&gt;</span> <span class="n">f</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x_low</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x_high</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N_steps</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kt">double</span> <span class="n">h</span> <span class="p">=</span> <span class="p">(</span><span class="n">x_high</span> <span class="p">-</span> <span class="n">x_low</span><span class="p">)</span> <span class="p">/</span> <span class="n">N_steps</span><span class="p">;</span>
+      <span class="kt">double</span> <span class="n">res</span> <span class="p">=</span> <span class="p">(</span><span class="nf">f</span><span class="p">(</span><span class="n">x_low</span><span class="p">)</span> <span class="p">+</span> <span class="nf">f</span><span class="p">(</span><span class="n">x_high</span><span class="p">))</span> <span class="p">/</span> <span class="m">2</span><span class="p">;</span>
+
+      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">N_steps</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+          <span class="n">res</span> <span class="p">+=</span> <span class="nf">f</span><span class="p">(</span><span class="n">x_low</span> <span class="p">+</span> <span class="n">i</span> <span class="p">*</span> <span class="n">h</span><span class="p">);</span>
+
+      <span class="k">return</span> <span class="p">(</span><span class="n">h</span> <span class="p">*</span> <span class="n">res</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="kt">double</span> <span class="nf">f</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">;</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="nf">Integrate</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">100</span><span class="p">));</span> <span class="c1">// 50</span>
+
+  <span class="kt">double</span> <span class="nf">f</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">*</span><span class="n">x</span><span class="p">;</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="nf">Integrate</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">100</span><span class="p">));</span> <span class="c1">// 333.35 (true value : 333.33)</span></code></pre></figure>
+
+<p><br /></p>
+
+<p>Integrate function from <a href="https://stackoverflow.com/questions/10741824/more-efficient-integration-loop">this StackOverflow post</a>.</p>
+
+<p><br /></p>
+<h2 id="action">Action</h2>
+<p><code class="language-plaintext cs highlighter-rouge">Action</code> is a delegate type defined in the System namespace. An Action type delegate is the same as Func delegate except that the Action delegate doesn’t return a value. In other words, an Action delegate can be used with a method that has a void return type.</p>
+
+<p><br /></p>
+<h3 id="example-1">Example</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">static</span> <span class="k">void</span> <span class="nf">ConsolePrint</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="p">}</span>
+
+  <span class="n">Action</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">printActionDel</span> <span class="p">=</span> <span class="n">ConsolePrint</span><span class="p">;</span>
+  <span class="nf">printActionDel</span><span class="p">(</span><span class="m">10</span><span class="p">);</span> <span class="c1">// 10</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="predicate">Predicate</h2>
+<p><code class="language-plaintext cs highlighter-rouge">Predicate</code> represents a method containing a set of criteria and checks whether the passed parameter meets those criteria. A predicate delegate methods must take one input parameter and return a boolean - true or false.</p>
+
+<p><br /></p>
+<h3 id="example-2">Example</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="n">Predicate</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">isUpper</span> <span class="p">=</span> <span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span><span class="p">.</span><span class="nf">Equals</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="nf">ToUpper</span><span class="p">());</span> <span class="c1">// Predicate checks the condition s = s.ToUpper()</span>
+  <span class="kt">bool</span> <span class="n">result</span> <span class="p">=</span> <span class="nf">isUpper</span><span class="p">(</span><span class="s">"hello world!!"</span><span class="p">);</span> <span class="c1">// false</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://www.tutorialsteacher.com/csharp/csharp-ternary-operator">Ternary Operator on Tutorial Teacher</a>,</li>
+  <li><a href="https://www.tutorialsteacher.com/csharp/csharp-switch">Switch on Tutorial Teacher</a>,</li>
+  <li><a href="https://www.geeksforgeeks.org/c-sharp-boxing-unboxing/">Geeks for Geeks on Boxing and Unboxing</a></li>
+  <li><a href="https://www.c-sharpcorner.com/article/mutable-and-immutable-class-in-c-sharp/">Article on Mutable and Immutable</a>,</li>
+  <li><a href="https://stackoverflow.com/questions/868411/are-value-types-immutable-by-definition">This StackOverflow post on Mutable, Immutable, Value and Reference Type</a>,</li>
+  <li><a href="https://www.tutorialsteacher.com/csharp/csharp-func-delegate">This page on Func</a>,</li>
+  <li><a href="https://www.tutorialsteacher.com/csharp/csharp-action-delegate">This page on Action</a>,</li>
+  <li><a href="https://stackoverflow.com/questions/9857180/what-does-t-denote-in-c-sharp">This StackOverflow post on Generic type</a></li>
+</ul>
+
+  </body>
+</html>

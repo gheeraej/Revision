@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - Offline Evaluation</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="baseline">Baseline</h1>
+<ul>
+  <li>Random baseline:
+    <ul>
+      <li>Predict at random:
+        <ul>
+          <li>Uniform,</li>
+          <li>Following label distribution,</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Zero rule baseline:
+    <ul>
+      <li>Always predict the most common class,</li>
+    </ul>
+  </li>
+  <li>Simple heuristics:
+    <ul>
+      <li>E.g.: classify tweets based on whether they contain links to unreliable sources,</li>
+    </ul>
+  </li>
+  <li>Human baseline:
+    <ul>
+      <li>What’s human-level performance?</li>
+    </ul>
+  </li>
+  <li>Existing solutions.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="evaluation-methods">Evaluation methods</h1>
+<ol>
+  <li>Perturbation Test</li>
+  <li>Invariance Tests</li>
+  <li>Directional Expectation Tests</li>
+  <li>Model Calibration</li>
+  <li>Confidence Measurement</li>
+  <li>Slice-based Evaluation</li>
+</ol>
+
+<p><br /></p>
+<h2 id="perturbation-tests">Perturbation Tests</h2>
+<p>Problem: users input might contain noise, making it different from test data</p>
+
+<p>Examples:</p>
+<ul>
+  <li>Speech recognition: background noise</li>
+  <li>Object detection: different lighting</li>
+  <li>Text inputs: typos, intentional misspelling (e.g. looooooooong)</li>
+</ul>
+
+<p>Model does well on test set, but fails in production.</p>
+
+<ul>
+  <li>Motivation: users input might contain noise, making it different from test data</li>
+  <li>Idea: randomly add small noise to test data to see how much outputs change</li>
+</ul>
+
+<p>The more sensitive the model is to noise:</p>
+<ul>
+  <li>The harder it is to maintain</li>
+  <li>The more vulnerable the model is to adversarial attacks</li>
+</ul>
+
+<p><br /></p>
+<h3 id="solutions">Solutions</h3>
+<p>If small changes cause model’s performance to fluctuate, you might want to make model more robust:</p>
+<ul>
+  <li>Add noise to training data,</li>
+  <li>Add more training data,</li>
+  <li>Choose another model.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="invariance-tests">Invariance Tests</h2>
+<p>Motivation: some input changes shouldn’t lead to changes in outputs:</p>
+<ul>
+  <li>Changing race/gender info shouldn’t change predicted approval outcome,</li>
+  <li>Changing name shouldn’t affect resume screening results.</li>
+</ul>
+
+<p>Idea:</p>
+<ul>
+  <li>Keep certain features the same, but randomly change values of sensitive features.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="directional-expectation-tests">Directional Expectation Tests</h2>
+<p>Motivation: some changes to inputs should cause predictable changes in outputs</p>
+
+<p>Example, when predicting housing prices:</p>
+<ul>
+  <li>Increasing lot size shouldn’t decrease the predicted price,</li>
+  <li>Decreasing square footage shouldn’t increase the predicted price.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="model-calibration">Model Calibration</h2>
+<p>If you predict team A wins in A vs. B match with 60% probability:</p>
+<ul>
+  <li>In 100 A vs. B match, A should win 60% of the time!</li>
+</ul>
+
+<p>Among all samples predicted POSITIVE with propa 80%, 80% of them should be POSITIVE!</p>
+
+<p><br /></p>
+<h2 id="confidence-measurement">Confidence Measurement</h2>
+<ul>
+  <li>Usefulness threshold for each individual prediction,</li>
+  <li>
+    <p>Uncertain predictions can cause annoyance &amp; catastrophic consequences.</p>
+  </li>
+  <li>How to measure the confidence level of each prediction?</li>
+  <li>What to do with predictions below the confidence threshold?
+    <ul>
+      <li>Skip,</li>
+      <li>Ask for more information,</li>
+      <li>Loop in humans.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h2 id="slice-based-evaluation">Slice-based Evaluation</h2>
+<ul>
+  <li>Classes
+    <ul>
+      <li>Might perform worse on minority classes</li>
+    </ul>
+  </li>
+  <li>Subgroups
+    <ul>
+      <li>Gender</li>
+      <li>Location</li>
+      <li>Time of using the app</li>
+      <li>etc.</li>
+    </ul>
+  </li>
+  <li>Evaluate your model on different slices</li>
+  <li>Check for consistency over time</li>
+</ul>
+
+<p><br /></p>
+<h3 id="pros">Pros</h3>
+<ul>
+  <li>Improve model’s performance both overall and on critical data</li>
+  <li>Help avoid biases</li>
+  <li>Even when you don’t think slices matter, slicing can:</li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329, lecture 7</a>.</li>
+</ul>
+
+  </body>
+</html>

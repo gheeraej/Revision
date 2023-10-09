@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Tokenizers</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-nlp"><a href="/Revision/deep_learning_nlp.html">Back to NLP</a></h2>
+<h2 id="back-to-transformers"><a href="/Revision/transformers.html">Back to Transformers</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>A tokenizer’s goal is to split a text in subpart in order to input these subpart in a model.</p>
+
+<p>Splitting a text can be done at a sentence level (each sentence is a subpart), at a word level (each word is a subpart) or at a character level (each character is a subpart). It can also be done at intermediate levels.</p>
+
+<p><br /></p>
+<h1 id="word-level-tokenisation">Word level tokenisation</h1>
+<p>A word level tokenizer will split a text in words. The split can be done using the spaces or using punctuation.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/word_based_tokenization.png" width="50%" height="50%" />
+</div>
+<p><br /></p>
+
+<p>Each word gets assigned an ID, starting from 0 and going up to the size of the vocabulary. The model uses these IDs to identify each word. These IDs are then used to map to a vector representation of the word.</p>
+
+<p><br /></p>
+<h2 id="pros">Pros</h2>
+<ul>
+  <li>A word representation contains useful information as a word contains semantic and contextual information.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="cons">Cons</h2>
+<ul>
+  <li>Different rules can be applied to split a text,</li>
+  <li>Vocabulary is very large and result in heavy models,</li>
+  <li>IDs of similar words can be very different (but they vector representations may be similar),</li>
+  <li>Unseen words during training are mapped to a same ‘UNKNOWN’ token</li>
+</ul>
+
+<p><br /></p>
+<h1 id="character-level-tokenisation">Character level tokenisation</h1>
+<p>Character-based tokenizers split the text into characters, rather than words. Some questions also exist concerning how to deal with punctuation.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/character_based_tokenization.png" width="50%" height="50%" />
+</div>
+<p><br /></p>
+
+<p>Each characters (letters, punctuation, numbers, special characters) gets assigned an ID starting from 0 to the size of the number of characters. These IDs are then used to map to a vector representation of the characters.</p>
+
+<p>The hidden layer \(h\):</p>
+
+<p><br /></p>
+<h2 id="pros-1">Pros</h2>
+<ul>
+  <li>Vocabulary size is not too big,</li>
+  <li>No out of vocabulary tokens since every word is built from characters.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="cons-1">Cons</h2>
+<ul>
+  <li>A character representation does not contain lot of information (semantic and contextual information),</li>
+  <li>Large amount of token to be processed.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="subword-tokenisation">Subword tokenisation</h1>
+<p>Subword tokenization algorithms rely on the principle that frequently used words should not be split into smaller subwords, but rare words should be decomposed into meaningful subwords.</p>
+
+<p>For instance, “annoyingly” might be considered a rare word and could be decomposed into “annoying” and “ly”. These are both likely to appear more frequently as standalone subwords, while at the same time the meaning of “annoyingly” is kept by the composite meaning of “annoying” and “ly”.</p>
+
+<p>Here is an example of subword representation where the
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/bpe_subword.png" width="50%" height="50%" />
+</div>
+<p><br /></p>
+
+<p>Each subword gets assigned an ID starting from 0 to the size of the number of subwords. These IDs are then used to map to a vector representation of the subwords.</p>
+
+<p>Note that every characters are kept as subwords to insure that every unseen words have a representation.</p>
+
+<p><br /></p>
+<h2 id="byte-pair-encoding-bpe">Byte-Pair Encoding (BPE)</h2>
+<p>(from <a href="https://huggingface.co/docs/transformers/tokenizer_summary#bytepair-encoding-bpe">Byte-Pair Encoding (BPE) on Hugging Face</a>)</p>
+
+<p>Byte-Pair Encoding (BPE) is a subword tokenizer.</p>
+
+<p>BPE relies on a pre-tokenizer that splits the training data into words. Pretokenization can be as simple as space tokenization or more complex pre-tokenization such as rule-based tokenization.</p>
+
+<p>After pre-tokenization, a set of unique words has been created and the frequency of each word it occurred in the training data has been determined. Next, BPE creates a base vocabulary consisting of all symbols that occur in the set of unique words and learns merge rules to form a new symbol from two symbols of the base vocabulary. It does so until the vocabulary has attained the desired vocabulary size. Note that the desired vocabulary size is a hyperparameter to define before training the tokenizer.</p>
+
+<h3 id="example">Example</h3>
+<p>As an example, let’s assume that after pre-tokenization, the following set of words including their frequency has been determined:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bpe1.png" width="60%" height="60%" />
+</div>
+<p><br /></p>
+
+<p>Consequently, the base vocabulary is [“b”, “g”, “h”, “n”, “p”, “s”, “u”]. Splitting all words into symbols of the base vocabulary, we obtain:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bpe2.png" width="60%" height="60%" />
+</div>
+<p><br /></p>
+
+<p>BPE then counts the frequency of each possible symbol pair and picks the symbol pair that occurs most frequently. In the example above “h” followed by “u” is present \(10 + 5 = 15\) times (10 times in the 10 occurrences of “hug”, 5 times in the 5 occurrences of “hugs”). However, the most frequent symbol pair is “u” followed by “g”, occurring \(10 + 5 + 5 = 20\) times in total. Thus, the first merge rule the tokenizer learns is to group all “u” symbols followed by a “g” symbol together. Next, “ug” is added to the vocabulary. The set of words then becomes:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bpe3.png" width="60%" height="60%" />
+</div>
+<p><br /></p>
+
+<p>BPE then identifies the next most common symbol pair. It’s “u” followed by “n”, which occurs 16 times. “u”, “n” is merged to “un” and added to the vocabulary. The next most frequent symbol pair is “h” followed by “ug”, occurring 15 times. Again the pair is merged and “hug” can be added to the vocabulary.</p>
+
+<p>At this stage, the vocabulary is [“b”, “g”, “h”, “n”, “p”, “s”, “u”, “ug”, “un”, “hug”] and our set of unique words is represented as:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bpe4.png" width="60%" height="60%" />
+</div>
+<p><br /></p>
+
+<p>Assuming, that the Byte-Pair Encoding training would stop at this point, the learned merge rules would then be applied to new words (as long as those new words do not include symbols that were not in the base vocabulary). For instance, the word “bug” would be tokenized to [“b”, “ug”] but “mug” would be tokenized as [“<unk>", "ug"] since the symbol "m" is not in the base vocabulary. In general, single letters such as "m" are not replaced by the "<unk>" symbol because the training data usually includes at least one occurrence of each letter, but it is likely to happen for very special characters like emojis.</unk></unk></p>
+
+<p>As mentioned earlier, the vocabulary size, i.e. the base vocabulary size + the number of merges, is a hyperparameter to choose. For instance GPT has a vocabulary size of 40,478 since they have 478 base characters and chose to stop training after 40,000 merges.</p>
+
+<p><br /></p>
+<h3 id="resources">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://huggingface.co/docs/transformers/tokenizer_summary#bytepair-encoding-bpe">Byte-Pair Encoding (BPE) on Hugging Face</a>,</li>
+  <li><a href="https://towardsdatascience.com/byte-pair-encoding-subword-based-tokenization-algorithm-77828a70bee0">This blog post by Chetna Khanna on BPE</a>,</li>
+  <li><a href="https://blog.floydhub.com/tokenization-nlp/">This blog post on subword tokenizer by Cathal Horan</a>,</li>
+</ul>
+
+<p><br /></p>
+<h2 id="byte-level-bpe">Byte-level BPE</h2>
+<p>Byte-level BPE is a subword tokenizer. Byte-level BPE is similar to classical BPE but is based on byte representation.</p>
+
+<p>A base vocabulary that includes all possible base characters can be quite large if e.g. all unicode characters are considered as base characters. To have a better base vocabulary, GPT-2 uses bytes as the base vocabulary, which is a clever trick to force the base vocabulary to be of size 256 while ensuring that every base character is included in the vocabulary. With some additional rules to deal with punctuation, the GPT2’s tokenizer can tokenize every text without the need for the <unk> symbol. GPT-2 has a vocabulary size of 50,257, which corresponds to the 256 bytes base tokens, a special end-of-text token and the symbols learned with 50,000 merges.</unk></p>
+
+<p><br /></p>
+<h3 id="resources-1">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://huggingface.co/docs/transformers/tokenizer_summary#bytelevel-bpe">Byte-level BPE on Hugging Face</a>,</li>
+  <li><a href="https://arxiv.org/pdf/1909.03341.pdf">Neural Machine Translation with Byte-Level Subwords by C Wang, K Cho and J Gu</a>,</li>
+  <li><a href="https://stackoverflow.com/questions/66193575/why-is-the-vocab-size-of-byte-level-bpe-smaller-than-unicodes-vocab-size">This StackOverflow answer on the relation of Byte-level BPE and UTF8 encoding</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="unigram">Unigram</h2>
+<p>Unigram is a pure probabilistic subword tokenizer based on the log-likelihood of subword appearances. It starts with a large vocabulary and progressively delete symbols that lead to the smallest increase of the loss (log likelihood).</p>
+
+<p>Unigram removes \(p\) (with \(p\) usually being 10% or 20%) percent of the symbols whose loss increase is the lowest i.e. those symbols that least affect the overall loss over the training data.</p>
+
+<p>Unigram saves the probability of each token in the training corpus on top of saving the vocabulary so that the probability of each possible tokenization can be computed after training.</p>
+
+<p>For a word \(x\), we define its set of all possible tokenizations as \(S(x)\). The for words \(x^{(1)}, \ldots, x^{(n)}\) of the training data the overall loss is defined as:</p>
+
+\[l = - \sum_{i=1}^n \log \left(\sum_{s \in S(x^{(i)}} P(x)\right)\]
+
+<p>Where:</p>
+<ul>
+  <li>\(x\) represents a possible sequence of tokens used to create word \(x^{(i)}\).</li>
+  <li>\(P(x) = \prod_{j=1}^m p(x_j)\) is the probability of sequence \(x\) computes as the product of each subword probability of appearance.</li>
+</ul>
+
+<p>The assumptions that each subword occurs independently is done here.</p>
+
+<p>The probabilities of occurence of each subword are computed using their number of occurence in the training data such that \(\forall j, x_j \in \mathcal{V}, \sum_{x \in \mathcal{V}} P(x) = 1\). This mean that the sum of probability of every possible tokenization for an element of vocabulary \(\mathcal{V}\) is always 1.</p>
+
+<p>Because Unigram is not based on merge rules (in contrast to BPE and WordPiece), the algorithm has several ways of tokenizing new text after training. As an example, if a trained Unigram tokenizer exhibits the vocabulary:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/unigram.png" width="60%" height="60%" />
+</div>
+<p><br /></p>
+
+<p>“hugs” could be tokenized both as [“hug”, “s”], [“h”, “ug”, “s”] or [“h”, “u”, “g”, “s”]. So which one to choose? Unigram saves the probability of each token in the training corpus on top of saving the vocabulary so that the probability of each possible tokenization can be computed after training. The algorithm simply picks the most likely tokenization in practice, but also offers the possibility to sample a possible tokenization according to their probabilities.</p>
+
+<p><br /></p>
+<h3 id="resources-2">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://blog.floydhub.com/tokenization-nlp/">This blog post on subword tokenizer by Cathal Horan</a>,</li>
+  <li><a href="https://huggingface.co/docs/transformers/tokenizer_summary#unigram">Unigram on Hugging Face</a>.</li>
+  <li><a href="https://arxiv.org/pdf/1804.10959.pdf">Unigram paper T. Kudo by with BPE presentation</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="wordpiece">WordPiece</h2>
+<p>WordPiece is a subword tokenizer.</p>
+
+<p>WordPiece is based on the likelihood of subword appearances. It merges subword if the result of this merge has the highest increase of likelihood. But it will try only subwords that have the greater prior ie the larger number of counts.</p>
+
+<p>The main difference with BPE is that it does not only look at the count of appearances of the merge but also the count of appearance of the two subwords. The difference with unigram is that it will not only look at the increase of likelihood but will also use the count of appearance.</p>
+
+<p>WordPiece is not a totally probabilistic model as it chooses potential merge based on the count (such as BPE) but then decides which subwords to merge based on the likelihood.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bpe_unigram_wordpiece.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>For example if:</p>
+<ul>
+  <li>‘e’ appears 100 times and ‘d’ 80 times and ‘de’ 20 times,</li>
+  <li>‘a’ appears 20 times and ‘b’ 15 times and ‘ab’ 12 times.</li>
+</ul>
+
+<p>Then WordPiece would rather merge ‘a’ and ‘b’.</p>
+
+<p><br /></p>
+<h3 id="resources-3">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://blog.floydhub.com/tokenization-nlp/">This blog post on subword tokenizer by Cathal Horan</a>,</li>
+  <li><a href="https://arxiv.org/pdf/1609.08144.pdf">WordPiece original paper by Wu et al.</a>,</li>
+  <li><a href="https://huggingface.co/docs/transformers/tokenizer_summary#wordpiece">Wordpiece on Hugging Face</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="sentencepiece">SentencePiece</h2>
+<p>SentencePiece is a subword tokenizer.</p>
+
+<p>SentencePiece is the only subword tokenizer that does not require pre tokenization.</p>
+
+<p>It has to different implementation, one based on BPE and the other based on Unigram. Both of these implementations uses some tricks to improve the based tokenizer:</p>
+<ul>
+  <li>Train from row sentences,</li>
+  <li>Encode everything as unicode,</li>
+  <li>Including the spaces as they are mapped to unicode caracter.</li>
+</ul>
+
+<p>Its main advantage is that it can be trained directly using raw sentences. Also as it encodes the spaces it can explicitly be decoded. For example:</p>
+
+<ul>
+  <li>‘Hello World!’ -&gt; [‘Hello’, ‘Wor’, ‘ld’, ‘!’] using classic tokenizers: the information about the space is lost, (‘Hello World !’ would give the same tokenization),</li>
+  <li>‘Hello World!’ -&gt; [‘Hello’, ‘__Wor’, ‘ld’, ‘!’] using SentencePiece: the information about the space is ‘__’ and we can retrieve the original sentence.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="pros-2">Pros</h3>
+<ul>
+  <li>No out of vocabulary tokens since every word can be built in the worst case from characters,</li>
+</ul>
+
+<p><br /></p>
+<h3 id="cons-2">Cons</h3>
+<ul>
+  <li>A character representation does not contain lot of information (semantic and contextual information),</li>
+  <li>Large amount of token to be processed,</li>
+  <li>Sub-words tokenizers generally require pre tokenization and different rules for pre tokenisation exist (ans in some languages pre tokenization may be complex).</li>
+</ul>
+
+<p><br /></p>
+<h3 id="resources-4">Resources</h3>
+<ul>
+  <li><a href="https://arxiv.org/pdf/1808.06226.pdf">SentencePiece: A simple and language independent subword tokenizer and detokenizer for Neural Text Processing by T. Kudo and J. Richardson</a>,</li>
+  <li><a href="https://github.com/google/sentencepiece">SentencePiece Github</a>.</li>
+  <li><a href="https://huggingface.co/docs/transformers/tokenizer_summary#sentencepiece">SentencePiece on Hugging Face</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="resources-5">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://huggingface.co/course/chapter2/4?fw=pt">Tokenizers on Hugging Face</a>,</li>
+  <li><a href="https://blog.floydhub.com/tokenization-nlp/">This blog post on subword tokenizer by Cathal Horan</a>,</li>
+  <li><a href="https://arxiv.org/pdf/1609.08144.pdf">WordPiece original paper by Wu et al.</a>,</li>
+  <li><a href="https://arxiv.org/pdf/1804.10959.pdf">Unigram paper T. Kudo by with BPE presentation</a></li>
+</ul>
+
+  </body>
+</html>

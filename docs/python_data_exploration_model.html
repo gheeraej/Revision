@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Python - Data Exploration and Model Creation</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-python"><a href="/Revision/python.html">Back to Python</a></h2>
+
+<p><br /></p>
+<h1 id="steps">Steps</h1>
+<h3 id="i-1st-data-exploration-statistiques-de-bases">I. 1st Data Exploration: statistiques de bases</h3>
+<ol>
+  <li>head(), describe(), dtypes, nunique(), isnull()</li>
+  <li>Identifier le label</li>
+  <li>Discuter des colonnes compliquées, ce qu’on pourrait en faire et les jeter directement</li>
+  <li>Transformer en catégories les colonnes numérique avec peu de valeurs uniques non ordonnées: df.astype({‘col’: ‘object’})</li>
+  <li>Supprimer les colonnes catégories avec trop de valeurs et qui ne semblent pas avoir de valeur</li>
+  <li>Créer une liste de variables numériques et une de variables catégorielles</li>
+</ol>
+
+<p><br /></p>
+<h3 id="ii-missing-values-regarder-les-missing-values-pour-voir-quoi-en-faire">II. Missing values: regarder les missing values pour voir quoi en faire</h3>
+<ol>
+  <li>Si une colonne a peu de valeurs manquantes, supprimer les lignes associées</li>
+  <li>Etudier le lien entre les valeurs manquantes des colonnes et la variable cible (2 histogrames/mean de y)</li>
+  <li>Si lien, remplacer par une valeur spécifique (-1 ou 0 ou une nouvelle catégorie par exemple) avec fillna()</li>
+  <li>Si pas de lien, on peut supprimer les entrées ou remplacer par une valeur (mean, 0) (à faire plus tard)</li>
+</ol>
+
+<p><br /></p>
+<h3 id="iii-2nd-data-exploration-distribution-du-label-et-des-features">III. 2nd Data Exploration: distribution du label et des features</h3>
+<ol>
+  <li>Histrogram</li>
+  <li>Regarder si distribution logarithmique dans se cas on peut appliquer une fonction log: apply(sign(x) * np.log(abs(x)+1))</li>
+  <li>Pour les outliers: clipper leur valeur: clip(lower=XX, upper=XX) ou supprimer au dela d’un quantile</li>
+  <li>Possibilité d’utiliser une méthode de détection d’outlier (OPTICS ou IsolationForest): en parler</li>
+</ol>
+
+<p><br /></p>
+<h3 id="iv-3rd-data-exploration-lien-entre-les-features-et-la-variable-cible">IV. 3rd Data Exploration: lien entre les features et la variable cible</h3>
+<ol>
+  <li>Si label=cat -&gt; vs cat -&gt; crosstab(y, col) + f_chi2(crosstab) / vs num -&gt; box(x=y, y=col) + f_oneway(y, col)</li>
+  <li>Si label=num -&gt; vs cat -&gt; box(x=col, y=y) + f_oneway(col, y) / vs num -&gt; scatter(col, y) + corr(x, y)</li>
+  <li>Par défaut garder toutes les colonnes mais ça donne une idée de ce qu’on peut attendre du modèle</li>
+</ol>
+
+<p><br /></p>
+<h3 id="v-pipeline">V. Pipeline</h3>
+<ol>
+  <li>Séparer X et y puis séparer test et train avec train_test_val (model_selection)</li>
+  <li>Vérifier que plus de données sont manquantes où alors qu’elles vont être prises en compte</li>
+  <li>Utiliser Imputer pour transformer les na en moyenne ou médiane (ou val) (utiliser un pipeline si besoin)</li>
+  <li>Utiliser TargetEncoder pour encoder les colonnes catégorielles (utiliser un pipeline si besoin)</li>
+  <li>Mettre dans un ColumnTransformer avec chaque pipeline associée à des colonnes</li>
+  <li>Faire un pipeline avec le ColumnTranformer et un model (GradientBoosting)</li>
+</ol>
+
+<p><br /></p>
+<h3 id="vi-fit">VI. Fit</h3>
+<ol>
+  <li>Option 1: fit sur X_train et test sur X_test</li>
+  <li>Option 2: utiliser cross_val_score sur X_train (make_scorer)</li>
+  <li>Option 3: RandomizedSearchCV avec les distribution à définir + fit le meilleur modèle sur X_train</li>
+</ol>
+
+<p><br /></p>
+<h3 id="vii-metric">VII. Metric</h3>
+<ol>
+  <li>Régression MSE ou MAE</li>
+  <li>Classification: Accuracy, f1_score, roc_auc_score, confusion_matrix, roc_curve(predict_proba)</li>
+</ol>
+
+  </body>
+</html>

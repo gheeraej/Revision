@@ -1,0 +1,334 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Transformers - Attention block</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-transformers"><a href="/Revision/transformers.html">Back to Transformers</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>Attention is a block of transformers network that defines at each step of the prediction which part of the input the model should look at.</p>
+
+<p>For example in this image we can see for each predicted word (in French) which input words (in English) have been used to predict this specific french word:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/attention.jpeg" width="25%" height="25%" />
+</div>
+<p><br /></p>
+
+<h2 id="introduction-example">Introduction example</h2>
+<p>In a Transformer an attention block can be computed using different pairs of 3 values (Query, Keys and Values).</p>
+
+<p>Here is an introductive example using the decoder hidden layer of the previous step (\(s_{i-1}\)) as Query and the encoder hidden layers (\(h_1, \ldots, h_n\)) as Keys and Values.</p>
+
+<p>For a given decoder hidder layer \(s_{i-1}\), for every encoder hidden layer \(h_j\), the attention block computes a score</p>
+
+\[e_{i,j}=f(W^Q s_{i-1}, W^K h_j)\]
+
+<p>Where:</p>
+<ul>
+  <li>\(s_{i-1}\) is the \({i-1}\) hidden layer of the decoder,</li>
+  <li>\(h_j\) is the \(j\)-th hidden layer of the encoder,</li>
+  <li>\(f\) is an alignement function (dot product),</li>
+  <li>\(W^Q\) and \(W^K\) are projection matrices (learned) that project in the same dimension \(d\).</li>
+</ul>
+
+<p><br /></p>
+
+<p>It then uses these score to compute a softmax function (make the score sums to 1). This gives a weight \(\alpha_j\) for each hidden layer of the encoder:</p>
+
+\[\alpha_{i,j} = softmax(e_{i,j}) = \frac{e_{i,j}}{\sum_{l=1}^n e_{i,l}}\]
+
+<p>\(\alpha_{i,j}\) represents the importance of hidden layer \(h_j\) for the current Query \(s_{i-1}\).</p>
+
+<p><br /></p>
+
+<p>It then uses these weights \(\alpha_{i,j}\) to make a weighted average of the Values (\(h_1, \ldots, h_n\)) for the current Query \(s_{i-1}\):</p>
+
+\[c_i = \sum_{j=1}^k \alpha_{i,j} \left(W^V h_j\right)\]
+
+<p>Where:</p>
+<ul>
+  <li>\(c_i\) is the weighted hidden layer for prediction \(i\),</li>
+  <li>\(\alpha_j\) is the weight for encoder hidden \(j\),</li>
+  <li>\(W^V\) is a projection matrix (learned) that projects in dimension \(d\).</li>
+</ul>
+
+<p><br /></p>
+<h2 id="dot-production-attention">Dot production attention</h2>
+<p>We saw that the attention block uses an alignement function \(f\) that we did not define.</p>
+
+<p>A typical choice for \(f\) is the basic dot product will lead to the dot production attention:</p>
+
+\[f(Q,K) = Q^T K\]
+
+<p><br /></p>
+<h1 id="attention-as-a-query-keys-values-generalisation">Attention as a Query, Keys, Values: Generalisation</h1>
+<p>An attention block can be view as a query applied to keys to output some values with:</p>
+<ul>
+  <li>The Query which is a vector asking for best values to look at,</li>
+  <li>The Keys which are used to score the values to look at,</li>
+  <li>The Values which are scored and output.</li>
+</ul>
+
+<p>The query asks something to the keys (which hidden layers are the most relevant for this particular prediction?) that answered with the appropriate value.</p>
+
+\[\begin{eqnarray}
+\text{Attention}(Q,K,V) &amp;&amp;= softmax(Q^T K)V \\
+&amp;&amp;= \frac{Q^T K}{\sum_{l=1}^k (Q^T K_l} V \;\;\; \forall j \in \{1, \ldots, n\}
+\end{eqnarray}\]
+
+<p>Here \(f\) is a dot production function.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/attention_matrix.png" width="30%" height="30%" />
+</div>
+<p>Here is a visualisation of an attention block in matrix form. From <a href="https://jalammar.github.io/illustrated-transformer/">the illustrated Transformer by Jay Alammar</a>.</p>
+
+<p><br /></p>
+
+<p>In the <a href="https://arxiv.org/pdf/1706.03762.pdf">original paper</a> they add a scaling factor \(\frac{1}{\sqrt{d_k}}\) in the softmax function where \(d_k\) is the dimension of the key vectors (64 in the original paper).</p>
+
+<p>Here is a representation from the original paper of scaled dot product attention:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/sdpa.png" width="20%" height="20%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<h2 id="multi-head-attention">Multi-Head Attention</h2>
+<p>Multi-Head Attention is a generalisation of scaled dot product attention for \(Q\), \(K\) and \(V\) which project linearly \(Q\), \(K\) and \(V\) \(h\) times with learned weights (parameters) and then apply \(h\) scaled dot product attention on each of the projected pairs.</p>
+
+\[\begin{eqnarray}
+\text{Mulit-Head Attention}(Q,K,V) &amp;&amp;= \text{Concat}(head_1, \ldots, head_h)W^O \\
+\text{Where } head_i &amp;&amp;= \text{Attention}(Q W_i^Q, K W_i^K, V W_i^V)
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(W_i^Q\), \(W_i^K\) and \(W_i^V\) and projection parameter matrices (learned) that project in the same dimension \(d\),</li>
+  <li>\(W^O\) is a projection matrix to project the concatenated matrix in a constant size vector of size \(d\).</li>
+</ul>
+
+<p><br /></p>
+
+<p>Here is an illustration of Multi-Head Attention:</p>
+
+<div style="text-align: center">
+<img src="assets/images/mha.png" width="20%" height="20%" />
+</div>
+
+<p><br /></p>
+<h3 id="detail-visualisation-of-multi-head-attention">Detail visualisation of Multi-Head Attention</h3>
+<p>From <a href="https://jalammar.github.io/illustrated-transformer/">The illustrated Transformer by Jay Alammar</a>:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/attention_2_heads.png" width="50%" height="50%" />
+</div>
+<p>Here is a visualisation of 2 different heads of a multi-head attention block. Each head has its own projection matrix. This projection matrix are randomly initialized and are then updated during the training.</p>
+
+<p><br /></p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/attention_output.png" width="40%" height="40%" />
+</div>
+<p>Here is a visualisation of the outputs of 8 heads of a multi-head attention block. 8 is the number of heads in the architecture of the Transformer from <a href="https://arxiv.org/pdf/1706.03762.pdf">Attention is all you need by A Vaswani and al.</a>.</p>
+
+<p><br /></p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/attention_concat.png" width="50%" height="50%" />
+</div>
+<p>Here is a visualisation of the concatenation step which concates the 8 outputs of the 8 heads and then mutiply them by a projection matrix \(W^O\) to project the concatenation to a constant size vector (size \(d\), the same size as query, keys and values).</p>
+
+<p><br /></p>
+<h2 id="self-attention">Self Attention</h2>
+<p>Self Attention is a special case of attention block which uses the same vectors (vectors from the layers coming as input of the self-attention block) for Query, Keys and Values:</p>
+<ul>
+  <li>Query: \(W^Q h_i\),</li>
+  <li>Keys: \(W^K (h)_{j \in \{1, \ldots, n\}}\),</li>
+  <li>Values: \(W^K (h)_{j \in \{1, \ldots, n\}}\),</li>
+</ul>
+
+<p><br /></p>
+
+<p>The focus of a self attention layer is on itself:</p>
+<div style="text-align: center">
+<img src="assets/images/self_attention_focus.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>Here is an illustration of the projection of the vectors from the input layer (it could be an hidden layer) to Query, Keys and Values:</p>
+<div style="text-align: center">
+<img src="assets/images/self_attention_proj.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h2 id="self-attention-single-head">Self Attention Single-Head</h2>
+<p>Here is an illustration of the self-attention block functionment for the first layer (input layer but it could be from any hidden layer) from <a href="https://jalammar.github.io/illustrated-transformer/">the illustrated Transformer by Jay Alammar</a>:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/self_attention_details.png" width="40%" height="40%" />
+</div>
+<p>The block uses its projected Query vector and the projected Keys and Values vectors of every input. It then computes a score, rescales it, applies softmax and multiplies the Values vector by it.</p>
+
+<p><br /></p>
+
+<p>The detail of the steps are exactly the same for a Single head attention block which would not be ‘self attention block’. The only difference would be that Query, Keys and Values vectors would not come from the same input.</p>
+
+<p><br /></p>
+<h3 id="detailed-illustration">Detailed illustration</h3>
+<p>Another more detailed illustration coming from <a href="https://jalammar.github.io/illustrated-gpt2/#part-2-illustrated-self-attention">The illustrated Self-Attention by Jay Alammar</a> is as follow:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/sa1.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/sa2.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/sa3.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+
+<p>Finally we end up with a vector representing each token containing the appropriate context of that token. Those are then presented to the next sublayer in the transformer block:</p>
+<div style="text-align: center">
+<img src="assets/images/sa4.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="self-attention-multi-head">Self Attention Multi-Head</h2>
+<p>Here is a summary of a multi-head self attention block apply to the first layer (input layer) from <a href="https://jalammar.github.io/illustrated-transformer/">the illustrated Transformer by Jay Alammar</a>:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/self_attention_multi_head.png" width="60%" height="60%" />
+</div>
+<p><br /></p>
+
+<p>The detail of the steps are exactly the same for a Multi head attention block which would not be ‘self attention block’. The only difference would be that Query, Keys and Values vectors would not come from the same input.</p>
+
+<p><br /></p>
+<h2 id="masked-attention">Masked Attention</h2>
+<p>A masked multi-head attention is simply a multi head attention in which some of the values are masked, ie they can’t be used by the attention block:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/msa_summary.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>In the decoder part of a Transformer, the true output is used as an input. In a task like prediction of the next word, it is mandatory to mask the next words of the sentence otherwise the desired results would be in the input.</p>
+
+<p><br /></p>
+
+<p>Here is a representation of masked attention: the model can only use information from previous words:</p>
+<div style="text-align: center">
+<img src="assets/images/masked_attention.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>From a mathematical point of view, the mask is just an additional matrix that the block adds to the score \(e_{i,j}\) before computing the softmax:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/masked_attention_maths.png" width="40%" height="40%" />
+</div>
+<p>The addition of \(-\infty\) to every masked Values scores insure that these values won’t be used in this attention block.</p>
+
+<p><br /></p>
+<h3 id="detailed-illustration-1">Detailed illustration</h3>
+<p>Here is an illustration coming from <a href="https://jalammar.github.io/illustrated-gpt2/#part-2-illustrated-self-attention">The illustrated Self-Attention by Jay Alammar</a> using a 4 words sentence in the task of next word prediction:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/msa1.png" width="40%" height="40%" />
+</div>
+<p>To predict true label ‘must’, the model can only look at the previous words ie ‘they’. To predict 3rd word ‘obey’, the model can look at previous words ie ‘they’ and ‘must’. The mask self attention block masks the other words.</p>
+
+<p><br /></p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/msa2.png" width="40%" height="40%" />
+</div>
+<p>The input values after the current value are masked: their scores are set to \(-\infty\).</p>
+
+<p><br /></p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/msa3.png" width="40%" height="40%" />
+</div>
+<p>This first step of a mask attention block is classic and computes the scores for a Query (here it is done for multiple Queries at a time) and Keys.</p>
+
+<p><br /></p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/msa4.png" width="40%" height="40%" />
+</div>
+<p>Next the self-attention block just adds a matrix of \(0\) and \(-\infty\) to the score matrix. This mask matrix is upper diagonal with values \(-\infty\).</p>
+
+<p><br /></p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/msa5.png" width="40%" height="40%" />
+</div>
+<p>Using the softmax function, every Values associated to score which have been masked will be ignored (weight of 0).</p>
+
+<p><br /></p>
+<h2 id="encoder-decoder-attention">Encoder-Decoder attention</h2>
+<p>Encoder-Decoder attention is an attention block for which, the Keys and Values come from the encoder and the Query comes from the Decoder. Encoder-Decoder attention is the second attention block of the decoder in the original Transformer from <a href="https://arxiv.org/pdf/1706.03762.pdf">Attention is all you need by A Vaswani and al.</a>.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/transformer_decoding.gif" width="40%" height="40%" />
+</div>
+
+<p>The “Encoder-Decoder Attention” layer works just like multiheaded self-attention, except it creates its Queries matrix from the layer below it, and takes the Keys and Values matrix from the output of the encoder stack.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://jalammar.github.io/illustrated-transformer/">The illustrated Transformer by Jay Alammar</a>,</li>
+  <li><a href="https://jalammar.github.io/illustrated-gpt2/#part-2-illustrated-self-attention">The illustrated Self-Attention by Jay Alammar</a>,</li>
+  <li><a href="https://towardsdatascience.com/attention-and-its-different-forms-7fc3674d14dc">This blog post on Toward Data Science</a></li>
+  <li><a href="https://arxiv.org/pdf/1706.03762.pdf">Attention is all you need by A Vaswani and al.</a>,</li>
+  <li><a href="https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/">Visualisation of sequence to sequence models with RNN and Attention</a>,</li>
+  <li><a href="https://www.coursera.org/lecture/attention-models-in-nlp/causal-attention-AMz8y">Coursera deeplearning.ai NLP course on Self Attention</a>.</li>
+</ul>
+
+  </body>
+</html>

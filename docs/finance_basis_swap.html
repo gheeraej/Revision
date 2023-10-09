@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Finance - Basis Swap</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-finance---general"><a href="/Revision/finance_general.html">Back to Finance - General</a></h2>
+
+<p><br /></p>
+<h1 id="basis-swap">Basis Swap</h1>
+<h2 id="definition">Definition</h2>
+<p>A Basis Swap is a floating-for-floating exchange of interest rate payments using one rate for the paying leg and another rate for the receiving leg.</p>
+
+<p><br /></p>
+<h1 id="tenor-basis-swap">Tenor Basis Swap</h1>
+<h2 id="definition-1">Definition</h2>
+<p>A Tenor Basis Swap is a floating-for-floating exchange of interest rate payments using rates with different tenor for paying and reveiving leg.</p>
+
+<p><br /></p>
+<h2 id="example-of-tenor-basis-swap">Example of Tenor Basis Swap</h2>
+<p>Here are list of different possible Tenor Basis Swap:</p>
+<ul>
+  <li>ESTR vs Euribor 6M,</li>
+  <li>Euribor 3M vs Euribor 6M,</li>
+  <li>SOFR vs Libor 6M</li>
+</ul>
+
+<p><br /></p>
+<h2 id="importance-of-tenor-basis-swap-since-2008-financial-crisis">Importance of Tenor Basis Swap since 2008 financial crisis</h2>
+<p>Before the 2008 financial crisis (or even the 2007 liquidity crisis), LIBOR rate were considered risk free. Tenor Basis spreads were null as show in the following graphs:</p>
+
+<div style="text-align: center">
+<img src="assets/images/ois_basis_spread.png" width="30%" height="30%" />
+</div>
+<p>This graph shows the rise in the basis spread between Eonia OIS 6M and Euribor 6M during 2008 financial crisis.</p>
+
+<div style="text-align: center">
+<img src="assets/images/basis_spread.png" width="30%" height="30%" />
+</div>
+<p>This graph shows the rise in the basis spread between Euribor 3M, Euribor 6M and Euribor 12M during 2008 financial crisis.</p>
+
+<p><br /></p>
+<h5 id="single-curve-and-multi-curves-framework">Single Curve and Multi Curves Framework</h5>
+<p>In the pre-crisis era, the standard market practice was to construct a single interest rate yield curve (single curve framework). This single interest rate yield curve was constructed using liquid vanilla interest Libor rate instruments based on different tenors (it could mix 1M Libor instruments with 6M Libor instruments, …).<br />
+This was possible as every of the Libor rates were risk free.</p>
+
+<p>However the crisis showed that these Libor rates were not risk free.<br />
+As shown in the second graph, the spread between a 6M ZC rate on Euribor 3M and Euribor 6M was greater than 0 (same for 12M ZC rate on Euribor 6M vs Euribor 12M).</p>
+
+<p>This led to the creation of the multi curve framework where each rate (ESTR, Euribor 1M, Euribor 3M, Euribor 6M, Euribor 12M) induces its own yield curves and its own forward curves (forward curves that can be deducted from the spot yield curve).</p>
+
+<p><br /></p>
+<h1 id="cross-currenncy-basis-swap">Cross Currenncy Basis Swap</h1>
+<h2 id="definition-2">Definition</h2>
+<p>A Cross-Currency Basis Swap (CCBS) is a floating-for-floating exchange of interest rate payments in two different currencies. Unlike other basis swaps, CCBS also exchange notional principals.
+A cross-currency basis swap is quoted in term of spread added to the paying (foreign) leg to make the swap fair at origination. This <em>basis</em> can be either positive or negative depending on the currency pair.</p>
+
+<p><br /></p>
+<h2 id="market-interpretation">Market Interpretation</h2>
+<p>The cross-currency basis spread partly reflects the difference in credit risks implied by the two reference rates (for example if one rate is collaterized and the other is not). This basis is also drived by supply and demand of the currency and more specifically by the balance between demand and supply for the currency pair.</p>
+
+<p>This market interpretation is summurized by <a href="https://www.frontieradvisors.com.au/wp-content/uploads/2021/09/Market-Insights-Cross-currency-basis-swaps-.pdf">Frontier advisors document on XCCY basis Swap</a>: “In principle, the basis should be zero if access to funding in the two currencies is equal, unless there is a higher degree of credit risk imbedded in one index relative to another. However, companies do not have the same access to funding markets in multiple currencies. Financial and credit conditions differ across markets. The cross-currency basis spread therefore represents equilibrium in the supply of and demand for funding across different currencies, adjusted for the creditworthiness of the banks that generate the underlying floating index.”</p>
+
+<h5 id="interpreation-of-some-cross-currency-basis">Interpreation of some cross-currency basis</h5>
+<p>When the basis is positive, such as for the Australian Dollar (AUD), the counterparty borrowing in USD benefits by receiving the positive basis. Conversely, when the basis is negative, such as for the Japanese Yen (JPY), the counterparty borrowing in USD pays the basis spread.</p>
+
+<p><br /></p>
+<h2 id="evolution-of-some-cross-currency-basis-spread">Evolution of some Cross Currency Basis Spread</h2>
+<div style="text-align: center">
+<img src="assets/images/cross_currency_basis_spread.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h1 id="cross-currency-csa-curves">Cross currency CSA Curves</h1>
+<p>A CSA (for Credit Support Annex) curve <em>currency 1</em> vs <em>currency 2</em> is a discounted curve used to discount flows in <em>currency 1</em> that will be exchange in <em>currency 2</em>. As specified before, the CSA discount curve takes into account the difference in credit risk and in liquidity between <em>currency 1</em> and <em>currency 2</em> (represented as a spread added to the discount curve of the currency).</p>
+
+<p><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://canopee-group.com/wp-content/uploads/2021/06/The-Multi-Curve-Framework-AWALEE.pdf">The Multi-Curve Framework: A Practitioner’s Guide</a>,</li>
+  <li><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2219548">Everything You Always Wanted to Know About Multiple Interest Rate Curve Bootstrapping But Were Afraid To Ask</a>,</li>
+  <li><a href="https://research-doc.credit-suisse.com/docView?language=ENG&amp;format=PDF&amp;source_id=csplusresearchcp&amp;document_id=1014795411&amp;serialid=49NWiaIfsRfi%2F5%2FWSTVyyURyVRLr2y9VAWKzG04VCOM%3D&amp;cspId=null">Credit Suisse Research: Cross-Currency Basis Swap</a>,</li>
+  <li><a href="https://insights.londonfs.com/modern-derivatives-pricing-csa-discounting">Modern Derivatives Pricing – CSA Discounting by London Financial Studies</a>.</li>
+</ul>
+
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Deep Learning - Regularization</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-deep-learning"><a href="/Revision/deep_learning.html">Back to Deep Learning</a></h2>
+
+<p><br /></p>
+<h1 id="regularization">Regularization</h1>
+<p>Regularization is an ensemble of method to prevent overfitting of a model. It increases biase but decrease variance (see <a href="/Revision/bias_variance.html">Bias variance tradeoff</a>).</p>
+
+<p><br /></p>
+<h2 id="l_1-regularization">\(L_1\) Regularization</h2>
+<p>\(L_1\) regularization adds a norm 1 (manhattan norm) penalty to the loss ie \(\lambda \Vert W \Vert_1 = \lambda \vert W \vert\) ie:</p>
+
+\[C_{L_1} = C + \lambda \vert W \vert\]
+
+<p>Similarely to the <a href="/Revision/linear_regression.html#lasso">Lasso regularization</a> in Linear Regression, the \(L_1\) penalty in neural network performs a weight selections ie it pushes some weights to 0.</p>
+
+<p><br /></p>
+<h2 id="l_2-regularization">\(L_2\) Regularization</h2>
+<p>\(L_2\) regularization adds a norm 1 (manhattan norm) penalty to the loss ie \(\frac{1}{2} \lambda \Vert W \Vert_2^2 = \frac{1}{2} \lambda W^2\) ie:</p>
+
+\[C_{L_2} = C + \frac{1}{2} \lambda W^2\]
+
+<p>When computing the derivative of the loss for each weight \(W\) (each weight of each layer) we add in the update rule \(- \lambda W\) ie the classic gradient descent update rule would become:</p>
+
+\[W = W - \alpha \nabla_W - \lambda W\]
+
+<p><br /></p>
+<h2 id="max-norm-constraint">Max Norm constraint</h2>
+<p>It is also possible to add a constraint on the maximum norm of a weights such that:</p>
+
+\[\Vert W \Vert_2^2 \lt c\]
+
+<p>Where:</p>
+<ul>
+  <li>\(c\) is the maximum possible norm (1000 or 10000 in general)</li>
+</ul>
+
+<p>It avoids the network to explode even when the gradients are really high.</p>
+
+<p><br /></p>
+<h1 id="dropout">Dropout</h1>
+<p><a href="https://www.cs.toronto.edu/~rsalakhu/papers/srivastava14a.pdf">Dropout</a> is another regularization method that can be used in complement of other methods.</p>
+
+<p>During training, dropout randomly set a given percentage of weights to 0 (the percentage being an hyperparameter - generally 30%).</p>
+
+<p>During testing time every weights are used. Dropout has the effect of performing a sort of ensemble of different models (each iteration with some weights set to 0 can be see as alternative model).</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/dropout.jpeg" width="25%" height="25%" />
+</div>
+
+<p>Figure taken from the <a href="https://www.cs.toronto.edu/~rsalakhu/papers/srivastava14a.pdf">Dropout paper</a> that illustrates the idea. During training, Dropout can be interpreted as sampling a Neural Network within the full Neural Network, and only updating the parameters of the sampled network based on the input data. (However, the exponential number of possible sampled networks are not independent because they share the parameters.) During testing there is no dropout applied, with the interpretation of evaluating an averaged prediction across the exponentially-sized ensemble of all sub-networks (more about ensembles in the next section).</p>
+
+  </body>
+</html>

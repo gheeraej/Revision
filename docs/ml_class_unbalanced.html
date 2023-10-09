@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - Class Unbalanced</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>Different solutions exist to combat class unbalanced.</p>
+
+<p><br /></p>
+<h2 id="right-metric">Right metric</h2>
+<p>Choose the right metrics: F1 Score, ROC curve, AUC, etc. Generally an asymetric metric is needed for unbalanced data.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/metrics.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="data-level-methods">Data-level methods</h2>
+<p>See the page on <a href="/Revision/unbalanced_dataset.html#resampling">Resampling</a> that talk about Tomek Links and SMOTE.</p>
+
+<p><br /></p>
+<h2 id="algorithm-level-methods">Algorithm-level methods</h2>
+<p>See the page on <a href="/Revision/unbalanced_dataset.html#algorithm-level-methods">Algorithm-level methods</a> that talk about Cost-sensitive learning, Class-balanced loss and Focal loss.</p>
+
+<p><br /></p>
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329 lecture 4</a>.</li>
+</ul>
+
+  </body>
+</html>

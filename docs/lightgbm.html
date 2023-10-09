@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>lightGBM</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-boosting"><a href="/Revision/boosting.html">Back to Boosting</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>lightGBM is another implementation of Gradient Boosting with tricks.</p>
+
+<p><br /></p>
+<h1 id="histogram-based-algorithm">Histogram based algorithm</h1>
+<p>lightGBM uses <a href="/decision_tree.html#histogram-based-algorithm">histogram based algorithm</a> to deal with continuous values instead of the classical pre-sort based algorithm.</p>
+
+<p>It is faster than pre-sort based algorithm.</p>
+
+<p><br /></p>
+<h1 id="goss">GOSS</h1>
+<p>GOSS for Gradient-Based One-Side Sampling is a method to weight the features for the split choice. It gives greater probability to choose a feature with a high gradient for the given split rather than features with low gradient.</p>
+
+<p><br /></p>
+<h2 id="resources">Resources</h2>
+<p>See the clear explanation on:</p>
+<ul>
+  <li><a href="https://towardsdatascience.com/what-makes-lightgbm-lightning-fast-a27cf0d9785e">This Toward Data Science blog post</a>,</li>
+  <li><a href="https://proceedings.neurips.cc/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf">The lightGBM article</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="efb">EFB</h1>
+<p>EFB for Exclusive Feature Bundling is a method to merge two sparse features into one.
+This is done by looking for non overlapping features (features which do not have non zero for the same samples) and then merging them, addind the maximum value of feature 1 to the value of feature 2 in order to be sure that they will be separated in different bucket.</p>
+
+<p><br /></p>
+<h2 id="resources-1">Resources</h2>
+<p>See the clear explanation on:</p>
+<ul>
+  <li><a href="https://towardsdatascience.com/what-makes-lightgbm-lightning-fast-a27cf0d9785e">This Toward Data Science blog post</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="leaf-wise-tree-growth">Leaf-wise tree growth</h1>
+<p>lightGBM uses leaf-wise tree growth.</p>
+
+<p>It means that at each level in the tree, the algorithm won’t look for the best split for every leafs but for the best possible split among every leafs. Hence a tree can be very unbalanced.</p>
+
+<p>Leaf-wise algorithms tend to achieve lower loss than level-wise algorithms but are prone to overfitting. Setting a max depth is hence very important.</p>
+
+<p>Level-wise:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/level-wise.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>Leaf-wise:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/leaf-wise.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<h1 id="optimal-split-for-categorical-features">Optimal Split for Categorical Features</h1>
+<p>To split unordered Categorical Features, lightGBM takes advantage of the gradient boosting structure and sort the categories not given the output value (like <a href="/Revision/decision_tree.html#categorical-explanatory-variables">in a classic Decision Tree</a>) but given the sum of the gradient over the sum of the hessian.</p>
+
+<p><br /></p>
+<h2 id="resources-2">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://lightgbm.readthedocs.io/en/latest/Features.html#optimal-split-for-categorical-features">lightGBM page</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources-3">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://proceedings.neurips.cc/paper/2017/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf">The paper of lightgbm</a>,</li>
+  <li><a href="https://lightgbm.readthedocs.io/en/latest/Features.html">The page of lightgbm</a>,</li>
+  <li><a href="https://towardsdatascience.com/what-makes-lightgbm-lightning-fast-a27cf0d9785e">This Toward Data Science blog post comparing XGBoost and lightGBM</a>,</li>
+  <li><a href="https://neptune.ai/blog/xgboost-vs-lightgbm">This Neptune blog post comparing XGBoost and lightGBM</a>,</li>
+  <li><a href="https://everdark.github.io/k9/notebooks/ml/gradient_boosting/gbt.nb.html">This great blog post</a>.</li>
+</ul>
+
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Deep Learning - Introduction</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-deep-learning"><a href="/Revision/deep_learning.html">Back to Deep Learning</a></h2>
+
+<p><br /></p>
+<h1 id="presentation">Presentation</h1>
+<p>Artificial neural networks (ANNs), usually simply called neural networks (NNs), are computing systems inspired by the biological neural networks that constitute animal brains.</p>
+
+<p>An ANN is based on a collection of connected units or nodes called artificial neurons, which loosely model the neurons in a biological brain. Each connection, like the synapses in a biological brain, can transmit a signal to other neurons. An artificial neuron receives a signal then processes it and can signal neurons connected to it. The “signal” at a connection is a real number, and the output of each neuron is computed by some non-linear function of the sum of its inputs. The connections are called edges. Neurons and edges typically have a weight that adjusts as learning proceeds. The weight increases or decreases the strength of the signal at a connection. Neurons may have a threshold such that a signal is sent only if the aggregate signal crosses that threshold. Typically, neurons are aggregated into layers. Different layers may perform different transformations on their inputs. Signals travel from the first layer (the input layer), to the last layer (the output layer), possibly after traversing the layers multiple times.</p>
+
+<p>NN can be used for regression or classification. It is widely used for complex tasks such as natural language processing (NLP), computer vision or deep reinforcement learning.</p>
+
+<p>Deep learning is a branch of learning based on ANN with a lot of parameters (a lot of layers, the depth).</p>
+
+<p>See <a href="https://en.wikipedia.org/wiki/Artificial_neural_network">Wikipedia page on Artifical Neural Network</a>.</p>
+
+<p><br /><br /></p>
+<h1 id="structure">Structure</h1>
+<p>A neural network is a serie of layers, each layers being composed of neurons.</p>
+
+<p>The input data (green dots) is connected to the first layer of neurons (blue dots) by the weights (black arrows). Then these neurons are transfered to the next layer by other weigths until getting to the output (purple dot).</p>
+
+<p>Here is an image of a very shallow network. The arrows represent the weights:</p>
+
+<p><br /><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ann.png" width="15%" height="15%" />
+</div>
+<p>From <a href="https://en.wikipedia.org/wiki/Neural_network">Wikipedia’s Neural Network page</a>. The hiden layer is composed of units that are called neurons.</p>
+
+<p>Here is more in details how a neuron is created from the weights and the input data.</p>
+
+<p><br /><br /></p>
+<div style="text-align: center">
+<img src="assets/images/neuron.gif" width="30%" height="30%" />
+</div>
+<p>From <a href="mql5.com">https://www.mql5.com/fr/articles/5486</a>. In this second scheme, the output is the output of the neuron, ie its value (not the output of the network).</p>
+
+<p>The activation function that we see in this scheme is an important part of a neural network.</p>
+
+<p><br /><br /></p>
+<h1 id="formula">Formula</h1>
+<p>The formula of a neural network can be written as follow:</p>
+
+\[\begin{eqnarray}
+Y &amp;&amp;= \underset{l=1}{\stackrel{L}{\circ}} f\left(\sum_{i=1}^{n_{weights}} W_i^l x_i^l + b^l\right) \\
+&amp;&amp;=\underset{l=1}{\stackrel{L}{\circ}} f\left(W^l x^l + b^l\right)
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(L\) is the number of layers,</li>
+  <li>\(\underset{l=1}{\stackrel{n_{layers}}{\circ}}\) represents the \(L\) compositions of the activation function \(f\) ie each output of a function is the input of the next function and each composition \(l\) corresponds to a layer,</li>
+  <li>\(f\) represents the activation function,</li>
+  <li>\(x_i^l\) represents the \(i\)-th input of layer \(l\) (and \(x^1:=x\) is the original input),</li>
+  <li>\(W_i^l\) represents the \(i\)-th weight of layer \(l\),</li>
+  <li>\(b^l\) represents the bias of layer \(l\).</li>
+</ul>
+
+<p>It can also be rewrite:</p>
+
+\[Y = f^L \left(b^L + W^L f^{L-1}\left(b^{L-1} + W^{L-1} \cdots f^{1}(b^1 + W^1 x) \cdots \right)\right)\]
+
+<p>Note that \(x^l=f^{l-1}(b^{l-1} + W^{l-1}x^{l-1})\).</p>
+
+<p><br /><br /></p>
+<h1 id="approximation-of-functions">Approximation of Functions</h1>
+<p>A neural network with a single hidden layer with unlimited number of neurons can approximate any function.
+The idea of the proof is to show that we can create step functions with a single neuron and that we can add step functions with different neurons.</p>
+
+<p>See <a href="http://neuralnetworksanddeeplearning.com/chap4.html">this visual proof by Michael Nilsen</a>.</p>
+
+  </body>
+</html>

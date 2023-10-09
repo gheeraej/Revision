@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>EM algorithm</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-machine-learning"><a href="/Revision/machine_learning.html">Back to Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>EM algorithm for Expectation-Maximization algorithm is an iterative optimisation method to find (local) maximum likelihood or maximum a posteriori (MAP) estimates of parameters in statistical models, where the model depends on unobserved latent variables.</p>
+
+<p>The EM iteration alternates between performing an expectation (E) step, which creates a function for the expectation of the log-likelihood evaluated using the current estimate for the parameters, and a maximisation (M) step, which computes parameters maximising the expected log-likelihood found on the E step.</p>
+
+<p><br /></p>
+<h1 id="description-of-the-optimization-problem">Description of the optimization problem</h1>
+<p>EM algorithm is used to maximise the log likelihood of unknown parameters \(\theta\) in a statistical model where the observed values \(x=(x^{(1)}, \ldots, x^{(n)})\) depends on latent variables \(z=(z_1, \ldots, z_k)\):</p>
+
+\[\begin{eqnarray}
+\max_\theta l(x, \theta) &amp;&amp;= \max_\theta p(x \vert \theta) \\
+&amp;&amp;= \max_\theta \sum_{j=1}^k p(x, z_j \vert \theta)\\
+&amp;&amp;= \max_\theta \sum_{j=1}^k p(x \vert z_j; \theta) p(z_j \vert \theta)
+\end{eqnarray}\]
+
+<p>In the continuous case it is:
+\(\begin{eqnarray}
+\max_\theta l(x, \theta) &amp;&amp;= \max_\theta p(x \vert \theta) \\
+&amp;&amp;= \max_\theta \int p(x, z \vert \theta) dz \\
+&amp;&amp;= \max_\theta \int p(x \vert z; \theta) p(z \vert \theta) dz
+\end{eqnarray}\)</p>
+
+<p>If \(p(z \vert \theta)\) were known, the optimisation would be easy. However in this setup it can’t be maximise using classical optimization algorithms.</p>
+
+<p><br /></p>
+<h1 id="algorithm">Algorithm</h1>
+<p>The idea is then to freeze the value of \(p(z \vert \theta)\) (E-step) and then optimise the parameter given the current value of \(p(z \vert \theta)\) (M-step). These two steps are done alternatively until convergence.</p>
+
+<p>The E-step gives a lower bound to the optimisation problem that we maximise using the M-step. The new maximum is then use as the new lower bound etc.</p>
+
+<p><br /></p>
+<h2 id="expectation-step">Expectation step</h2>
+<p>The expectation defines \(Q(z)\) the current (and fix) distribution of \(z\) as:</p>
+
+\[Q(z) = p(z \vert x; \theta)\]
+
+<p>Where \(p(z \vert x; \theta)\) is computed using the current parameters.
+For example in a mixture of gaussian, the probability \(p(z \vert x; \theta)\) depends on the parameters \(\phi_j\), \(\mu_j\) and \(\Sigma_j\) associated with each latent variable \(z_j\).</p>
+
+<p>The probability is computed similarly to what is done in <a href="/Revision/gaussian_discriminant_analysis.html#inference">Gaussian Discriminant Analysis</a>.</p>
+
+<p><br /></p>
+<h4 id="proof">Proof</h4>
+<p>For one \(x^{(i)}\) we want to maximise its log probability given the parameters \(\theta\).</p>
+
+<p>We can express \(log p(x^{(i)}; \theta)\) as:</p>
+
+\[\begin{eqnarray}
+log p(x^{(i)}; \theta) &amp;&amp;= \log \sum_z p(x^{(i)}, z; \theta) \\
+&amp;&amp;= \log \sum_z Q(z) \frac{p(x^{(i)}, z; \theta)}{Q(z)} \\
+&amp;&amp;\geq \sum_z Q(z) \log \frac{p(x^{(i)}, z; \theta)}{Q(z)}
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(Q(z)\) can be any function of \(z\) such that \(\sum_z Q(z) = 1\) and \(Q(z) \geq 0 \;\;\) (\(Q(z)\) is a probability distribution for \(z\)).</li>
+</ul>
+
+<p>Third line is obtained using <a href="/Revision/mathematics_functional_analysis.html#jensen-s-inequality">Jensen’s inequality for a concave function</a> applied on \(\log\) (concave function) and using the probabilistic view of Jensen’s inequality (seeing that as \(Q(z)\) is a probability distribution for \(z\), \(\sum_z Q(z) \frac{p(x^{(i)}, z; \theta)}{Q(z)}\) is an expectation).</p>
+
+<p><br /></p>
+
+<p>Once this lower bound is obtained we need to choose a definition for \(Q(z)\).
+The idea is to make \(Q(z)\) match the current probability distribution of \(z\) given the current parameters \(\theta\).</p>
+
+<p>In order to hold with equality, we need \(\frac{p(x^{(i)}, z; \theta)}{Q(z)}\) to be a constant value (if \(c\) is a constant then \(\mathbb{E}[f(c)]=f(\mathbb{E}[c])\)). So we need:</p>
+
+\[\frac{p(x^{(i)}, z; \theta)}{Q(z)} = c\]
+
+<p>It can be achieved easily defining \(Q(z)\) such that:</p>
+
+\[Q(z) \propto p(x^{(i)}, z; \theta)\]
+
+<p>If \(Q(z) = k \cdot p(x^{(i)}, z; \theta)\) then:</p>
+
+\[\frac{p(x^{(i)}, z; \theta)}{Q(z)} =  \frac{p(x^{(i)}, z; \theta)}{k \cdot p(x^{(i)}, z; \theta)} = \frac{1}{k}\]
+
+<p>If \(k = 1/c\) we obtain \(\frac{p(x^{(i)}, z; \theta)}{Q(z)} = c\)/</p>
+
+<p><br /></p>
+
+<p>Now as we need to choose \(Q(z)\) such that \(\sum_z Q(z)=1\) we define \(Q(z)\) as:</p>
+
+\[\begin{eqnarray}
+Q(z) &amp;&amp;= \frac{k \cdot p(x^{(i)}, z; \theta)}{\sum_w Q(w)}\\
+&amp;&amp;= \frac{k \cdot p(x^{(i)}, z; \theta)}{\sum_w k \cdot p(x^{(i)}, w; \theta)}\\
+&amp;&amp;= \frac{k \cdot p(x^{(i)}, z; \theta)}{k \cdot \sum_w p(x^{(i)}, w; \theta)}\\
+&amp;&amp;= \frac{p(x^{(i)}, z; \theta)}{\sum_w p(x^{(i)}, w; \theta)}\\
+&amp;&amp;= \frac{p(x^{(i)}, z; \theta)}{\sum_w p(x^{(i)}, w; \theta)}\\
+&amp;&amp;= \frac{p(x^{(i)}, z; \theta)}{p(x^{(i)}; \theta)}\\
+&amp;&amp;= p(z \vert x^{(i)}; \theta)
+\end{eqnarray}\]
+
+<p><br /></p>
+
+<p>We can show that using this definition of \(Q(z)\) we find the current value of our maximimum likelihood:</p>
+
+\[\begin{eqnarray}
+\sum_z Q(z) \log \frac{p(x^{(i)}, z; \theta)}{Q(z)} &amp;&amp;= \sum_z p(z \vert x^{(i)}; \theta) \log \frac{p(x^{(i)}, z; \theta)}{p(z \vert x^{(i)}; \theta)} \\
+&amp;&amp;= \sum_z p(z \vert x^{(i)}; \theta) \log \frac{p(z \vert x^{(i)}; \theta) p(x^{(i)}; \theta)}{p(z \vert x^{(i)}; \theta)} \\
+&amp;&amp;= \sum_z p(z \vert x^{(i)}; \theta) \log p(x^{(i)}; \theta) \\
+&amp;&amp;= \log p(x^{(i)}; \theta) \sum_z p(z \vert x^{(i)}; \theta) \\
+&amp;&amp;= \log p(x^{(i)}; \theta)
+\end{eqnarray}\]
+
+<p>Using \(P(A,B)=P(A \vert B)P(B)\) to pass from line 2 to 3 and the fact that \(\sum_z p(z \vert x^{(i)}; \theta)=1\) to pass from line 4 to 5.</p>
+
+<p><br /></p>
+
+<p>We call the evidence lower bound (ELBO) the value:</p>
+
+\[\sum_z Q(z) \log \frac{p(x,z ; \theta)}{Q(z)}\]
+
+<p>The generalisation for every \(x^{(i)}\) follows:</p>
+
+\[l(\theta^{(t)})=\sum_{i=1}^n \text{ELBO}(x^{(i)}; Q_i^{(t)}, \theta^{(t)})\]
+
+<p><br /></p>
+<h2 id="maximisation-step">Maximisation step</h2>
+<p>The maximisation step is a classical maximisation of a log likelihood function once the distribution \(Q(z)\) of the latent variables has been fix:</p>
+
+\[\begin{eqnarray}
+l(\theta^{(t+1)}) &amp;&amp; \geq \sum_{i=1}^n \text{ELBO}(x^{(i)}; Q_i^{(t)}, \theta^{(t+1)}) &amp;&amp; \;\;\;\;\; \text{as Jensen's inequality can be applied to any } Q \text{ and } \theta \\
+&amp;&amp; \geq \sum_{i=1}^n \text{ELBO}(x^{(i)}; Q_i^{(t)}, \theta^{(t)}) &amp;&amp; \;\;\;\;\; \text{as } \theta^{(t+1)} = arg\max_{\theta} \sum_{i=1}^n \text{ELBO}(x^{(i)}; Q_i^{(t)}, \theta^{(t)}) \\
+&amp;&amp; = l(\theta^{(t)})
+\end{eqnarray}\]
+
+<p>Hence the maximum increase (or remain equal) at each step.</p>
+
+<p>The optimisation of the parameters for a particular \(Q(zs)\) is done imilarly to what is done in <a href="/Revision/gaussian_discriminant_analysis.html#calibration-using-mle">Gaussian Discriminant Analysis</a>.</p>
+
+<p><br /></p>
+<h2 id="pseudo-code">Pseudo-code</h2>
+<p>Repeat until convergence (when increase of the MLE is less than a \(\varepsilon\) value) {</p>
+<ul>
+  <li>(E-step) For each \(i\), set
+    <ul>
+      <li>\(Q_i(z) := p(z \vert x^{(i)}; \theta)\).</li>
+    </ul>
+  </li>
+  <li>(M-step) Set
+    <ul>
+      <li>\(\theta := arg\max_{\theta} \sum_{i=1}^n \text{ELBO}(x^{(i)}; Q_i, \theta)\),</li>
+      <li>\(\theta := arg\max_{\theta} \sum_{i=1}^n \sum_{z_j} Q_i(z_j) \log \frac{p(x^{(i)}, z_j; \theta)}{Q_i}\).
+}</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Expectation–maximization_algorithm">EM algorithm page on Wikipedia</a>,</li>
+  <li><a href="https://cs229.stanford.edu/notes2021fall/cs229-notes8.pdf">CS229 cours on EM algorithm</a>.</li>
+</ul>
+
+  </body>
+</html>

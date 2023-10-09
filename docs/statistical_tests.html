@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Statistical tests</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-inferential-statistics"><a href="/Revision/mathematics_inferential_statistics.html">Back to Inferential statistics</a></h2>
+
+<p><br /></p>
+<h1 id="test-framework">Test framework</h1>
+<p>When performing a test we when to test an hypotheses say H0 vs another alternative hypotheses say H1.
+These hypotheses may be that two population are equal (relatively to a given metric), that a population mean is null, etc.</p>
+
+<p>The values that we observed from our sample (mean of a sample, variance of the sample) are random variables (for a different sample we would have got a different mean or variance).</p>
+
+<p>These variables are randomly distributed but their distribution is unknown. Some hypotheses may be make on the distribution and then a parametric test can be used or no hypotheses is made and then a non parametric test must be used.</p>
+
+<p>Once the test is chosen, we will compare the observed value to the expected value and will extract its p-value which is the percentage of outcomes that would be more extreme than our observed value if the H0 hypotheses was true. This p-value is computed using the complementary cumulative distribution function (inverse of the cdf function which takes as input a random value and outputs a percentage).
+This p-value will help us decide if we keep or reject the null hypotheses.</p>
+
+<p>Generally the values used to decide to keep or reject the null hypotheses are 0.01, 0.05 and 0.1. They mean that only 1%, 5% or 10% of the outcomes would be more extreme than our observed variable under H0.</p>
+
+<p>If we write our statistic Z then its left tail p-value is \(P(X&lt;Z)\), its right tail p-value is \(P(X&gt;Z)\) and the bilateral p-value is \(P(X \leq -\vert Z \vert \text{ or } X \geq \vert Z \vert)\). See <a href="/Revision/pvalue.html">p-value</a>.</p>
+
+<p><br /></p>
+<h1 id="type-i-error-and-type-ii-error">Type I Error and Type II Error</h1>
+<ul>
+  <li>Type I Error = False positive: error coming from a wrong rejecting of the null hypothesis.</li>
+  <li>Type II Error= False negative: error coming from a wrong acceptance of the null hypothesis.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="one-sample-tests">One sample tests</h1>
+<h2 id="population-mean">Population mean</h2>
+<h3 id="z-test">Z-test</h3>
+<p>If the variance \(\sigma^2\) is known and the population X in normally distributed or the CLT can be applied (ie n&gt;30) then the Z statistic is written as follow:</p>
+
+\[Z=\frac{\bar{X}-\mu}{\sigma}\]
+
+<p><br /></p>
+<h3 id="student-t-test">Student t-test</h3>
+<p>If the variance \(\sigma^2\) is unknown but the population X in normally distributed or the CLT can be applied (ie n&gt;30) then the T statistic is written as follow:</p>
+
+\[T=\frac{\bar{X}-\mu}{\frac{S}{\sqrt{n}}}\]
+
+<p>Where \(n\) is the sample size.</p>
+
+<p><br /></p>
+<h2 id="population-variance">Population variance</h2>
+<h3 id="chi-squared-test-for-variance">Chi-squared test for variance</h3>
+<p>If the population X in normally distributed then we can test if the sample variance \(S^2\) is equal to a given variance \(\sigma^2\). The Chi-squared statistic is then:</p>
+
+\[\chi^2=\frac{(n-1)S^2}{\sigma^2}\]
+
+<p><br /></p>
+<h2 id="population-proportion">Population proportion</h2>
+<p>Let each element of a population X follows a Bernoulli distribution. They take the value 1 with probability p and the value 0 with probability q=1-p. Sample size of the population is n. If \(np \geq 5\) and \(nq \geq 5\) then thanks to the Central Limit Theorem, a normal test can be applied. It Z statistic is :</p>
+
+\[Z=\frac{\widehat{p}-p}{\sqrt{\frac{pq}{n}}}\]
+
+<p><br /></p>
+<h2 id="equivalence-to-a-probability-distribution">Equivalence to a probability distribution</h2>
+<h3 id="kolmogorov-smirnov-test">Kolmogorov-Smirnov test</h3>
+<p>The Kolmogorov-Smirnov test is a non parametric test (ie without hypotheses in the data distribution). It is based on the empirical cumulative distribution function. It can be used to test if a sample of data follows a given distribution.</p>
+
+<p>First let’s define the empirical distribution \(F_{n}(x)\) as follow:
+\(F_{n}(x)={\frac {\text{number of (elements in the sample} \leq x)}{n}}=\frac {1}{n}\sum_{i=1}^{n}1_{[-\infty ,x]}(X_{i})\)</p>
+
+<p>Where:</p>
+<ul>
+  <li>\(1_{[-\infty ,x]}\) is the indicator function equal to 1 if \(X_i \leq x\) and 0 otherwise.</li>
+</ul>
+
+<p>Then the statistic in the Kolmogorov-Smirnov test is computed as follow:</p>
+
+\[D_n=\underset{x}{\sup}|F_n(x)-F(x)|\]
+
+<p><br /></p>
+<h3 id="shapirowilk-test">Shapiro–Wilk test</h3>
+<p>See <a href="https://en.wikipedia.org/wiki/Shapiro–Wilk_test">Shapiro–Wilk test Wikipedia page</a> (but the theory is non trivial).</p>
+
+<p><br /></p>
+<h1 id="two-sample-tests">Two sample tests</h1>
+<p>See <a href="/Revision/ab_testing.html">A/B testing</a>.</p>
+
+<p><br /></p>
+<h3 id="fisher-test-for-variance-of-two-populations">Fisher test for variance of two populations</h3>
+<p>The Fisher test is defined as the ratio of two Chi-2 variables.
+If X and Y are two normally distributed populations then we can test if their variance are equivalent.
+The Fisher test is written as follow:</p>
+
+\[F=\frac{S_X^2}{S_Y^2}\]
+
+<p>\(S_X^2\) and \(S_Y^2\) follows chi-2 distribution (sum of squared gaussian) thus their fraction follows a Fisher distribution.</p>
+
+<p><br /></p>
+<h3 id="pearsons-chi-squared-test">Pearson’s chi-squared test</h3>
+<p>Pearson’s chi-squared test is for categorical variables.</p>
+
+<p>We detailed the Pearson’s chi-squared test for two population and two categories in the A/B testing page.
+We can generalize for \(n_X\) populations and \(n_Y\) outcomes.
+Note that this test can be seen as an independent test: test the independence between a population and an outcome (for example medical treatment / placebo and cured / not cured).</p>
+
+<p><img src="assets/images/ind_categories.png" width="10%" height="10%" /></p>
+
+<p>The population \(i\) has \(S_i\) elements and the outcome \(j\) has \(T_j\) elements.</p>
+
+<p>We can compute the theoretical sizes:</p>
+
+\[C_{ij}=\frac{S_iT_j}{n}\]
+
+<p>Under the H0 assumption, \(C_{ij}=n_{ij}\) and the Pearson’s chi-squared statistic is:</p>
+
+\[\chi^2_c=\sum_{i,j}\frac{\left(n_{ij}-C_{ij}\right)^2}{C_{ij}}\]
+
+<p><br /></p>
+<h3 id="t-test-for-null-correlation">t-test for null correlation</h3>
+<p>Null correlation test is for continuous variables.</p>
+
+<p>Let X and Y be two normally distributed population with n observable pairs.
+Let r be the sample correlation coefficient. Let H0 be \(\rho=0\) (no correlation between the two populations).</p>
+
+<p>Then the T statistic follows a Student distribution and is defined as follow:</p>
+
+\[T=\frac{r\sqrt{n-2}}{\sqrt{1-r^2}}\]
+
+<p>The degree of liberty of the distribution is \(\nu=n-2\).</p>
+
+<p><br /></p>
+<h1 id="references">References</h1>
+<p>Sources may be easily found on Wikipedia or Internet.</p>
+
+  </body>
+</html>

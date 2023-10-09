@@ -1,0 +1,291 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>C# Built-in Types</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-c---types"><a href="/Revision/csharp_types.html">Back to C# - Types</a></h2>
+
+<p><br /></p>
+<h1 id="built-in-types">Built-in Types</h1>
+<h2 id="built-in-value-types">Built-in Value Types</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">bool</span> <span class="n">b</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">minInt</span> <span class="p">=</span> <span class="n">Int32</span><span class="p">.</span><span class="n">Min</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">maxInt</span> <span class="p">=</span> <span class="n">Int32</span><span class="p">.</span><span class="n">Max</span><span class="p">;</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">float</span> <span class="n">x</span> <span class="p">=</span> <span class="m">0.1F</span><span class="p">;</span> <span class="c1">// type Single</span>
+  <span class="n">Single</span> <span class="n">s</span> <span class="p">=</span> <span class="m">0.1F</span><span class="p">;</span> <span class="c1">// type Single</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">double</span> <span class="n">y</span> <span class="p">=</span> <span class="p">-</span><span class="m">1.2D</span><span class="p">;</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">decimal</span> <span class="n">z</span> <span class="p">=</span> <span class="m">2.3</span><span class="n">M</span><span class="p">;</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">char</span> <span class="n">c</span> <span class="p">=</span> <span class="s">"A"</span><span class="p">;</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="difference-among-numerical-types">Difference among Numerical types</h3>
+<h5 id="difference-of-interger-types"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types">Difference of Interger types</a></h5>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">type</th>
+      <th style="text-align: center">Range</th>
+      <th style="text-align: center">Size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">sbyte</td>
+      <td style="text-align: center">-128 to 127</td>
+      <td style="text-align: center">Signed 8-bit integer</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">byte</td>
+      <td style="text-align: center">0 to 255</td>
+      <td style="text-align: center">Unsigned 8-bit integer</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">short</td>
+      <td style="text-align: center">-32,768 to 32,767</td>
+      <td style="text-align: center">Signed 16-bit integer</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ushort</td>
+      <td style="text-align: center">0 to 65,535</td>
+      <td style="text-align: center">Unsigned 16-bit integer</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">int</td>
+      <td style="text-align: center">-2,147,483,648 to 2,147,483,647</td>
+      <td style="text-align: center">Signed 32-bit integer</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">uint</td>
+      <td style="text-align: center">0 to 4,294,967,295</td>
+      <td style="text-align: center">Unsigned 32-bit integer</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">long</td>
+      <td style="text-align: center">-2^63 to 2^63-1</td>
+      <td style="text-align: center">Signed 64-bit integer</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ulong</td>
+      <td style="text-align: center">2^64-1</td>
+      <td style="text-align: center">Unsigned 64-bit integer</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+<h5 id="difference-of-decimal-types">Difference of Decimal types</h5>
+<p><code class="language-plaintext cs highlighter-rouge">float</code> is an alias for <code class="language-plaintext cs highlighter-rouge">Single</code> (<code class="language-plaintext cs highlighter-rouge">float</code> and <code class="language-plaintext cs highlighter-rouge">Single</code> are hence equivalent) and <code class="language-plaintext cs highlighter-rouge">double</code> are floating binary point types whereas <code class="language-plaintext cs highlighter-rouge">decimal</code> is a floating decimal point type.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">type</th>
+      <th style="text-align: center">Range</th>
+      <th style="text-align: center">Size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">float</td>
+      <td style="text-align: center">7 digits</td>
+      <td style="text-align: center">32-bit</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">double</td>
+      <td style="text-align: center">15-16 digits</td>
+      <td style="text-align: center">64-bit</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">decimal</td>
+      <td style="text-align: center">28-29 digits</td>
+      <td style="text-align: center">128-bit</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">float</span> <span class="n">flt</span> <span class="p">=</span> <span class="m">1F</span><span class="p">/</span><span class="m">3</span><span class="p">;</span>
+  <span class="kt">double</span> <span class="n">dbl</span> <span class="p">=</span> <span class="m">1D</span><span class="p">/</span><span class="m">3</span><span class="p">;</span>
+  <span class="kt">decimal</span> <span class="n">dcm</span> <span class="p">=</span> <span class="m">1</span><span class="n">M</span><span class="p">/</span><span class="m">3</span><span class="p">;</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"float: {0} double: {1} decimal: {2}"</span><span class="p">,</span> <span class="n">flt</span><span class="p">,</span> <span class="n">dbl</span><span class="p">,</span> <span class="n">dcm</span><span class="p">);</span></code></pre></figure>
+
+<p>Result:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs"><span class="kt">float</span><span class="p">:</span> <span class="m">0.3333333</span>  
+<span class="kt">double</span><span class="p">:</span> <span class="m">0.333333333333333</span>  
+<span class="kt">decimal</span><span class="p">:</span> <span class="m">0.3333333333333333333333333333</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="declare-value-type">Declare Value Type</h3>
+<p>One can create value types using the keyword <code class="language-plaintext cs highlighter-rouge">struct</code>.</p>
+
+<p><br /></p>
+<h2 id="built-in-reference-types">Built-in Reference Types</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">string</span> <span class="n">s</span> <span class="p">=</span> <span class="s">"Hello World!"</span><span class="p">;</span>
+
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span> <span class="c1">// 12 - Size of string</span>
+
+  <span class="kt">int</span> <span class="n">index</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]);</span> <span class="c1">// e - Access string letters by index</span>
+
+  <span class="kt">int</span> <span class="n">indexStart</span> <span class="p">=</span> <span class="m">6</span><span class="p">,</span> <span class="n">indexEnd</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">indexStart</span><span class="p">..</span><span class="n">indexEnd</span><span class="p">]);</span> <span class="c1">// World - Slice string by index (indexEnd excluded)</span>
+
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="nf">IndexOf</span><span class="p">(</span><span class="s">"e"</span><span class="p">));</span>  <span class="c1">// 1 - Find index of char</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="nf">IndexOf</span><span class="p">(</span><span class="s">"World"</span><span class="p">));</span>  <span class="c1">// 6 - Find indexes of subString</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="declare-reference-type">Declare Reference Type</h3>
+<p>The following keywords can be used to declare reference types:</p>
+<ul>
+  <li><code class="language-plaintext cs highlighter-rouge">class</code></li>
+  <li><code class="language-plaintext cs highlighter-rouge">interface</code></li>
+  <li><code class="language-plaintext cs highlighter-rouge">delegate</code></li>
+  <li><code class="language-plaintext cs highlighter-rouge">record</code></li>
+</ul>
+
+<p><br /></p>
+<h1 id="untyped-variable-creation">Untyped variable creation</h1>
+<h2 id="var-vs-dynamic">var vs dynamic</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"><code class="language-plaintext cs highlighter-rouge">var</code></th>
+      <th style="text-align: left"><code class="language-plaintext cs highlighter-rouge">dynamic</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="language-plaintext cs highlighter-rouge">var</code> untyped variables are created using the keyword <code class="language-plaintext cs highlighter-rouge">var</code></td>
+      <td style="text-align: left"><code class="language-plaintext cs highlighter-rouge">dynamic</code> untype variables are created using the keyword <code class="language-plaintext cs highlighter-rouge">dynamic</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Type of <code class="language-plaintext cs highlighter-rouge">var</code> variable is automatically determined by the compiler at compilation time from the value used to initialize the variable</td>
+      <td style="text-align: left">Type of <code class="language-plaintext cs highlighter-rouge">dynamic</code> variable is determined at runtime</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Initialization is mandatory for a <code class="language-plaintext cs highlighter-rouge">var</code> variable in order to know its type at compilation time</td>
+      <td style="text-align: left">Initialization is not mandatory for a <code class="language-plaintext cs highlighter-rouge">dynamic</code> variable</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">A <code class="language-plaintext cs highlighter-rouge">var</code> variable can’t change type after it has been created</td>
+      <td style="text-align: left">A <code class="language-plaintext cs highlighter-rouge">dynamic</code> variable can change type after it has been created</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="language-plaintext cs highlighter-rouge">var</code> can’t be used to return values from a function or for properties</td>
+      <td style="text-align: left"><code class="language-plaintext cs highlighter-rouge">dynamic</code> can be used to return values from a function or for properties</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="var"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/declarations">var</a></h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">var</span> <span class="n">u</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="c1">// u will be typed integer at compilation time</span>
+  <span class="kt">var</span> <span class="n">v</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span> <span class="c1">// v will be typed bool at compilation time</span>
+  <span class="kt">var</span> <span class="n">w</span> <span class="p">=</span> <span class="s">"Untyped variable"</span><span class="p">;</span> <span class="c1">// w will be typed string at compilation time</span></code></pre></figure>
+
+<p>This will not work:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">var</span> <span class="n">e</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="n">e</span> <span class="p">=</span> <span class="s">"test"</span><span class="p">;</span> <span class="c1">// ERROR: it is not an integer</span></code></pre></figure>
+
+<p>This neither:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">var</span> <span class="n">f</span><span class="p">;</span> <span class="c1">// ERROR: cannot implicitly cast a to a type</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="dynamic"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/types/using-type-dynamic">dynamic</a></h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">dynamic</span> <span class="n">u</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="c1">// u will be typed integer at runtime</span>
+  <span class="kt">dynamic</span> <span class="n">v</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span> <span class="c1">// v will be typed bool at runtime</span>
+  <span class="kt">dynamic</span> <span class="n">w</span> <span class="p">=</span> <span class="s">"Untyped variable"</span><span class="p">;</span> <span class="c1">// w will be typed string at runtime</span>
+
+  <span class="kt">dynamic</span> <span class="n">e</span><span class="p">;</span> <span class="c1">// e will wait an assignation of data to have type</span>
+  <span class="n">e</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="c1">// e has now the type int</span>
+
+  <span class="kt">dynamic</span> <span class="n">f</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="n">f</span> <span class="p">=</span> <span class="s">"test"</span><span class="p">;</span> <span class="c1">// f will change type from int to string</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="nullable"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/nullable-value-types">Nullable</a></h1>
+<p>You can make a value type nullable (make it accept null values) by adding a <code class="language-plaintext highlighter-rouge">?</code> after the type name (reference type can be null without using the <code class="language-plaintext highlighter-rouge">?</code>):</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span><span class="p">?</span> <span class="n">i</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+  <span class="kt">float</span><span class="p">?</span> <span class="n">x</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="constant"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/constants">Constant</a></h1>
+<p>Constants are immutable values which are known at compile time and do not change for the life of the program.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">const</span> <span class="kt">int</span> <span class="n">valConst</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+
+  <span class="k">class</span> <span class="nc">MyClassConst</span>
+  <span class="p">{</span>
+      <span class="k">const</span> <span class="kt">int</span> <span class="n">constVar</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="p">}</span></code></pre></figure>
+
+<h2 id="const-vs-readonly"><code class="language-plaintext cs highlighter-rouge">const</code> vs <code class="language-plaintext cs highlighter-rouge">readonly</code></h2>
+<p>In a <code class="language-plaintext cs highlighter-rouge">class</code> or a <code class="language-plaintext cs highlighter-rouge">struct</code>, <code class="language-plaintext cs highlighter-rouge">const</code> or <code class="language-plaintext cs highlighter-rouge">readonly</code> can be used. Here are their main differences:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"><code class="language-plaintext cs highlighter-rouge">const</code></th>
+      <th style="text-align: left"><code class="language-plaintext cs highlighter-rouge">readonly</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Defined at compile time</td>
+      <td style="text-align: left">Defined at compile time or runtime</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Implicitly static</td>
+      <td style="text-align: left">Instance-level or static</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">In a <code class="language-plaintext cs highlighter-rouge">class</code> or a <code class="language-plaintext cs highlighter-rouge">struct</code>, defined at declaration</td>
+      <td style="text-align: left">In a <code class="language-plaintext cs highlighter-rouge">class</code> or a <code class="language-plaintext cs highlighter-rouge">struct</code>, defined at declaration or in the constructor</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">MyClassConst</span>
+  <span class="p">{</span>
+      <span class="k">const</span> <span class="kt">int</span> <span class="n">constVar</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="c1">// can't be define in constructor</span>
+  <span class="p">}</span>
+
+  <span class="k">class</span> <span class="nc">MyClassReadOnly</span>
+  <span class="p">{</span>
+      <span class="k">const</span> <span class="kt">int</span> <span class="n">readOnlyVar</span><span class="p">;</span> <span class="c1">// can be define in constructor</span>
+
+      <span class="k">public</span> <span class="nf">MyClassReadOnly</span><span class="p">(</span><span class="kt">int</span> <span class="n">roVar</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">readOnlyVar</span> <span class="p">=</span> <span class="n">roVar</span><span class="p">;</span> <span class="c1">// use of 'this' is not mandatory</span>
+      <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/reference-types">Microsoft Documentation on reference type</a>,</li>
+  <li><a href="https://www.codingninjas.com/codestudio/library/var-vs-dynamic-in-c">var and dynamic on Coding Ninja</a>,</li>
+  <li><a href="https://fr.wikibooks.org/wiki/Programmation_C_sharp">The Wikibooks page on C#</a>.</li>
+</ul>
+
+  </body>
+</html>

@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>C# - Struct</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-c---class-struct-and-interface"><a href="/Revision/csharp_class_struct_and_interface.html">Back to C# - Class, Struct and Interface</a></h2>
+
+<p><br /></p>
+<h1 id="struct"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/struct">Struct</a></h1>
+<p>A structure type (or struct type) is a value type that can encapsulate data and related functionality.
+<code class="language-plaintext cs highlighter-rouge">struct</code> keyword is used to define a structure type.</p>
+
+<p>Typically, you use structure types to design small data-centric types that provide little or no behavior.<br />
+Structure types have value semantics. That is, a variable of a structure type contains an instance of the type.</p>
+
+<p><br /></p>
+<h1 id="difference-between-struct-and-class">Difference between struct and class</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"><code class="language-plaintext cs highlighter-rouge">struct</code></th>
+      <th style="text-align: left"><code class="language-plaintext cs highlighter-rouge">class</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="language-plaintext cs highlighter-rouge">struct</code> cannot be inherited</td>
+      <td style="text-align: left"><code class="language-plaintext cs highlighter-rouge">class</code> can be inherited</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="language-plaintext cs highlighter-rouge">struct</code> cannot have default constructor</td>
+      <td style="text-align: left"><code class="language-plaintext cs highlighter-rouge">class</code> can have default constructor</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Value types (of a <code class="language-plaintext cs highlighter-rouge">struct</code>) that are allocated on the <a href="http://clarkkromenaker.com/post/csharp-structs/">stack</a> or on inline (more performant)</td>
+      <td style="text-align: left">Reference types (of a <code class="language-plaintext cs highlighter-rouge">class</code>) are allocated on the <a href="http://clarkkromenaker.com/post/csharp-structs/">heap</a> and garbage-collected</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">A struct contains the entire struct, with all its fields.</td>
+      <td style="text-align: left">A <code class="language-plaintext cs highlighter-rouge">class</code> contains pointer to its fields</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Value types (of a <code class="language-plaintext cs highlighter-rouge">struct</code>) always contains a value</td>
+      <td style="text-align: left">Reference types (of a <code class="language-plaintext cs highlighter-rouge">class</code>) can contain a null-reference</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="language-plaintext cs highlighter-rouge">struct</code> are used for small data structures</td>
+      <td style="text-align: left"><code class="language-plaintext cs highlighter-rouge">class</code>  are used for complex data structures</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Copying the contents of a value type variable (a <code class="language-plaintext cs highlighter-rouge">struct</code>) copies the entire contents into the new variable, making the two distinct</td>
+      <td style="text-align: left">Copying the contents of a reference type variable (a <code class="language-plaintext cs highlighter-rouge">class</code> ) into another variable copies the reference, the two pointing to the same storage</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">After the copy, changes to one won’t affect the other</td>
+      <td style="text-align: left">After the copy, changes to one will affect the other</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+<h1 id="creation">Creation</h1>
+<h4 id="without-constructor">Without constructor</h4>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">struct</span> <span class="nc">Employee</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">id</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">getId</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Employee Id: "</span> <span class="p">+</span> <span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">Employee</span> <span class="n">emp</span><span class="p">;</span>
+  <span class="n">emp</span><span class="p">.</span><span class="n">id</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">emp</span><span class="p">.</span><span class="n">id</span><span class="p">);</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="with-a-constructor">With a constructor</h4>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">struct</span> <span class="nc">Employee</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">id</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">Employee</span><span class="p">(</span><span class="kt">int</span> <span class="n">employeeId</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">id</span> <span class="p">=</span> <span class="n">employeeId</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">Employee</span> <span class="n">emp</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Employee</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">emp</span><span class="p">.</span><span class="n">id</span><span class="p">);</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="creation-with-inheritance">Creation with inheritance</h2>
+<p>A <code class="language-plaintext cs highlighter-rouge">struct</code> can’t be inherited but can inherit from an <code class="language-plaintext cs highlighter-rouge">interface</code>.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">public</span> <span class="k">interface</span> <span class="nc">Person</span>
+  <span class="p">{</span>  
+    <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">double</span> <span class="n">Age</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">double</span> <span class="nf">GetLifeExpectancy</span><span class="p">();</span>    
+  <span class="p">}</span>
+
+  <span class="k">struct</span> <span class="nc">Employee</span><span class="p">:</span> <span class="n">Person</span>
+  <span class="p">{</span>
+    <span class="k">public</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">hoursWorked</span> <span class="p">=</span> <span class="m">35</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">double</span> <span class="n">Age</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">id</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">Employee</span><span class="p">(</span><span class="kt">int</span> <span class="n">employeeId</span><span class="p">,</span> <span class="kt">string</span> <span class="n">name</span><span class="p">,</span> <span class="kt">double</span> <span class="n">age</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">id</span> <span class="p">=</span> <span class="n">employeeId</span><span class="p">;</span>
+      <span class="n">Name</span> <span class="p">=</span> <span class="n">name</span><span class="p">;</span>
+      <span class="n">Age</span> <span class="p">=</span> <span class="n">age</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">double</span> <span class="nf">GetLifeExpectancy</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span><span class="p">(</span><span class="m">80D</span> <span class="p">-</span> <span class="n">age</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">Employee</span> <span class="n">employee</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Employee</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="s">"Henry"</span><span class="p">,</span> <span class="m">33</span><span class="p">);</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">emp</span><span class="p">.</span><span class="nf">GetLifeExpectancy</span><span class="p">());</span> <span class="c1">// 50</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://www.programiz.com/csharp-programming/struct">Programiz page on Struct</a>,</li>
+  <li><a href="https://hackr.io/blog/c-sharp-interview-questions">Hackr.IO C# interview questions</a>,</li>
+  <li><a href="http://clarkkromenaker.com/post/csharp-structs/">This article by Clark Kromenaker on memory stack and heap</a>,</li>
+  <li><a href="https://www.c-sharpcorner.com/uploadfile/puranindia/struct-in-C-Sharp/">C-Sharp Corner article on struct</a>.</li>
+</ul>
+
+  </body>
+</html>

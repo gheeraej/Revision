@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Actor Critic - Introduction</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-deep-reinforcement-learning---actor-critic"><a href="/Revision/reinforcement_learning_actor_critic.html">Back to Deep Reinforcement Learning - Actor Critic</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>Actor-Critic method combines a policy based method ie an actor with a value based method ie a critic.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/VB_vs_PB.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="actor-policy-based-method">Actor: policy based method</h2>
+<p>A policy based method directly estimates the policy. The neural network of the method directly outputs an action. Hence the model acts.</p>
+
+<p>In the REINFORCE model, the Monte-Carlo method is used that wait until the end of a batch of episode before updating the model.</p>
+
+<p><br /></p>
+<h2 id="critic-value-based-method">Critic: value based method</h2>
+<p>A value based method directly estimates the action value function. The model tries to guess what will be the associated reward for each action. The model does’nt act hence it can be viewed as a critic.</p>
+
+<p>In the DQN model, the Temporal difference is used to estimate the action value function.</p>
+
+<p><br /></p>
+<h2 id="idea-of-the-method">Idea of the method</h2>
+<p>The actor critic method will use an actor and a critic:</p>
+<ul>
+  <li>The actor will estimate the policy using not anymore a Monte-Carlo estimate but a Temporal Difference estimate,</li>
+  <li>The critic will estimate the state value function using Temporal Difference estimate.</li>
+</ul>
+
+<p>The Monte-Carlo method used to train the actor will be modfied using the critic: the actor won’t need to wait a full episode to obtain an estimate of the return and to update its parameters using gradient ascent. It will now be able to apply temporal differences.</p>
+
+<p><br /></p>
+<h1 id="algorithm">Algorithm</h1>
+<p>Here is a video that present the algorithm (click on the gif to download the video with oral explanations):
+<br /></p>
+<div style="text-align: center">
+<a href="assets/images/actor_critic.gif" title="Link Title"><img src="assets/images/actor_critic.gif" alt="Actor Critic Algorithm presentation" /></a>
+</div>
+<p>In the video, the actor is \(\pi\) with parameters \(\theta_\pi\) and the critic is \(V\) with parameters \(\theta_V\). First the actor takes an action and from the environment the model observes the reward and the next state. The critic uses this reward and next state to define its alternative estimate and update its parameters using TD estimate. Then the critic computes an estimate of total return \(G\) by computing the advantage value \(A(s,a)\) (see note on advantage value function) and adding it to the state value. The actor then uses this estimate of return to update its parameters.</p>
+
+<p><br /></p>
+<h2 id="details-of-the-algorithm">Details of the algorithm</h2>
+<p>The critic (with parameters \(\theta_V\)) computes an estimation of the total return \(G\) using the state value function of next state \(s'\) and reward \(r\).</p>
+
+<p>The estimation of \(G_{\theta_V}\) from the critic is:</p>
+
+\[G = r + \gamma V_{\theta_V}(s')\]
+
+<p>Where:</p>
+<ul>
+  <li>\(r\) is the reward obtained by taking action \(a\) in state \(s\),</li>
+  <li>\(s'\) is the state after taking action \(a\) in state \(s\),</li>
+  <li>\(V_{\theta_V}(s')\) is the value state function from the critic for state \(s'\).</li>
+</ul>
+
+<p>Once this estimation of the return \(G\) is obtained, the actor will use this information to update its parameter in order to better represent the reality of the environment.</p>
+
+<p>More specifically it can be understood using the advantage function. Recall that the advantage function \(A(s,a)\) is the advantage of an action \(a\) with respect to a state \(s\). It is the difference between the action value function \(Q(s,a)\) and the state value function \(V(s)\):</p>
+
+\[A(s,a) = Q(s,a) - V(s)\]
+
+<p><br /></p>
+
+<p>Also \(G_{\theta_V}\) is exactly the estimation of the reward obtained by taking action \(a\) in state \(s\). It is thus equivalent to the action value function \(Q_{\theta_V}(a, s)\).</p>
+
+<p>Finally we can express the difference between the current estimate of the state function and the alternative estimate of the state function as:</p>
+
+<p><br /></p>
+
+\[\begin{eqnarray}
+A_{\theta_V}(s,a) &amp;&amp;= Q_{\theta_V}(s,a) - V_{\theta_V}(s) \\
+&amp;&amp;= r + \gamma V_{\theta_V}(s') - V_{\theta_V}(s)
+\end{eqnarray}\]
+
+<p><br /></p>
+
+<p>So the actor will look at the advantage function of the action \(a\) it choosed. 2 possibles option arise:</p>
+<ul>
+  <li>If the critic tells that the advantage of action \(a\) is negative, the actor will update its parameters to less likely choose action \(a\) in state \(s\),</li>
+  <li>If the critic tells that the advantage of action \(a\) is positive, the actor will update its parameters to more likely choose action \(a\) in state \(s\).</li>
+</ul>
+
+<p>Also note that the critic can compute the advantage function just by computing the state value function.</p>
+
+<p><br /></p>
+<h2 id="pseudo-code">Pseudo code</h2>
+<p>And here is the pseudo code of the algorithm:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/actor_critic.png" width="40%" height="40%" />
+</div>
+<p>The actor is \(\pi\) with parameters \(\theta\) and the critic is \(\hat{v}\) with parameters \(w\).
+The update rule for the critic is the same as the update rule of DQN. The update rule for the actor is the same as the update rule of REINFORCE.</p>
+
+<p><br /></p>
+
+<p>Here is the detail of the gradient ascent update rule of the actor where we see the influence of the critic:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/actor_critic_GA.png" width="40%" height="40%" />
+</div>
+
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li>UDRLN videos 3.4.2, 3.4.4, 3.4.5, 3.4.6, 3.4.7,</li>
+  <li><a href="http://incompleteideas.net/book/bookdraft2017nov5.pdf">Reinforcement Learning: An Introduction by Sutton and Barto</a> section 13.5.</li>
+</ul>
+
+  </body>
+</html>

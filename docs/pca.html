@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>PCA</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-machine-learning"><a href="/Revision/machine_learning.html">Back to Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>PCA seeks to find a new basis to represent a dataset. In general this new basis dimension is lower than the original dimension of the dataset.</p>
+
+<p>The goal of PCA is then to represent the maximum of the variance of the original data in a lower dimension.</p>
+
+<p><br /></p>
+<h1 id="formulation">Formulation</h1>
+<p>Let’s define a dataset X where each \(X^{(j)}\) is represented in \(n\) dimension: \(X^{(j)}=(X_i^{(j)})_{i \in [1, n]}\).</p>
+
+<p>Let’s normalise each element of X to have mean 0 and variance 1 for each feature of X.</p>
+
+<p>The goal of PCA is to find a new basis of unit vectors \(u=(u_k)_{k \in [1, d]}\) (\(\Vert u_k \Vert_2^2=1\)), such that the projection of X on this new basis retains the maximum variance.</p>
+
+<p>As the elements of X are centered, the variance of an \(X^{(j)}\) is defined by its distance to the origin (squared).
+The variance for the projected \(X^{(j)}\) is also defined by its distance to the origin (as \(X^{(j)}\) is just multiplied by a scalar).</p>
+
+<p><br /></p>
+
+<p>The projection of \(X^{(j)}\) on the axis \(u_k\) is \((X^{(j)})^T u_k\) and its distance to origin given the axis \(u_k\) is thus \((X^{(j)})^T u_k\) (as \(u_k\) is a unit vector). So the maximisation problem is:</p>
+
+<p><br /></p>
+
+\[\begin{eqnarray}
+\frac{1}{n_{pop}}\sum_{j=1}^{n_{pop}}\left((X^{(j)})^T u_k\right)^2 &amp;&amp;= \frac{1}{n_{pop}}\sum_{j=1}^{n_{pop}}u_k^T X^{(j)} (X^{(j)})^T u_k \\
+&amp;&amp;= u_k^T \left(\frac{1}{n_{pop}}\sum_{j=1}^{n_{pop}} X^{(j)} (X^{(j)})^T\right) u_k \\
+&amp;&amp; \text{subject to } \Vert u_k \Vert_2^2=1
+\end{eqnarray}\]
+
+<p><br /></p>
+
+<p>First remark that \(\frac{1}{n_{pop}}\sum_{j=1}^{n_{pop}} X^{(j)} (X^{(j)})^T\) is the covariance matrix of \(X\).
+Let’s call it \(\Sigma\).
+The maximum of this function is obtained using its Lagrangian and setting the derivatives to 0.</p>
+
+<p><br /></p>
+
+\[L(u_k)=u_k^T \Sigma u_k + \lambda (\Vert u_k \Vert_2^2-1)\]
+
+<p><br /></p>
+
+\[\begin{eqnarray}
+\frac{d}{d u_k}L(u_k) &amp;&amp;= 2 \Sigma u_k + 2 \lambda u_k = 0 \\
+&amp;&amp;= \Sigma u_k + 2 \lambda u_k = 0
+\end{eqnarray}\]
+
+<p>We recognize the eigenvector formulation.</p>
+
+<p><br /></p>
+
+<p>Hence PCA in \(d\) dimension is equivalent to looking for the \(d\)-th eigenvector with highest eigenvalue of the covariance matrix of X.</p>
+
+<p>Then we project X on the new basis as follow:</p>
+
+\[X'=u^TX\]
+
+<p>Where:</p>
+<ul>
+  <li>\(u\) is a \(n \times d\) matrix,</li>
+  <li>\(X\) is a \(n_{pop} \times n\) matrix.</li>
+</ul>
+
+<p>So \(u^TX\) gives a \(n_{pop} \times d\) matrix.</p>
+
+<p><br /></p>
+<h1 id="resource">Resource</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://cs229.stanford.edu/notes2021fall/cs229-notes10.pdf">CS229 course on PCA</a>.</li>
+</ul>
+
+  </body>
+</html>

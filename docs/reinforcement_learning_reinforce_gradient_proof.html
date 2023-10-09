@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>REINFORCE gradient proof</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-reinforcement-learning---reinforce"><a href="/Revision/reinforcement_learning_reinforce.html#proof-of-the-derivative">Back to Reinforcement Learning - REINFORCE</a></h2>
+
+<p><br /></p>
+<h1 id="notation">Notation</h1>
+<p>The notation is different from the one we used (the one coming from the Udacity Deep Reinforcement Learning Nanodegree).</p>
+
+<p>Here the probability of getting a trajectory from policy \(\pi_\theta\) that we noted \(P(\tau, \theta)=P(\tau \vert \theta)\) is expand as \(P(s_t, a_t \vert \tau)\).</p>
+
+<p>This notation is a little bit misleading as \(\tau\) is a trajectory hence deterministic. It is implicitly \(P(s_t, a_t \vert \tau)P(\tau \vert \theta)\) which is \(P(\tau \vert \theta)\) for \((s_t, a_t) \in \tau\).</p>
+
+<p>Also if we expand \(\tau\) using our notation we have:</p>
+
+\[P(\tau \vert \theta) = P(s_0, a_0, s_1, a_1, \ldots, a_H, s_H, s_{H+1} \vert \pi_\theta)\]
+
+<p>And in the alternative notation we have:</p>
+
+\[P(s_t, a_t \vert \tau) = P(s_0, a_0, s_1, a_1, \ldots, s_t, a_t, \ldots, a_H, s_H, s_{H+1} \vert \pi_\theta)\]
+
+<p><br /></p>
+<h1 id="proof">Proof</h1>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/REINFORCE_gradient_proof1.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/REINFORCE_gradient_proof2.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/REINFORCE_gradient_proof3.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h1 id="resource">Resource</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://medium.com/@thechrisyoon/deriving-policy-gradients-and-implementing-reinforce-f887949bd63">Medium blog post by Chris Yoon</a>.</li>
+</ul>
+
+  </body>
+</html>

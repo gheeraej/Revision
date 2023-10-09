@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - Data Augmentation</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>Data Augmentation are methods to synthetically augment the quantity of data.</p>
+
+<p><br /></p>
+<h1 id="goals">Goals</h1>
+<ul>
+  <li>Improve model’s performance overall or on certain classes,</li>
+  <li>Generalize better,</li>
+  <li>Enforce certain behaviors.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="methods">Methods</h1>
+<ol>
+  <li>Simple label-preserving transformation,</li>
+  <li>Perturbation,</li>
+  <li>Data synthesis,</li>
+  <li>Generative adversarial network (GAN).</li>
+</ol>
+
+<h2 id="label-preserving-transformations">Label-preserving transformations</h2>
+<p>Label-preserving transformations modify a bit a date without changing its label. It is widely used in computer vision and NLP.</p>
+
+<h3 id="in-computer-vision">In Computer Vision</h3>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/cv_da.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h3 id="in-nlp">In NLP</h3>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/nlp_da.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="perturbations">Perturbations</h2>
+<p>Small perturbations can be added to data in order to make the classification difficult.</p>
+
+<p><br /></p>
+<h3 id="in-computer-vision-1">In Computer Vision</h3>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/cv_pertubation.png" width="30%" height="30%" />
+</div>
+<p>From <a href="https://arxiv.org/pdf/1511.04599.pdf">DeepFool: a simple and accurate method to fool deep neural networks by SM Moosavi-Dezfooli et al.</a>.</p>
+
+<p><br /></p>
+<h3 id="in-nlp-1">In NLP</h3>
+<p><a href="/Revision/bert.html">BERT</a> has been trained on data with pertubations and has been trained on finding the right word in place of the pertubation:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/nlp_pertubation.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="data-synthesis">Data synthesis</h2>
+<p>Since collecting data is expensive and slow with many potential privacy concerns, it’d be a dream if we could sidestep it altogether and train our models with synthesized data. Even though we’re still far from being able to synthesize all training data, it’s possible to synthesize some training data to boost a model’s performance.</p>
+
+<p><br /></p>
+<h3 id="in-computer-vision-2">In Computer Vision</h3>
+<p>In computer vision, a straightforward way to synthesize new data is to combine existing examples with discrete labels to generate continuous labels. Consider a task of classifying images with two possible labels: DOG (encoded as 0) and CAT (encoded as 1). From example \(x_1\) of label DOG and example \(x_2\) of label CAT, you can generate \(x'\) such as:</p>
+
+\[x' = \gamma x_1 + (1 - \gamma) x_2\]
+
+<p>The label of \(x'\) is a combination of the labels of \(x_1\) and \(x_2\) : \(\gamma \times 0 + (1 - \gamma) \times 1\). This method is called mixup. The authors showed that mixup improves models’ generalization, reduces their memorization of corrupt labels, increases their robustness to adversarial examples, and stabilizes the training of generative adversarial networks.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/cv_ds.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>Mixup us useful for:</p>
+<ul>
+  <li>Incentivize models to learn linear relationships,</li>
+  <li>Improves generalization on speech and tabular data,</li>
+  <li>Can be used to stabilize the training of GANs/</li>
+</ul>
+
+<p><br /></p>
+<h3 id="in-nlp-2">In NLP</h3>
+<p>In NLP, templates can be a cheap way to bootstrap your model. It is possible to bootstrap training data for a conversational AI (chatbot). A template might look like: “Find me a [CUISINE] restaurant within [NUMBER] miles of [LOCATION].” With lists of all possible cuisines, reasonable numbers (you would probably never want to search for restaurants beyond 1000 miles), and locations (home, office, landmarks, exact addresses) for each city, you can generate thousands of training queries from a template.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/nlp_ds.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="generative-adversarial-network">Generative adversarial network</h2>
+<p>GAN are neural networks that are trained to fool a classification network not to recognize if the data is a real data or has been generated by the GAN network.</p>
+
+<p>Both network (discrimant and GAN) are trained in the same time and if the discrimant is better and better at recognizing real data compare to generated data, then the GAN will improve, and then the discriminator will improve again, etc.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/cv_gan.png" width="30%" height="30%" />
+</div>
+<p>Data augmentation using GAN. Results from model trained on augmented data using GAN vs expert and standard training. From <a href="https://www.nature.com/articles/s41598-019-52737-x.pdf">Data augmentation using generative adversarial networks (CycleGAN) to improve generalizability in CT segmentation tasks by V Sandfort et al.</a>.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329, lecture 4</a>.</li>
+</ul>
+
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>AdaBoost</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-boosting"><a href="/Revision/boosting.html">Back to Boosting</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>AdaBoost is a classification boosting algorithm which iteratively forces the learners to predict accurately the sample wrongly predicted.</p>
+
+<p>It does this by setting weights on each sample. At initialisation the weights of every sample are equal but after an iteration the weights of wrongly predicted sample are greater than the correctly predicted samples.</p>
+
+<p>Here are the steps of AdaBoost:</p>
+<ul>
+  <li>Start with same weight for all individuals: \(\alpha_j = \frac{1}{n_{pop}}\)</li>
+  <li>For \(k \in [1, n_{trees}]\):
+    <ul>
+      <li>Learn a decision tree on data using the weights \(\alpha_j\),</li>
+      <li>Compute from the errors \(\varepsilon_k\), the coefficients \(w_k\),</li>
+      <li>Recompute weights \(\alpha_j\) based on \(w_k\),</li>
+      <li>Normalise weights \(\alpha_j\) (they must sum to 1),</li>
+    </ul>
+  </li>
+  <li>Final prediction is the sum of \(w_k \cdot t_k\).</li>
+</ul>
+
+<p><br /></p>
+
+<p>Where:</p>
+<ul>
+  <li>
+    <p>\(\varepsilon_k=\sum_{j=1}^{n_{pop}}\alpha_j[t_k(X_j) \ne Y_j]\),</p>
+  </li>
+  <li>
+    <p>\(w_k=\frac{1}{2}\log\left(\frac{1-\varepsilon_k}{\varepsilon_k}\right)\) (negative logit function muliplied by 0.5),</p>
+  </li>
+  <li>
+    <p>\(\alpha_j\) is updated as follow: \(\alpha_j=\begin{cases}
+                                    \alpha_j e^{-w_k}&amp;&amp; \text{if } \;\; t_k(X_j)=Y_j\\
+                                    \alpha_j e^{w_k}&amp;&amp; \text{if } \;\; t_k(X_j) \ne Y_j
+                                    \end{cases}\),</p>
+  </li>
+  <li>
+    <p>Normalisation of \(\alpha_j\) is \(\alpha_j \leftarrow \frac{\alpha_j}{\sum_{l=1}^{n_{pop}}\alpha_l}\).</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p>The final prediction for an unseen sample \(x\) is:</p>
+
+\[T_A(x)=\frac{1}{n_{trees}}\sum_{k=0}^{n_{trees}} w_k \cdot \left[t_k(x) \leq 0.5\right]\]
+
+<p><br /></p>
+<h2 id="adaboost-as-a-gradient-boosting-algorithm">AdaBoost as a Gradient Boosting algorithm</h2>
+<p>Using the exponential loss \(L(h(X), Y)=e^{-h(X)Y}\) and \(\lambda=1\) it can be shown that Gradient Boosting is almost equivalent to AdaBoost.</p>
+
+<p>See:</p>
+<ul>
+  <li><a href="https://stats.stackexchange.com/questions/430158/is-exponential-loss-function-the-only-reason-for-adaboost-being-adaptive-algorit">This StackExchange page</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://perso.univ-rennes2.fr/system/files/users/rouviere_l/poly_apprentissage.pdf">Introduction aux méthodes d’agrégation - Laurent Rouvière (in french)</a>.</li>
+  <li><a href="http://www.chengli.io/tutorials/gradient_boosting.pdf">A Gentle Introduction to Gradient Boosting (chapter 6) - Cheng Li</a></li>
+</ul>
+
+  </body>
+</html>

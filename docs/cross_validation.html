@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Cross Validation</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-machine-learning"><a href="/Revision/machine_learning.html">Back to Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="train-validation-and-test-sets">Train, Validation and Test sets</h1>
+<p>When training a model, 3 different set are needed, the train set to statistically estimates the parameters, the validation set to estimate the hyperparameter and the test set to test the model on unseen data.</p>
+
+<p>Hence one needs to split its initial datset in 3 parts. This generates a loss of training data and some methods exist to avoid loosing precious data.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/set.png" width="30%" height="30%" />
+</div>
+<p>The split in done in two steps: first separate the test from the training data and then split the remaining training data in training (for statistical estimation) and validation (for estimation of hyperparameters).</p>
+
+<p>Note than sometimes validation set is refered as test set.</p>
+
+<p><br /></p>
+<h1 id="cross-validation">Cross-Validation</h1>
+<p>Cross-validation, or out-of-sample testing, is a method for assessing how the results of a statistical analysis will generalize to an independent data set.</p>
+
+<p>Cross-validations technics use different splits of train and validation sets in order to use each data sometimes for training and sometimes for validation. Note that test data always remains the same.</p>
+
+<p>For example if I want to test to different ensemble of hyperparameters for my model I can:</p>
+
+<ol>
+  <li>Train each model on 70% of the training data and validates on the other 30%.</li>
+  <li>Train, for each model, three sub models, each on \(2/3\)-rd of the data and computes for each one the quality metric on the remaining \(1/3\)-rd of the data. Then avergage this metric and compare the two possible parametrization of the model.</li>
+</ol>
+
+<p>The first method is a simple validation but 30% of the data won’t serve for statistically calibrates the data. The second one uses all the data for the training.</p>
+
+<p>Here is an explaining scheme of cross validation:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/cv.png" width="25%" height="25%" />
+</div>
+
+<p><br /></p>
+<h2 id="leave-p-out-cross-validation">Leave-p-out cross-validation</h2>
+<p>Leave-p-out cross-validation involves using \(p\) observations as the validation set and the remaining observations as the training set. It is an exhaustive cross validation methods as it will try all possible combinations of \(p\) data for validation ie, if the total number of data is \(n\), it will test \(n \choose p\) different combination of validation data.</p>
+
+<p>In pratice this method is not used.</p>
+
+<p><br /></p>
+<h2 id="k-fold-cross-validation">k-fold cross-validation</h2>
+<p>In k-fold cross-validation, the original sample is randomly partitioned into \(k\) equal sized subsamples. Of the \(k\) subsamples, a single subsample is retained as the validation data for testing the model, and the remaining \(k − 1\) subsamples are used as training data. The cross-validation process is then repeated \(k\) times, with each of the \(k\) subsamples used exactly once as the validation data. The \(k\) results can then be averaged to produce a single estimation.</p>
+
+<p>The advantage of this method is that all observations are used for both training and validation, and each observation is used for validation exactly once.</p>
+
+<p>10-fold cross-validation is commonly used, but in general \(k\) remains an unfixed parameter.</p>
+
+<p>(copied from <a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)#k-fold_cross-validation">paragpraph on k-folds from Wikipedia page on Cross validation</a>).</p>
+
+<p>Here is a representation of \(k\)-folds:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/kfolds.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>Here is another representation of \(k\)-folds:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/kfolds2.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h2 id="suffle-and-split">Suffle and Split</h2>
+<p>Suffle and Split method, also known as Repeated random sub-sampling validation (or Random permutations cross-validation or Monte Carlo cross-validation), generates multiple random splits of the dataset into training and validation data. The samples are first shuffled and then split into a pair of train and validation sets.</p>
+
+<p>For each such split, the model is fit to the training data, and predictive accuracy is assessed using the validation data. The results are then averaged over the splits.</p>
+
+<p>The advantage of this method (over \(k\)-fold cross validation) is that the proportion of the training/validation split is not dependent on the number of iterations (i.e., the number of partitions). The disadvantage of this method is that some observations may never be selected in the validation subsample, whereas others may be selected more than once. In other words, validation subsets may overlap. This method also exhibits Monte Carlo variation, meaning that the results will vary if the analysis is repeated with different random splits.</p>
+
+<p>As the number of random splits approaches infinity, the result of repeated random sub-sampling validation tends towards that of leave-p-out cross-validation.</p>
+
+<p>(copied from <a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)#Repeated_random_sub-sampling_validation">paragpraph on Repeated random sub-sampling from Wikipedia page on Cross validation</a>.</p>
+
+<p>Here is a representation of Suffle and Split:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/shufflesplit.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h2 id="stratified-k-fold">Stratified k-fold</h2>
+<p>StratifiedKFold is a variation of k-fold which returns stratified folds: each set contains approximately the same percentage of samples of each target class as the complete set.</p>
+
+<p>Here is a representation of stratified \(k\)-folds:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/skfolds.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h2 id="stratified-shuffle-split">Stratified Shuffle Split</h2>
+<p>StratifiedShuffleSplit is a variation of ShuffleSplit, which returns stratified splits, i.e which creates splits by preserving the same percentage for each target class as in the complete set.</p>
+
+<p>Here is another representation of stratified Suffle and Split:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/sshufflesplit.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h2 id="time-series-split">Time Series Split</h2>
+<p>TimeSeriesSplit is a variation of k-fold which returns first \(k\)-folds as train set and the \((k+1)\)-th fold as test set. Note that unlike standard cross-validation methods, successive training sets are supersets of those that come before them. Also, it adds all surplus data to the first training partition, which is always used to train the model.</p>
+
+<p>Older data are used more times than more recent data.</p>
+
+<p>Here is a representation of Time Series split:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/tssplit.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://scikit-learn.org/stable/modules/cross_validation.html">Sciki-Learn page on cross validation</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)">Cross validation on Wikipedia</a>.</li>
+</ul>
+
+  </body>
+</html>

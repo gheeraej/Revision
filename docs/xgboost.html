@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>XGBoost</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-boosting"><a href="/Revision/boosting.html">Back to Boosting</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p><a href="https://arxiv.org/pdf/1603.02754.pdf">XGBoost</a> is a special type of gradient descent methods that adds some improvment of the base Gradient Descent algorithm.</p>
+
+<p><br /></p>
+<h2 id="newtons-method">Newton’s method</h2>
+<p>The first trick used by XGBoost is to use the <a href="/Revision/mathematics_optimization.html#newton-s-method">Newton’s method</a> ie to not use the first order approximation in the Taylor expansion but the second order:</p>
+
+\[\begin{eqnarray}
+L(Y, T_{k-1}(X)+t(X)) &amp;&amp;= L(Y, T_{k-1}(X)) + t(X) \frac{d}{dT_{k-1}(X)}L(Y, T_{k-1}(X)) + \frac{1}{2} t(X)^2 \frac{d^2}{d^2T_{k-1}(X)}L(Y, T_{k-1}(X)) + o(t(X)^2) \\
+&amp;&amp;= L(Y, T_{k-1}(X)) + t(X) g_{k-1} + \frac{1}{2} t(X)^2 h_{k-1} + o(t(X)^2)
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(g_{k-1} = \frac{d}{dT_{k-1}(X)}L(Y, T_{k-1}(X))\) does not depend on \(t(X)\) (it depends on the prediction \(\hat{Y}\) of \(T_{k-1}\)),</li>
+  <li>\(h_{k-1} = \frac{d^2}{d^2T_{k-1}(X)}L(Y, T_{k-1}(X))\) does not depend on \(t(X)\) (it depends on the prediction \(\hat{Y}\) of \(T_{k-1}\)).</li>
+</ul>
+
+<p>We can no longer use gradient descent to find the find our update rule by fining \(t\) that best fits (it would require finding a learner that fit himself plus something).</p>
+
+<p><br /></p>
+<h2 id="regularization">Regularization</h2>
+<p>XGBoost also adds a regularization on the structures of its trees. It penalizes the leafs’ number and the leaf values. It allows to limit overfitting:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/step_fit.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>Assume:</p>
+<ul>
+  <li>\(t\) has \(\text{Leafs}\) leafs where each leaf value is the average of the values of the elements in the leaf (or a vote for a classification problem),</li>
+  <li>\(l_{m}\) is the ensemble of individuals of leaf \(m\),</li>
+  <li>\(w\) is the vector of weights associated with tree \(t\), \(w = (w_m)_{m \neq \text{Leafs}}\).</li>
+</ul>
+
+<p>We are here in the case of a regression tree and not a decision tree. Unlike decision trees, each regression
+tree contains a continuous score on each of the leaf, represented here by \(w_m\):</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/twocart.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>Then, the regularization for tree \(t\) is:</p>
+
+\[\Omega(t)=\gamma \left(\text{Leafs}\right) + \frac{1}{2}\lambda \Vert w \Vert_2^2\]
+
+<p>The regularization limits the numbers of leafs and the weight associated to tree \(t\) to avoid overfitting.
+Similar regularization can be created for decision trees.</p>
+
+<p><br /></p>
+
+<p>So \(L(Y, T_{k-1}(X)+t(X))\) becomes:</p>
+
+\[\begin{eqnarray}
+L(Y, T_{k-1}(X)+t(X)) &amp;&amp;= \left[L(Y, T_{k-1}(X))\right] + \left[t(X) g_{k-1}\right] + \left[\frac{1}{2} t(X)^2 h_{k-1}\right] + \gamma \left(\Omega(t)\right) + o\left(t(X)^2\right) \\
+&amp;&amp;= \left[L(Y, T_{k-1}(X))\right] + \left[t(X) g_{k-1}\right] + \left[\frac{1}{2} t(X)^2 h_{k-1}\right] + \left[\gamma \left(\text{Leafs}\right) + \frac{1}{2}\lambda \Vert w \Vert_2^2\right] + o\left(t(X)^2\right)
+\end{eqnarray}\]
+
+<p><br /></p>
+<h2 id="tree-and-loss-function-estimation">Tree and loss function estimation</h2>
+<p>Given the function loss \(L(Y, T_{k-1}(X)+t(X))\) with the regularization and approximated using Newton’s method, XGBoost finds a quick way to estimate the loss for a given \(t\) and for every splits.</p>
+
+<p><br /></p>
+
+<p>Let’s compute the loss for one \(t\), for every \(X^{(j)}\) (every sample).
+We can ignore \(L(Y, T_{k-1}(X))\) and \(o(t(X)^2)\)) (as the first the equivalent for all \(t\) and the second is negligeable). Let’s also call it \(L(t)\) as our variable is \(t\).</p>
+
+\[\begin{eqnarray}
+L(t) &amp;&amp;= \sum_{j=1}^{n_{pop}} L(Y, T_{k-1}(X^{(j)})+t(X^{(j)})) \\
+&amp;&amp;= \sum_{j=1}^{n_{pop}} \left[t\left(X^{(j)}\right) g_{k-1} + \frac{1}{2} t\left(X^{(j)}\right)^2 h_{k-1} + \gamma \left(\text{Leafs}\right) + \frac{1}{2}\lambda \sum_{m=1}^{L} w_m^2 \right] \\
+&amp;&amp;= \sum_{m=1}^{\text{Leafs}} \left[ \left(\sum_{j \in l_m} g_{k-1}\right) w_m + \frac{1}{2} \left(\sum_{j \in l_m} h_{k-1} + \lambda \right) w_m^2 \right] + \gamma \left(\text{Leafs}\right)
+\end{eqnarray}\]
+
+<p><br /></p>
+
+<p>Line 2 to line 3 uses that, for a given leaf \(m\) of tree \(t\), for an individual \(X^{(j)}\) that belongs to this leaf, we can replace \(t(X^{(j)})\) by \(w_m\) and \(t\left(X^{(j)}\right)^2\) by \(w_m^2\) as the value that \(t\) will associate to \(X^{(j)}\) is \(w_m\) (each element of a leaf will be associated to the same value).\</p>
+
+<p>All the individuals of a given leaf \(m\) share the same weight \(w_m\) and we can therefore factorize the individual of a leaf by \(w_m\).</p>
+
+<p><br /></p>
+
+<p>We transform the sum over all element in two nested sums:</p>
+<ul>
+  <li>One sum over all the leafs,</li>
+  <li>One sum over the elements in of each leaf (it is equivalent).</li>
+</ul>
+
+<p><br /></p>
+
+<p>Now we can compute the optimal value for every \(w_m\) and compute the loss for \(t\).</p>
+
+<p><br /></p>
+
+<p>Let’s differentiate wrt \(w_m\) and set to 0 to find a minimum:</p>
+
+\[\frac{d}{dw_m} L(Y, T_{k-1}+t) = \sum_{j \in l_m} g_{k-1} + w_m \left(\sum_{j \in l_m} h_{k-1} + \lambda \right)\]
+
+<p>Setting the loss to 0 and resolving for \(w_m\), we obtain:</p>
+
+\[w_m^* = - \frac{ \sum_{j \in l_m} g_{k-1} } { \sum_{j \in l_m} h_{k-1} + \lambda }\]
+
+<p><br /></p>
+
+<p>\(w_m^*\) is the weight that will be use for individuals of leaf \(m\) in the tree \(t\). It is simply computed as the derivative of the loss \(L\) with respect to the current strong learner \(T\) over the Hessian (second derivative) of the loss \(L\) with respect to the current strong learner \(T\). It is a direct application of <a href="/Revision/mathematics_optimization.html#newton-s-method">Newton’s method</a>.</p>
+
+<p><br /></p>
+<h4 id="function-loss-estimation">Function loss estimation</h4>
+<p>Replacing the \(w_m\) by this obtained value gives the total loss for \(t\):</p>
+
+\[\begin{eqnarray}
+L(t) &amp;&amp;= \sum_{m=1}^{L} \left[ \left(\sum_{j \in l_m} g_{k-1}\right) \left(- \frac{ \sum_{j \in l_m} g_{k-1} } { \sum_{j \in l_m} h_{k-1} + \lambda }\right) + \frac{1}{2} \left(\sum_{j \in l_m} h_{k-1} + \lambda \right) \left(- \frac{ \sum_{j \in l_m} g_{k-1} } { \sum_{j \in l_m} h_{k-1} + \lambda }\right)^2 \right] + \gamma L \\
+
+&amp;&amp; = \sum_{m=1}^{L} \left[ -\frac{ \left(\sum_{j \in l_m} g_{k-1}\right)^2 } { \sum_{j \in l_m} h_{k-1} + \lambda } + \frac{1}{2} (\frac{ \left(\sum_{j \in l_m} h_{k-1} + \lambda \right) \left(\sum_{j \in l_m} g_{k-1}\right)^2 } { \left(\sum_{j \in l_m} h_{k-1} + \lambda\right)^2} \right] + \gamma L \\
+
+&amp;&amp;=\sum_{m=1}^{L} \left[ -\frac{ \left(\sum_{j \in l_m} g_{k-1}\right)^2 } { \sum_{j \in l_m} h_{k-1} + \lambda } + \frac{1}{2} \frac{ \left(\sum_{j \in l_m} g_{k-1}\right)^2 } { \sum_{j \in l_m} h_{k-1} + \lambda } \right] + \gamma L \\
+
+&amp;&amp;= -\frac{1}{2} \sum_{m=1}^{L} \frac{ \left(\sum_{j \in l_m} g_{k-1}\right)^2 } { \sum_{j \in l_m} h_{k-1} + \lambda } + \gamma L \\
+\end{eqnarray}\]
+
+<p><br /></p>
+<h5 id="fast-estimation">Fast estimation</h5>
+<p>This loss can be used as a scoring function to measure the quality of a tree. It can be computed for any loss function for which we can compute its first and second derivatives \(g\) and \(h\).</p>
+
+<p>Note that the \(g_{k-1}\) and \(h_{k-1}\) are common for each tree and each split and only require to be computed once.</p>
+
+<p>Once \(g_{k-1}\) and \(h_{k-1}\), the best tree is easily estimated as:</p>
+<ul>
+  <li>The loss function can be computed quickly,</li>
+  <li>The loss function can be used to compare possible splits and select the best one,</li>
+  <li>The loss function can also be used to compare trees,</li>
+  <li>The loss computation for different split can be parallelized.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="parallelization">Parallelization</h2>
+<p>Gradient Boosting and XBoost are sequential models. The precedent step needs to be known in order to estimate the next weak learner.</p>
+
+<p>However for the estimation of a given weak learner during the process and using the precedent formula, all the computation can be parallelized. Hence finding the best tree at each step is very fast.</p>
+
+<p><br /></p>
+<h2 id="stochastic-gradient-descent">Stochastic gradient descent</h2>
+<p>XGBoost accepts in its implementation stochastic gradient descent which allows to not compute the loss over the whole dataset everytime and can hence reduce the computation time.</p>
+
+<p><br /></p>
+<h2 id="other-improvments">Other improvments</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://arxiv.org/pdf/1603.02754.pdf">The paper of XGBoost</a></li>
+</ul>
+
+<p><br /></p>
+<h2 id="notes">Notes</h2>
+<p>For classification and using the <a href="/Revision/loss_functions.html#binary-cross-entropy-loss-/-log-loss">cross entropy loss</a>, the output of our strong learner \(T_{k-1}\) is a sum of Bernoulli variable. So we need to rescale them between 0 and 1 which mean applied the sigmoid function.</p>
+
+<p>This must be taken into account when compute the derivative \(g_{k-1}\) and second derivative \(h_{k-1}\).
+Chain rule must be used as derivative is compute with respect to \(\hat{Y_{k-1}}\) being a sum of outputs of each tree in \(T_{k-1}\).</p>
+
+<p>The loss function is hence:</p>
+
+\[L=Y \log (\sigma(\hat{Y_{k-1}})) + (1-Y) \log (\sigma(1-\hat{Y_{k-1}}))\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\sigma(z)=\frac{1}{1+e^{-z}}\) is the sigmoid function.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="resources">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://dimleve.medium.com/xgboost-mathematics-explained-58262530904a">This Medium post</a>,</li>
+  <li><a href="https://stats.stackexchange.com/questions/231220/how-to-compute-the-gradient-and-hessian-of-logarithmic-loss-question-is-based">This StackExchange page with the computation of the first and derivatives of sigmoid function</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="resources-1">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://xgboost.readthedocs.io/en/stable/tutorials/model.html">The webpage of XGBoost library</a>,</li>
+  <li><a href="https://stats.stackexchange.com/questions/202858/xgboost-loss-function-approximation-with-taylor-expansion">This StackExchange page</a>,</li>
+  <li><a href="https://arxiv.org/pdf/1603.02754.pdf">The paper of XGBoost</a>,</li>
+  <li><a href="https://everdark.github.io/k9/notebooks/ml/gradient_boosting/gbt.nb.html">This great blog post</a>,</li>
+  <li><a href="https://github.com/dimleve/tinygbt/blob/master/tinygbt.py">This simple implementation (200 lines) of Gradient Boosting</a>.</li>
+</ul>
+
+  </body>
+</html>

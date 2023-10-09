@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>General Mathematics - Probability</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-general-mathematics"><a href="/Revision/mathematics.html">Back to General Mathematics</a></h2>
+
+<p><br /></p>
+<h1 id="law-of-large-numbers">Law of large numbers</h1>
+<p>There exists two form of the law of large numbers. One weak and one strong. Each of these theorems insure that the average of a serie of iid random variables with same distribution will converge toward the expected value of the random variables.</p>
+
+<p>Let \(X_1, X_2, ...\) be an infinite sequence of independent and identically distributed Lebesgue integrable random variables with expected value \(\mu\). Let \(\bar{X_n}=\frac{1}{n}\sum_{i=1}^n X_i\) then:</p>
+
+\[\bar{X_n} \rightarrow \mu \text{ as } n \rightarrow \infty\]
+
+<p>The difference between weak and strong law of large numbers depends on the type of convergence. Also in certain cases only the weak law can be applied.</p>
+
+<p><br /></p>
+<h2 id="weak-law-of-large-numbers">Weak Law of large numbers</h2>
+<p>Let \(X_1, X_2, ...\) be an infinite sequence of independent and identically distributed Lebesgue integrable random variables with expected value \(\mu\).</p>
+
+<p>Let \(\bar{X_n}=\frac{1}{n}\sum_{i=1}^n X_i\) then the weak law of large numbers states that the sample average converges in probability towards the expected value:</p>
+
+\[\bar{X_n} \rightarrow^P \mu \text{ as } n \rightarrow \infty\]
+
+<p>Or equivalently:</p>
+
+\[\lim_{n \rightarrow \infty}P\left(\vert \bar{X_n} - \mu \vert \lt \varepsilon \right)=1\]
+
+<p><br /></p>
+<h2 id="strong-law-of-large-numbers">Strong Law of large numbers</h2>
+<p>Let \(X_1, X_2, ...\) be an infinite sequence of independent and identically distributed Lebesgue integrable random variables with expected value \(\mu\). Let \(\bar{X_n}=\frac{1}{n}\sum_{i=1}^n X_i\) then. The weak law of large numbers states that the sample average converges almost surely towards the expected value:</p>
+
+\[\bar{X_n} \rightarrow^{a.s.} \mu \text{ as } n \rightarrow \infty\]
+
+<p>Or equivalently:</p>
+
+\[P\left(\lim_{n \rightarrow \infty} \bar{X_n} = \mu \right)=1\]
+
+<p><br /></p>
+<h2 id="difference-between-weak-law-of-large-numbers-and-strong-law-of-large-numbers">Difference between Weak Law of large numbers and Strong Law of large numbers</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Law_of_large_numbers#Differences_between_the_weak_law_and_the_strong_law">The paragraph on the differences on the Wikipedia page on Law of large numbers</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Law_of_large_numbers">Wikipedia page for law of large numbers</a>.</li>
+</ul>
+
+<p><br /><br /></p>
+<h1 id="central-limit-theorem">Central Limit Theorem</h1>
+<p>In probability theory, the central limit theorem (CLT) establishes that, in many situations, when independent random variables are summed up, their properly normalized sum tends toward a normal distribution (informally a bell curve) even if the original variables themselves are not normally distributed.</p>
+
+<p><br /></p>
+<h2 id="theorem">Theorem</h2>
+<p>Suppose \(\{X_1, ..., X_n\}\) is a sequence of iid random variables with \(\mathbb{E}[X_i]=\mu\) and \(Var[X_i]=\sigma^2 \lt \infty\).</p>
+
+<p>Let \(S_n\) be the sum of the \(X_i\): \(S_n=\sum_{i=1}^n X_i\) and \(\bar{X_n}\) be an estimator of \(\mu\): \(\bar{X_n}=\frac{1}{n}S_n=\frac{1}{n}\sum_{i=1}^n X_i\).</p>
+
+<p>Then as n tends to infinity, the random variables:</p>
+<ul>
+  <li>\(S_n \sim \mathcal{N}(n\mu, n\sigma^2)\),</li>
+  <li>\(\bar{X_n} \sim \mathcal{N}(\mu, \frac{\sigma^2}{n})\).</li>
+</ul>
+
+<p>The average \(\bar{X_n}\) of the sum of \(n\) iid random variables with \(\mathbb{E}[X_i]=\mu\) converges toward \(\mu\) at a rate \(\frac{1}{\sqrt{n}}\).</p>
+
+<p>Let’s now define \(Z_n\) as:</p>
+
+\[Z_n = \frac{S_n-n\mu}{\sigma\sqrt{n}} = \sqrt{n}\frac{\bar{X_n}-\mu}{\sigma}\]
+
+<p>Then:</p>
+
+\[Z_n \sim \mathcal{N}(0, 1)\]
+
+<p><br /></p>
+<h2 id="resources-1">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Central_limit_theorem">Wikipedia page for CLT</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/Théorème_central_limite">Wikipedia page for CLT in french</a>.</li>
+</ul>
+
+<p><br /><br /></p>
+<h1 id="markov-inequality">Markov Inequality</h1>
+<p>Let \(Z\) be a random variable almost surely positive of null, Then</p>
+
+\[\forall a \gt 0 \text{, } \; P(Z \geq a) \leq \frac{\mathbb{E}[Z]}{a}\]
+
+<p><br /></p>
+<h4 id="proof">Proof</h4>
+<p>Let \(a \in \mathbb{R}_+^*\) and \(1_{\{Z \geq a\}}\) be the indicatrice function of the event \(Z \geq a\).</p>
+
+\[a \cdot 1_{\{Z \geq a\}} \leq Z \cdot 1_{\{Z \geq a\}} \leq Z\]
+
+<p>The first inequality holds as if \(Z\) is smaller than \(a\) than both the first and second part are null and the second inequality holds as \(Z\) is always greater or equal than himself and \(Z\) is positive or null hence greater or equal than 0.</p>
+
+<p>Taking the expected values of first and third part we get:</p>
+
+\[\mathbb{E}[a \cdot 1_{\{Z \geq a\}}] \leq \mathbb{E}[Z] \implies \mathbb{E}[a] \cdot \mathbb{E}[1_{\{Z \geq a\}}] \leq \mathbb{E}[Z]\]
+
+<p>The expected value of a deterministic value is the value itself and the expected value of an indicatrice function is the probability of the event hence we obtain:</p>
+
+\[a \cdot P(Z \geq a) \leq \mathbb{E}[Z]\]
+
+<p>And finally:</p>
+
+\[P(Z \geq a) \leq \frac{\mathbb{E}[Z]}{a}\]
+
+<p><br /></p>
+<h2 id="resources-2">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Markov%27s_inequality">Markov inequality page on Wikipedia</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/Inégalité_de_Markov">Markov inequality page on Wikipedia (in french)</a>.</li>
+</ul>
+
+<p><br /><br /></p>
+<h1 id="bienaymé-tchebychev-inequality">Bienaymé-Tchebychev Inequality</h1>
+<p>Let \(X\) be a random variable with expected value \(\mathbb{E}[X]\) and variance \(\sigma^2\).
+Bienaymé-Tchebychev inequality says:</p>
+
+\[\forall \alpha \gt 0 \text{, } \; P(\vert X - \mathbb{E}[X] \vert \geq \alpha) \leq \frac{\sigma^2}{\alpha^2}\]
+
+<p><br /></p>
+<h4 id="proof-1">Proof</h4>
+<p>The proof is done applying Markov inequality with the variable \(Z\) being \((X - \mathbb{E}[X])^2\) and the variable \(a\) being \(\alpha^2\). Let’s apply Markov inequality:</p>
+
+\[P((X - \mathbb{E}[X])^2 \geq \alpha^2) \leq \frac{\mathbb{E}[(X - \mathbb{E}[X])^2]}{\alpha^2}\]
+
+<p>\(\mathbb{E}[(X - \mathbb{E}[X])^2\) is \(\sigma^2\) and as \(\alpha \gt 0\) then \(((X - \mathbb{E}[X])^2 \geq \alpha^2) = (\vert X - \mathbb{E}[X] \vert \geq \alpha)\).</p>
+
+<p>We thus obtain:</p>
+
+\[P(\vert X - \mathbb{E}[X] \vert \geq \alpha) \leq \frac{\sigma^2}{\alpha^2}\]
+
+<p><br /></p>
+<h2 id="resources-3">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Chebyshev%27s_inequality">Bienaymé-Tchebychev inequality page on Wikipedia</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/Inégalité_de_Bienaymé-Tchebychev">Bienaymé-Tchebychev inequality page on Wikipedia (in french)</a>.</li>
+</ul>
+
+<p><br /><br /></p>
+<h1 id="type-of-convergence">Type of convergence</h1>
+<h2 id="convergence-linfty">Convergence \(L^\infty\)</h2>
+<p>Recall that a variable \(Y\) is essantially bounded if there exists a value \(M \gt 0\) such that \(P(\vert Y \vert \leq M)=1\).</p>
+
+<p>We define \(\Vert Y \Vert_{L^\infty}\) as the infimum (the smallest) of the ensemble of theses bounds.</p>
+
+<p>The serie \((X_n)\) converges in \(L^\infty\) norm (or essentially uniformaly) toward \(X\) if for all \(n\), \((X_n)\) and \(X\) are essentially bounded and:</p>
+
+\[\lim_{n \rightarrow \infty} \Vert X_n - X \Vert_{L^\infty} = 0\]
+
+<p>We write \(X_n \rightarrow^{L^\infty} X\).</p>
+
+<p><br /></p>
+<h2 id="convergence-lp">Convergence \(L^P\)</h2>
+<p>Recall that a variable \(Y\) has a moment of order \(p \gt 0\) if \(\mathbb{E}[\vert Y \vert^p] \lt +\infty\).</p>
+
+<p>We define \(\Vert Y \Vert_{L^p} := \mathbb{E}[\vert Y \vert^p]^{1/p}\).</p>
+
+<p>Let \(p \gt 0\). The serie \((X_n)\) converges in \(L^p\) norm toward \(X\) if for all \(n\), \((X_n)\) and \(X\) have a moment of order \(p\) and:</p>
+
+\[\lim_{n \rightarrow \infty} \Vert X_n - X \Vert_{L^p} = 0\]
+
+<p>or equivalently:</p>
+
+\[\lim_{n \rightarrow \infty} \mathbb{E}\left[\vert X_n - X \vert^p\right] = 0\]
+
+<p>We write \(X_n \rightarrow^{L^p} X\).</p>
+
+<p><br /></p>
+<h2 id="convergence-almost-surely-presque-sure">Convergence almost surely (presque sure)</h2>
+<p>The serie \((X_n)\) converges almost surely toward \(X\) if:</p>
+
+\[P\left(\lim_{n \rightarrow \infty} X_n = X \right) = 1\]
+
+<p>We write \(X_n \rightarrow^{a.s.} X\).</p>
+
+<p><br /></p>
+<h2 id="convergence-in-probability-en-probabilité">Convergence in probability (en probabilité)</h2>
+<p>The serie \((X_n)\) converges in probability toward \(X\) if:</p>
+
+\[\forall \varepsilon \gt 0 \text{, } \; \lim_{n \rightarrow \infty} P\left(\vert X_n - X \vert \geq \varepsilon \right) = 0\]
+
+<p>We write \(X_n \rightarrow^{P} X\).</p>
+
+<p><br /></p>
+<h2 id="convergence-in-distribution-en-loi">Convergence in distribution (en loi)</h2>
+<p>The serie \((X_n)\) converges in distribution toward \(X\) if for all real values, continuous and bounded function \(f\):</p>
+
+\[\lim_{n \rightarrow \infty} \mathbb{E}\left[f(X_n)\right] = \mathbb{E}\left[f(X)\right]\]
+
+<p>We write \(X_n \rightarrow^{L} X\).</p>
+
+<p><br /></p>
+<h2 id="implications">Implications</h2>
+<p>See this diagram (in french):</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/convergences_map.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h2 id="resources-4">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Convergence_of_random_variables">Wikipedia page of convergences</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Convergence_of_random_variables">Wikipedia page of convergences (in french)</a>.</li>
+</ul>
+
+  </body>
+</html>

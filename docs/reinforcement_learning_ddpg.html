@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>DDPG</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-actor-critic"><a href="/Revision/reinforcement_learning_actor_critic.html">Back to Actor Critic</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>Deep Deterministic Policy Gradient method (DDPG) is an actor critic model used to deal with continuous action space.</p>
+
+<p>Unlike the other actor critic methods using a <a href="/Revision/reinforcement_learning_dqn.html">DQN</a> like model to estimate a distribution probability over the possible action, DDPG directly estimates the best possible action in a deterministic way (in practice a noise is added to the selected action - remember that we are now in a continuous space).</p>
+
+<p><br /></p>
+<h1 id="advantage">Advantage</h1>
+<p>The main advantage of outputing the best possible action is that DDPG can easily deal with continous space action function, the other methods generally output a probability for a finite list of actions.</p>
+
+<p><br /></p>
+<h1 id="structure">Structure</h1>
+<p>DDPG is an actor critic method:</p>
+<ul>
+  <li>The actor of the DDPG outputs the best possible action \(a\) at each state \(s\),</li>
+  <li>The critic compute the advantage function using this action.</li>
+</ul>
+
+<p>Here is an image of DDPG:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/DDPG.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>The function \(\mu(s, \theta_\mu)\) outputs the best possible action given policy \(\pi_\theta\) and state \(s\):</p>
+
+\[\mu(s, \theta_\mu) = arg\max_{a}Q(a,s)\]
+
+<p>The critic \(Q\) uses this action, the recevied reward and the next state to update its parameters using TD estimate. It also estimates the action value function and the advantage value function which will then be used to train the actor.</p>
+
+<p><br /></p>
+<h1 id="tricks">Tricks</h1>
+<h2 id="soft-update-of-the-target-network">Soft update of the target network</h2>
+<p>Both actor and critics use a regular and a target network.
+Unlike in the <a href="/Revision/reinforcement_learning_dqn.html#fixed-target">DQN model</a>, these networks are softly updated (instead of being updated evert \(C\) steps):</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/DDPG_FT.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="batch-normalization">Batch normalization</h2>
+<p>DDPG also relies on <a href="/Revision/deep_learning_batch_normalization.html">Batch normalization</a> to normalize the outputs of layers and obtain better gardient smoothing.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li>UDRLN videos 3.4.14 , 3.4.15,</li>
+  <li><a href="https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html">this blog post by Lilian Weng</a>.</li>
+</ul>
+
+  </body>
+</html>

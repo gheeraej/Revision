@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Python - TensorFlow</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-python"><a href="/Revision/python.html">Back to Python</a></h2>
+
+<p><br /></p>
+<h1 id="import">Import</h1>
+<p>Base import of TensorFlow requires <code class="language-plaintext python highlighter-rouge">tensorflow</code> and is generally cast as <code class="language-plaintext python highlighter-rouge">tf</code>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span></code></pre></figure>
+
+<p><br /><br /></p>
+<h1 id="model-creation">Model Creation</h1>
+<p>A TensorFlow model is created as an instance of <code class="language-plaintext python highlighter-rouge">tf.keras.models.Sequential</code>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">models</span><span class="p">.</span><span class="n">Sequential</span><span class="p">([</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Flatten</span><span class="p">(</span><span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)),</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">),</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.2</span><span class="p">),</span>
+  <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="p">])</span></code></pre></figure>
+
+<p>The <code class="language-plaintext python highlighter-rouge">model</code> uses different composants of TensforFlow that are in <code class="language-plaintext python highlighter-rouge">tf.keras.layers</code>.
+The <code class="language-plaintext python highlighter-rouge">backward</code> is implicitly created from the forward method and the composants used.</p>
+
+<p><br /><br /></p>
+<h1 id="training">Training</h1>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s">'adam'</span><span class="p">,</span>
+              <span class="n">loss</span><span class="o">=</span><span class="n">loss_fn</span><span class="p">,</span>
+              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+<span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span></code></pre></figure>
+
+<p>The training of the model is easily done in TensorFlow using the <code class="language-plaintext python highlighter-rouge">compile</code> method. It only requires to specify the optimizer, the loss and the metrics to check.
+Then the training is launch on the data using the <code class="language-plaintext python highlighter-rouge">fit</code> method and specifying the input and output data.</p>
+
+<p><br /><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://www.tensorflow.org/tutorials/quickstart/beginner">QuickStart page of TensorFlow</a>.</li>
+</ul>
+
+  </body>
+</html>

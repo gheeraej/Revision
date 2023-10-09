@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>General Mathematics - Optimization</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-general-mathematics"><a href="/Revision/mathematics.html">Back to General Mathematics</a></h2>
+
+<p><br /></p>
+<h1 id="gradient-descent">Gradient descent</h1>
+<p>Gradient descent is a first-order iterative optimization algorithm for finding a local minimum of a differentiable function.
+To find the minimum of a function \(f\) it starts with an initial guess \(x_0\) and then will update its guess using the gradient descent rule:</p>
+
+\[x_{i+1} = x_{i} - \alpha \frac{df(x_i)}{dx_i}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\alpha\) is an hyperparameter that modify the step sizes</li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/gradient_descent.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h3 id="link-with-taylors-expansion">Link with <a href="/Revision/mathematics_functional_analysis.html#taylor-s-theorem">Taylor’s expansion</a></h3>
+<p>Using the formulation:</p>
+
+\[f(a+h) = f(a)+\frac{f'(a)}{1!}h+\frac{f^{(2)}(a)}{2!}h^2 + ... + \frac{f^{(k)}(a)}{k!}h^k + o(h^k)\]
+
+<p>up to the first derivative we get:</p>
+
+\[\begin{eqnarray}
+f(a+h) &amp;&amp;= f(a)+\frac{f'(a)}{1!}h + o(h) \\
+&amp;&amp;= f(a) + h \cdot f'(a) + o(h)
+\end{eqnarray}\]
+
+<p>In this setup, we look for the step \(h\) that will decrease the value of the function:</p>
+
+<ul>
+  <li>\(f(a)\) is the current value of the function using the current point (\(a\) in the example or \(x_i\)),</li>
+  <li>As we look for the minimum we want to reduce the value of \(f(a+h)\) compared to \(f(a)\). In other words, we want \(h \cdot f'(a)\) to be negative (ignoring \(o(h)\)),</li>
+  <li>\(f'(a)\) is the derivative with respect to the current point \(a\). We can’t modify it,</li>
+  <li>In order to make \(h \cdot f'(a)\) negative, we must choose \(h\) such that the sign of \(h\) is the opposite of the sign of \(f'(a)\).</li>
+</ul>
+
+<p>Hence we could choose \(h=-sign(f'(a))\).</p>
+
+<p>But the gradient descent algorithm choose another option: \(h=-\alpha f'(a)\).
+Using this formulation of \(h\), \(h \cdot f'(a)\) is still negative and \(f(a+h)\) smaller than \(f(a)\).</p>
+
+<p>Why the value of \(h\) is relative to the magnitude of \(f'(a)\) and not just its sign?
+The answer is that for smooth functions, the gradient of a function is expected to decrease as we moove closer to the minimum hence the steps are expected to be smallers.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See <a href="https://en.wikipedia.org/wiki/Gradient_descent">Wikipedia page for Gradient Descent</a>.</p>
+
+<p><br /></p>
+<h1 id="newtons-method">Newton’s method</h1>
+<p>Newton’s method is an iterative optimization algorithm for finding the roots of a differentiable function \(f\), which are solution of \(f(x)=0\).</p>
+
+<p>If \(f\) is twice differentiable, Newton’s method can be applied to the derivative of \(f\), \(f'\) in order to find the minimum (or maximum or saddle point) of \(f\) (as \(f(x)\) is \(\max\) or \(\min\) or saddle point if \(f'(x)=0\)).</p>
+
+<p><br /></p>
+<h2 id="newtons-method-to-find-the-0-of-a-function">Newton’s method to find the 0 of a function</h2>
+<p>To find the zero of a function \(f\) Newton’s method starts with an initial guess \(x_0\) and the update rule is:</p>
+
+\[x_{i+1} = x_{i} - \frac{f(x_i)}{f'(x_i)}\]
+
+<p>Let’s now focus on the optimization objective (minimization). We will give more details in this following part.</p>
+
+<p><br /></p>
+<h2 id="optimization-using-newtons-method">Optimization using Newton’s method</h2>
+<p>To find the minimum of a function \(f\) Newton’s method starts with an initial guess \(x^0\) and then will update its guess using a second order rule:</p>
+
+\[x_{i+1} = x_{i} - \alpha \frac{f'(x_i)}{f^{(2)}(x_i)}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\alpha\) is an hyperparameter that modify the step sizes (not always mentioned)</li>
+</ul>
+
+<p>The update rule is similar to the one in gradient descent but it is scaled by the inverse of the second derivative of \(f\).</p>
+
+<p>In higher dimension we obtain:</p>
+
+\[x_{i+1} = x_{i} - \alpha \left(\triangledown^{2}f(x_i)\right)^{-1} \triangledown f(x_i)\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\triangledown f(x) \in \mathbb{R}^d\) is the derivative of \(f\),</li>
+  <li>\(\triangledown^{2} f(x) \in \mathbb{R}^{d \times d}\) is the Hessian of \(f\).</li>
+</ul>
+
+<p><br /></p>
+<h2 id="link-with-taylors-expansion-1">Link with <a href="/Revision/mathematics_functional_analysis.html#taylor-s-theorem">Taylor’s expansion</a></h2>
+<p>Newton’s method uses the second order approximation of the Taylor expansion of the function \(f\).</p>
+
+\[\begin{eqnarray}
+f(a+h) &amp;&amp;= f(a) + \frac{f'(a)}{1!}h + \frac{f^{(2)}(a)}{2!}h^2 + o(h^2) \\
+&amp;&amp;= f(a) + h \cdot f'(a) + h^2 \cdot \frac{1}{2}f^{(2)}(a) + o(h^2)
+\end{eqnarray}\]
+
+<p>Using \(x_i\) we get:</p>
+
+\[f(x_i+h) = f(x_i) + h \cdot f'(x_i) + h^2 \cdot \frac{1}{2}f^{(2)}(x_i) + o(h^2)\]
+
+<p><br /></p>
+
+<p>The current guess \(x_i\) for the minimum (or maximum) of the function \(f\) gives an associated minimum value \(f(x_i)\) and its derivative is \(f'(x_i)\). If \(f'(x_i)=0\) we are done. Otherwise we search a new \(x_{i+1}\) such that \(f'(x_{i+1})=0\). Equivalently we search \(h\) such that \(f'(x_i+h)=0\) (\(x_{i+1} = x_i + h\)).</p>
+
+<p>Note that the sense of the optimization is dependent of the second derivative of \(f\). If \(f^{(2)}(x) \gt 0\) then we are converging to a minimum, otherwise to a maximum.</p>
+
+<p>For small step \(h\) we can apply the Taylor’s theorem to the neighbourhood of \(x_i\) until order two (or order one for gradient descent). We then compute the derivative and set it to 0:</p>
+
+<p><br /></p>
+
+\[\begin{eqnarray}
+\frac{d f(x_i+h)}{dx_i} &amp;&amp;= f'(x_i) + h \cdot f^{(2)}(x_i) &amp;&amp; \\
+&amp;&amp; \Rightarrow f'(x_i) + h \cdot f^{(2)}(x_i) = 0 \; \; \; &amp;&amp; \text{Setting the derivative to 0} \\
+&amp;&amp; \Rightarrow h = \frac{f'(x_i)}{f^{(2)}(x_i)} &amp;&amp;
+\end{eqnarray}\]
+
+<p><br /></p>
+
+<p>Hence, the update rule for \(x_{i+1}\) is:</p>
+
+\[x_{i+1} = x_{i} - \frac{f'(x_i)}{f^{(2)}(x_i)}\]
+
+<p>We can add an hyperparameter \(\alpha\) to scale the step.</p>
+
+<p><br /></p>
+<h2 id="resources-1">Resources</h2>
+<p>See <a href="https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization">Wikipedia page for Newton’s method</a>.</p>
+
+<p><br /></p>
+<h1 id="note-on-the-second-derivative">Note on the second derivative</h1>
+<p>When finding a flat point of a function \(f\), ie a point \(x\) for which the derivative is null, \(f'(x)=0\) we do not know if the point is a minimum or a maximum.</p>
+
+<p>The second derivative however gives us the information:</p>
+<ul>
+  <li>if \(f^{(2)}(x) \gt 0\), the point is a minimum,</li>
+  <li>if \(f^{(2)}(x) \lt 0\), the point is a maximum.</li>
+</ul>
+
+<p>\(f^{(2)}(x) \gt 0\) means that the derivative of \(f\) will get bigger in the neighbourhood of \(f\), hence becoming positive as \(f'(x)=0\) and hence \(f(x)\) will get bigger.</p>
+
+<p>\(f^{(2)}(x) \lt 0\) means that the derivative of \(f\) will get smaller in the neighbourhood of \(f\), hence becoming negative as \(f'(x)=0\) and hence \(f(x)\) will get smaller.</p>
+
+<p><br /></p>
+<h1 id="linear-optimization">Linear Optimization</h1>
+<h2 id="simplex">Simplex</h2>
+<h2 id="interior-point">Interior point</h2>
+<h2 id="lagrange-duality">Lagrange Duality</h2>
+
+<p><br /></p>
+<h1 id="quadratic-optimization">Quadratic Optimization</h1>
+<h2 id="interior-point-1">Interior point</h2>
+<h2 id="active-set">Active Set</h2>
+<h2 id="augmented-lagrangian">Augmented Lagrangian</h2>
+<h2 id="conjugate-gradient">Conjugate Gradient</h2>
+<h2 id="simplex-1">Simplex</h2>
+
+  </body>
+</html>

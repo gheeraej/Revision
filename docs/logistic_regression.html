@@ -1,0 +1,400 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Logistic Regression</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-machine-learning"><a href="/Revision/machine_learning.html">Back to Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>Logistic regression is a classification method that predicts observed binary variables \(Y \in \{0, 1\}\) from explanatory variables X.</p>
+
+<p>\(Y \sim \mathcal{B}\): Y follows a Bernoulli distribution.</p>
+
+<p>It is a member of the Generalized linear models: logistic regression applies a sigmoid function on linearly regressed inputs.</p>
+
+<p><br /></p>
+<h1 id="assumptions">Assumptions</h1>
+<p>The logistic regression does not require assumptions as strong as the linear regression. However to obtain good estimations some assumptions must be respected:</p>
+
+<p>1) Independence of observations: \(\mathrm{Cov}(\varepsilon_i, \varepsilon_j) = 0 \; (i \neq j)\)</p>
+
+<p>2) Linear relation between explanatory variables and the logit of the observed variables must be linear. Let \(p=P(Y=1 \vert X)\), thus we want \(\log\frac{p}{1-p}\) to have a linear relation to X,</p>
+
+<p>3) No collinearity: explanatory variables are linearly independent ie the matrix X is of maximal rank - \(rank = n_{parameters}\),</p>
+
+<p>4) No strongly influential outlier</p>
+
+<p><br /></p>
+<h4 id="how-to-check-assumptions">How to check assumptions</h4>
+<p>1) Plot of residuals</p>
+
+<p>2) Box-Tidwell Test</p>
+
+<p>3) VIF</p>
+
+<p>4) Cook distance + standardized residuals</p>
+
+<p>This part has been written based on <a href="https://towardsdatascience.com/assumptions-of-logistic-regression-clearly-explained-44d85a22b290">this toward data science post</a></p>
+
+<p><br /></p>
+<h1 id="formula">Formula</h1>
+<h2 id="sigmoid-function">Sigmoid function</h2>
+<p>First let’s introduce the sigmoid function:</p>
+
+\[g(z)=\frac{1}{1+e^{-z}}\]
+
+<p>The sigmoid function insures that the output of the logistic regression model are between 0 and 1 ie they represent a probability. See <a href="/Revision/sigmoid_and_softmax.html#sigmoid-function">the page for Sigmoid function for more details</a>.</p>
+
+<p>Using the sigmoid function, let’s define \(h_\beta(X)\) as \(g(\beta X)\):</p>
+
+\[h_\beta(X)=g(\beta X)=\frac{1}{1+e^{-\beta X}}\]
+
+<p><br /></p>
+<h2 id="logit">Logit</h2>
+<p>The Logit function is the inverse of the sigmoid function:</p>
+
+\[logit(p) = \log\left(\frac{p}{1-p}\right) \;\;\; \forall p \in ]0, 1[\]
+
+<p>See <a href="/Revision/sigmoid_and_softmax.html#logit-function">the page for Logit function for more details</a>.</p>
+
+<p><br /></p>
+
+<p>Logistic regression is from the family of regression models as the relation between the input data \(X\) and the logit of the predictions made by the model is linear. In other terms, the logit of the prediction of the model \(\beta X\) are a linear combination of the variables \(X\).</p>
+
+<p>This is immediate using the formula of the logistic regression and of the logit function:</p>
+
+\[logit(h_\beta(X)) = logit(g(\beta X)) = \beta X\]
+
+<p>As \(logit(g(x)) = x\).</p>
+
+<p>Logit means logistic units and is also called log-odds.</p>
+
+<p><br /></p>
+<h3 id="odds">Odds</h3>
+<p>To understand what log-odds is it is important to important what odds is.</p>
+
+<p>Odds is simply the ratio between the probability of success over the probability of failure:</p>
+
+\[odds(p) = \frac{p}{1-p} = \exp(logit(p))\]
+
+<p>Where:</p>
+<ul>
+  <li>\(p\) represents the probability of a success in the experiment,</li>
+  <li>\(1-p\) represent the probability of a failure in the experiment,</li>
+</ul>
+
+<p>Note that this value is positive but can be greater than 1.</p>
+
+<p><br /></p>
+<h4 id="example">Example</h4>
+<p>For example when throwing a dice, the probability to get a 4 is \(1/6\) however the odds of getting a 4 is \(\frac{1/6}{5/6}=\frac{1}{5}\). It is simply the probability of winning (to get a 4) over the probability of losing (to get another number).</p>
+
+<p><br /></p>
+<h2 id="definition-of-py-vert-x">Definition of \(P(Y \vert X\))</h2>
+<p>Let’s define the probability of Y given X in a logistic regression:</p>
+
+\[\begin{cases}
+  P(Y=1 \vert X; \beta)=h_\beta(X)\\
+  P(Y=0 \vert X; \beta)=1-h_\beta(X)\\
+\end{cases}\]
+
+<p><br /></p>
+
+<p>The probability for \(Y=1\) is \(h_\beta(X)\) and for \(Y=0\) it is \(1-h_\beta(X)\).</p>
+
+<p>Hence the above definition can be summarize in one line using the property of the power function:</p>
+
+\[P(Y \vert X; \beta)=\left(h_\beta(X)\right)^Y\left(1-h_\beta(X)\right)^{1-Y}\]
+
+<p>If \(Y=1\) the right part is equal to 1 and thus we obtain \(h_\beta(X)\) and if \(Y=0\) the left part is equal to 1 and thus we obtain \(1-h_\beta(X)\).</p>
+
+<p><br /></p>
+<h1 id="calibration-using-mle-and-gradient-descent">Calibration using MLE and gradient descent</h1>
+<p><a href="/Revision/estimators.html#maximum_likelihood">Maximum likelihood</a> is used to calibrate the parameter \(\beta\) and <a href="/Revision/mathematics_optimization.html#gradient_descent">Gradient Descent</a> is used to make the optimization.
+Let’s define the likelihood function \(L(\beta)\) as follow:</p>
+
+\[\begin{eqnarray}
+L(\beta) &amp;&amp;= P(Y \vert X; \beta) \\
+&amp;&amp;= \prod_{j=1}^{n_{pop}}P(Y^{(j)} \vert X^{(j)}; \beta) \\
+&amp;&amp;= \prod_{j=1}^{n_{pop}}\left(h_\beta(X^{(j)})\right)^{Y^{(j)}}\left(1 - h_\beta(X^{(j)})\right)^{1-Y^{(j)}} \\
+\end{eqnarray}\]
+
+<p>It can also be wrote:</p>
+
+\[\begin{eqnarray}
+L(\beta) &amp;&amp;= \prod_{j:Y^{(j)}=1} h_\beta(X^{(j)}) \; \prod_{j:Y^{(j)}=0} \left(1 - h_\beta(X^{(j)})\right) \\
+&amp;&amp;= \prod_{j=1}^{n_{pop}}\left(h_\beta(X^{(j)})\right)^{Y^{(j)}}\left(1 - h_\beta(X^{(j)})\right)^{1-Y^{(j)}}
+\end{eqnarray}\]
+
+<p><br /></p>
+
+<p>Now let’s define the log likelihood function:</p>
+
+\[\begin{eqnarray}
+l(\beta) &amp;&amp;= \log L(\beta) \\
+&amp;&amp;= \log \left[\prod_{j=1}^{n_{pop}}P(Y^{(j)} \vert X^{(j)}; \beta)\right] \\
+&amp;&amp;= \sum_{j=1}^{n_{pop}}Y^{(j)} \log h_\beta(X^{(j)})+(1-Y^{(j)})\log\left(1-h_\beta(X^{(j)})\right)
+\end{eqnarray}\]
+
+<p>Here we recognize the <a href="/Revision/loss_functions.html#binary_cross_entropy_loss">binary cross entropy loss function</a>.</p>
+
+<p>Let’s differentiate with respect to one \(\beta_i\):</p>
+
+\[\begin{eqnarray}
+\frac{d}{d\beta_i}l(\beta) &amp;&amp;= \left[Y \frac{1}{g(\beta X)} - (1-Y) \frac{1}{1 -g(\beta X)}\right]\frac{d}{d\beta_i}g(\beta X) \\
+&amp;&amp;= \left[Y \frac{1}{g(\beta X)} - (1-Y) \frac{1}{1 -g(\beta X)}\right]g(\beta X)(1-g(\beta X))\frac{d}{d\beta_i}\beta X \\
+&amp;&amp;= \left[Y (1-g(\beta X)) - (1-Y)g(\beta X)\right]X_i \\
+&amp;&amp;= \left[Y-g(\beta X)\right]X_i \\
+&amp;&amp;= \left[Y-h_\beta(X)\right]X_i
+\end{eqnarray}\]
+
+<p>In the derivative we use the fact that \(\frac{1}{dz}g(z)=g(z)\left(1-g(z)\right)\).</p>
+
+<p>Thus the gradient descent rule is:</p>
+
+\[\beta_i=\beta_i-\alpha \left[Y-h_\beta(X) \right] X_i\]
+
+<p><br /></p>
+<h1 id="interpretation-of-beta">Interpretation of \(\beta\)</h1>
+<p>We said that the \(\beta\) were linearly linked to the logit or the log odds.</p>
+
+<p>Hence:</p>
+<ul>
+  <li>\(\beta_i \gt 0\) will:
+    <ul>
+      <li>Increase the log odds and hence the odds of success when the associated feature \(X_i\) increases,</li>
+      <li>Decrease the log odds and hence the odds of success when the associated feature \(X_i\) decreases.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Equivalently:</p>
+<ul>
+  <li>\(\beta_i \lt 0\) will:
+    <ul>
+      <li>Decrease the log odds and hence the odds of success when the associated feature \(X_i\) increases,</li>
+      <li>Increase the log odds and hence the odds of success when the associated feature \(X_i\) decreases.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p>Also we can compare the log-odds when \(X_i\) is augmented by 1. Recall:</p>
+
+\[logit(h_\beta(X)) = \beta X = \sum_{i=1}^{n_features} \beta_i X_i\]
+
+<p>And:</p>
+
+\[odds(h_\beta(X)) = \exp \left(\beta X \right) = \exp \left(\sum_{i=1}^{n_features} \beta_i X_i\right)\]
+
+<p><br /></p>
+
+<p>Let’s define \(X'\) similar as \(X\) with the only difference being for the \(k\)-th feature where \(X_k^{'} = X_k+1\).</p>
+
+\[\begin{eqnarray}
+\frac{odds(h_\beta(X'))}{odds(h_\beta(X))} &amp;&amp;= \frac{\exp \left(\beta X' \right)}{\exp \left(\beta X \right)} \\
+&amp;&amp;= \frac{\exp \left(\sum_{i=1}^{n_features} \beta_i X_i^{'}\right)}{\exp \left(\sum_{i=1}^{n_features} \beta_i X_i\right)} \\
+&amp;&amp;= \frac{\exp \left(\beta_k X_k^{'} \sum_{i \neq k}^{n_features} \beta_i X_i^{'}\right)}{\exp \left(\beta_k X_k \sum_{i \neq k}^{n_features} \beta_i X_i\right)} \\
+&amp;&amp;= \frac{\exp (\beta_k (X_k + 1))}{\exp (\beta_k X_k)} \\
+&amp;&amp;= \exp (\beta_k)
+\end{eqnarray}\]
+
+<p>Hence by increasing the \(k\)-th feature by \(1\), the odds of success change by exactly \(\exp (\beta_k)\).</p>
+
+<p><br /></p>
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://www.unm.edu/~schrader/biostat/bio2/Spr06/lec11.pdf">This course on Logistic Regression by University of New Mexico</a>,</li>
+  <li><a href="https://stats.stackexchange.com/questions/442789/interpretation-of-the-beta-regression-coefficients-with-logit-link-used-to-analy">This StackExchange question</a>,</li>
+  <li><a href="https://towardsdatascience.com/a-simple-interpretation-of-logistic-regression-coefficients-e3a40a62e8cf">This Toward Data Science blog post by Dina Jankovic</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="distribution-of-hatbeta">Distribution of \(\hat{\beta}\)</h1>
+<p>The variance of \(\beta\) is:</p>
+
+\[\hat{\sigma}_\hat{\beta}^2 = \hat{I}^{-1}(\hat{\beta})\]
+
+<p>With:</p>
+
+\[\hat{I}(\hat{\beta}) = X^t \hat{V} X\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\hat{V}\) is a diagonal matrix,</li>
+  <li>\(\hat{V}_{(j,j)} = h_{\hat{\beta}}(X^{(j)}) \cdot (1 - h_{\hat{\beta}}(X^{(j)}))\).</li>
+</ul>
+
+<p>Using the notation \(\hat{\pi}_j = h_{\hat{\beta}}(X^{(j)})\) and \(n = n_{pop}\), we get:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/logistic_beta_variance.png" width="25%" height="25%" />
+</div>
+<p><br /></p>
+
+<p>The mean of \(\hat{\beta}\) is the estimated value of \(hat{\beta}\).</p>
+
+<p><br /></p>
+<h1 id="statistical-test">Statistical test</h1>
+<h2 id="goodness-of-fit">Goodness of fit</h2>
+<p>The test for goodness of fit test the global quality of the model.</p>
+
+<p><br /></p>
+<h3 id="deviance-ratio-test-or-likelihood-ration-test">Deviance ratio test or Likelihood ration test</h3>
+<p>The deviance ratio test is based on the ratio of the likelihood of:</p>
+<ul>
+  <li>A null model constructed as the best possible model predicting the same value for every individuals,</li>
+  <li>Out fitted model.</li>
+</ul>
+
+<p><br /></p>
+<h4 id="formula-1">Formula</h4>
+<p>The null model is constructed as follow:</p>
+
+\[h_0 = \frac{1}{n_{pop}} \sum_{j=1}^{n_{pop}} \mathrm{1}_{Y^{(j)}=1}\]
+
+<p>Its prediction is simply the percentage of individuals of class 1 in the training data.</p>
+
+<p>The deviance ratio statistics is then:</p>
+
+\[D = -2 \ln \frac{L(h_0)}{L(h_\beta)} \sim \chi_{n_{features}}^2\]
+
+<p><br /></p>
+<h4 id="link-with-fisher-test">Link with Fisher test</h4>
+<p>This is analogous to the <a href="/Revision/linear_regression.html#fisher-test">Fisher test used in Linear Regression</a>.</p>
+
+<p>In the Deviance ratio test:</p>
+<ul>
+  <li>The \(SS_Residual\) are replaced by the \(SS_Total\) that are represented as the likelihood of the null model (estimated as the average prediction - similar to the average \(\bar{y}\) in \(SS_Total\)),</li>
+  <li>The \(SS_Explained\) are replace by the likelihood of the fitted model (likelihood explained).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="general-deviance-test">General deviance test</h4>
+<p>Note that the deviance test is normally done using an oracle (called saturated model):</p>
+
+\[D = -2 \ln \frac{L(h_\beta)}{L(h_{\text{oracle}})} \sim \chi_{n_{pop}-(n_{features}+1)}^2\]
+
+<p>As this saturated model is generally unknown, the test is modified to represent the gain in deviance of the fitted model vs a null model \(D_{fitted} - D_{null}\). Using the properties of the \(\ln\) function we can find the deviance ratio test as presented above.</p>
+
+<p>The number of degrees of liberty of the \(chi^2\) distribution is the number of features of the model in the denominator minus the number of features of the model in the numerator.</p>
+
+<h4 id="resources-1">Resources:</h4>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Logistic_regression">Wikipedia page for Logistic regression</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Likelihood-ratio_test">Wikipedia page for Likelihood-ratio test</a></li>
+  <li><a href="http://acctlib.ui.ac.id/file?file=digital/2016-12/13095-Applied%20Logistic%20Regrestion,%20%203.ed%20-%20David%20W.%20Hosmer%20Jr.pdf">Applied Logistic Regression by DW Hosmer, S Lemeshow and RX Sturdivant (p. 10; p. 156)</a>.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="pseudo-r-squared">Pseudo R-squared</h3>
+<p>In logistic regression analysis, there is no equivalence of the \(R^2\) of linear regression but different measures exist:</p>
+
+<p><br /></p>
+<h4 id="likelihood-ratio">Likelihood ratio</h4>
+
+\[R_L^2 = \frac{D_{null} - D_{fitted}}{D_{null}} = 1 - \frac{D_{fitted}}{D_{null}}\]
+
+<p><br /></p>
+<h4 id="cox-and-snell">Cox and Snell</h4>
+
+\[R_{CS}^2 = 1 - \left(\frac{L(h_0)}{L(h_\beta)}\right)^{2/n_{pop}} = 1 - \exp \left(2\frac{L(h_0) - L(h_\beta)}{n_{pop}}\right)\]
+
+<p><br /></p>
+<h4 id="mcfadden">McFadden</h4>
+
+\[R_{MCF}^2 = 1 - \frac{\ln L(h_0)}{\ln L(h_\beta)}\]
+
+<p><br /></p>
+<h2 id="coefficient-significance">Coefficient significance</h2>
+<h3 id="deviance-ratio-test-or-likelihood-ratio-test">Deviance ratio test or Likelihood ratio test</h3>
+<p>Deviance ratio test can be applied to a model using only one feature. In this case the fitted model only uses this feature. The test is then done similarly than in the ‘Goodness of fit’ deviance ratio test:</p>
+
+\[D = -2 \ln \frac{L(h_0)} {L(h_{\beta_i})} \sim \chi_1^2\]
+
+<p><br /></p>
+<h2 id="wald-test">Wald test</h2>
+<p>The Wald test assesses the contribution of individual predictors in a given model. The Wald statistic for \(\beta_i\) is:</p>
+
+\[W_i = \frac{\beta_i^2}{\sigma_{\beta_i}^2} \sim \chi_1^2\]
+
+<p><br /></p>
+
+<p>It is also possible to test the vector of \(\beta\):</p>
+
+\[W = \beta^t \Sigma_\beta^{-1} \beta \sim \chi_{n_{features}}^2\]
+
+<p><br /></p>
+<h3 id="resources-2">Resources:</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Logistic_regression#Coefficient_significance">Wikipedia page for Logistic regression</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Wald_test">Wikipedia page for Wald test</a></li>
+</ul>
+
+<p><br /></p>
+<h1 id="generalization-to-multiclass-problem">Generalization to multiclass problem</h1>
+<p>For multiclass problem, the logistic regression is called multinomial logistic regression.</p>
+
+<p>The idea is to perform on regression for the log odds of each of the \(K\) output class. Hence the model will have a set of parameters \(\beta_{k,i}\) where \(k\) represent the output class and \(i\) the feature.</p>
+
+<p><br /></p>
+<h2 id="formula-2">Formula</h2>
+<p>The inference formula is the following:</p>
+
+\[\begin{eqnarray}
+P(Y^{(j)}=k) &amp;&amp;= \frac{e^{h_{\beta_k} (X)}}{\sum_{l=1}^K e^{h_{\beta_l} (X)}} \\
+&amp;&amp;= \frac{e^{\beta_k^t X}}{\sum_{l=1}^K e^{\beta_l^t X}}
+\end{eqnarray}\]
+
+<p><br /></p>
+
+<p>It can also be expressed using the <a href="/Revision/sigmoid_and_softmax.html#softmax-function">Softmax function</a>:</p>
+
+\[\begin{eqnarray}
+P(Y^{(j)}=k) &amp;&amp;= softmax(k; h_{\beta_1}(X), \ldots, h_{\beta_K}(X)) \\
+&amp;&amp;= softmax(k; \beta_1^t X, \ldots, \beta_K^t X) \\
+&amp;&amp;= \frac{e^{\beta_k^t X}}{\sum_{l=1}^K e^{\beta_l^t X}}
+\end{eqnarray}\]
+
+<p>Hence the \(softmax\) function replaces the \(sigmoid\) function in the multiclass problem.</p>
+
+<p><br /></p>
+<h2 id="estimation">Estimation</h2>
+<p>Maximum likelihood estimation is replaced by MAP (maximum a posteriori) estimation and the optimization is done by algorithms like L-BFGS.</p>
+
+<p><br /></p>
+<h2 id="resources-3">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Multinomial_logistic_regression">Wikipedia page for Multinomial logistic regression</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Logistic_regression">Logistic regression on Wikipedia page</a></li>
+  <li><a href="https://cs229.stanford.edu/syllabus.html">CS229 course on logistic regression (course 1 on supervised learning)</a></li>
+  <li><a href="https://scikit-learn.org/dev/modules/linear_model.html#logistic-regression">Logistic regression on Scikit-Learn</a></li>
+</ul>
+
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Grid and Random Search</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="machine-learning"><a href="/Revision/machine_learning.html">Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="hyperparameter-tuning">Hyperparameter tuning</h1>
+<p>Some models (the majority of the models) have hyperparameters.</p>
+
+<p>Hyperparameters are parameters that won’t be statistically calibrated but which are chosen arbitrarily by the user of the model.</p>
+
+<p><br /></p>
+<h2 id="example-of-hyperparameters">Example of hyperparameters</h2>
+<ul>
+  <li>Number of layers and neurons by layers in a neural network,</li>
+  <li>Regularization parameter in a penalized regression,</li>
+  <li>Maximum depth of a decision tree,</li>
+  <li>Splitting criterion of a decision tree,</li>
+  <li>Number of trees in a random forest,</li>
+  <li>Percentage of data in each decision tree of a random forest,</li>
+  <li>Maximum number of tree in a Gradient Boosting,</li>
+  <li>Learning rate in a Gradient Boosting,</li>
+  <li>Regularization parameter in a SVM,</li>
+  <li>Kernel of a SVM,</li>
+  <li>Number of cluster in K-means,</li>
+  <li>Number of dimension in PCA,</li>
+  <li>Minimum distance to be considered neighbours in DBSCAN,</li>
+  <li>Minimum number of neighbours to be considered a core sample in DBSCAN,</li>
+  <li>Distance metric and splitting criterion in Hierarchical Clustering,</li>
+  <li>Maximum distance in Hierarchical Clustering,</li>
+  <li>…</li>
+</ul>
+
+<p><br /></p>
+<h2 id="how-to-choose-the-right-hyperparameter-value">How to choose the right hyperparameter value?</h2>
+<p>Chosing the right hyperparameter value is a difficult task even more when the number of hyperparameters is important as it increases the number of possible models.</p>
+
+<p>A good understanding of the model, the input and the output data is helpful to choose wizely the hyperparameters.</p>
+
+<p>Another solution is to train the model with different combination of hyperparameters and test the results of each of them on a validation set and keep the one giving the best results. See <a href="/Revision/cross_validation.html">Cross validation</a> for more information on train, validation and test set.</p>
+
+<p>The number of combinations to test is arbitrarily chosen depending on the time and computation power available and the combinations may be chosen using two different methods.</p>
+
+<p><br /></p>
+<h1 id="grid-search">Grid search</h1>
+<p>Grid search defines for each hyperparameter a set of values to try and then tests all possible combinations of the hyperparameters values.</p>
+
+<p>For example for a Gradient Boosting algorithm, if I want to try:</p>
+<ul>
+  <li>Maximum depths of each decision tree: \([3, 9, 15]\),</li>
+  <li>Maximum number of trees: \([100, 1000, 2000, 10000]\),</li>
+  <li>Learning rate: \([10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}, 1, 10]\).</li>
+</ul>
+
+<p>Then grid search will test all the possible combination of these hyperparameters (ie 72 combinations).</p>
+
+<p><br /></p>
+<h1 id="random-search">Random search</h1>
+<p>Random search will test a given number of combinations randomly drawn from specified probabilistic distributions.</p>
+
+<p>For example for a Gradient Boosting algorithm, if I want to try:</p>
+<ul>
+  <li>Maximum depths of each decision tree: \(\mathcal{U}(3, 15)\),</li>
+  <li>Maximum number of trees: \(\mathcal{R}(10^2, 10^4)\),</li>
+  <li>Learning rate: \(\mathcal{R}(10^{-4}, 10)\).</li>
+</ul>
+
+<p>Where:</p>
+<ul>
+  <li>\(\mathcal{U}\) is the <a href="/Revision/probability_distributions_distributions.html#continuous-uniform">discrete uniform distribution</a>,</li>
+  <li>\(\mathcal{R}\) is the <a href="/Revision/probability_distributions_distributions.html#reciprocal-or-log-uniform">reciprocal (log-uniform) distribution</a>.</li>
+</ul>
+
+<p>Then grid search will test \(n\) (\(n\) being chosen by the user) randomly drawn combination of these hyperparameters.</p>
+
+<p><br /></p>
+<h1 id="comparison-of-grid-search-and-random-search">Comparison of Grid search and Random search</h1>
+<p>In general it is better to use random search as it will test more possible values for each hyperparameters.</p>
+
+<p>Here is a visual proof of this:</p>
+
+<div style="text-align: center">
+<img src="assets/images/search.png" width="40%" height="40%" />
+</div>
+<p>Core illustration from Random Search for Hyper-Parameter Optimization by Bergstra and Bengio. It is very often the case that some of the hyperparameters matter much more than others (e.g. top hyperparam vs. left one in this figure). Performing random search rather than grid search allows you to much more precisely discover good values for the important ones. (text from <a href="https://cs231n.github.io/neural-networks-3/#hyper">CS231n course</a>).</p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://cs231n.github.io/neural-networks-3/#hyper">CS231n course</a>,</li>
+  <li><a href="https://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search for Hyper-Parameter Optimization by Bergstra and Bengio</a>.</li>
+</ul>
+
+  </body>
+</html>

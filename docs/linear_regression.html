@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Linear Regression</title>
+    <link rel="stylesheet" href="assets/css/main.css">
     
       <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
@@ -13,31 +14,428 @@
     
   </head>
   <body>
-    <h1>Revision</h1>
-    <h1 id="linear-regression">Linear Regression</h1>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-machine-learning"><a href="/Revision/machine_learning.html">Back to Machine Learning</a></h2>
 
-<h2 id="formule">Formule</h2>
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>Linear regression is a regression algorithm that model a linear relation between explanatory variables and observed variables.</p>
 
-<h2 id="calibration">Calibration</h2>
-<h3 id="fonction-de-perte-et-mco">Fonction de perte et MCO</h3>
-<p>\(Y= \beta X + \epsilon\)</p>
-<h3 id="approche-probabiliste">Approche probabiliste</h3>
+<p><br /></p>
+<h1 id="notation">Notation</h1>
+<p>\(X_i^{(j)}\) represents the j-th sample and the i-th feature.</p>
 
-<h2 id="hypothèses">Hypothèses</h2>
-<p>1) Pas de collinéarité<br />
-2) \(E(eps_i)=0\)<br />
-3) $Cov(eps_i, x_i)=0$<br />
-4) $E(eps_i^2|x_i)=\sigma$<br />
-5) $Cov(eps_i, eps_j) = 0 (i!=j)$<br />
-6) $eps_i ~ N(0, sigma)$</p>
+<p><br /></p>
+<h1 id="formula">Formula</h1>
+<p>\(Y= \beta X + \varepsilon\)</p>
 
-<h2 id="distribution-des-coefficients">Distribution des coefficients</h2>
+<p>The observed variable Y may be explained by explanatory variables X and a noise \(\varepsilon\).
+The \(\beta\) contain the relation between the explanatory variables X and Y.</p>
 
-<h2 id="mesure-de-qualité--r2">Mesure de qualité : R2</h2>
+<p>Note that the \(\beta\) defined here is not an estimator, it is an oracle ie the true population parameter.</p>
 
-<h2 id="tests-statistiques--student-et-fisher">Tests statistiques : Student et Fisher</h2>
+<p><br /></p>
+<h1 id="assumptions">Assumptions</h1>
+<p>1) No collinearity: explanatory variables are linearly independent ie the matrix \(X\) is of maximal rank - \(rank = n_{parameters}\),</p>
 
-<h2 id="lasso-ridge-elasticnet">Lasso, Ridge, ElasticNet</h2>
+<p>2) Exogeneity: errors are centered conditionally to \(X\): \(\mathbb{E}\left[\varepsilon \vert X\right]=0\) (if \(X\) are deterministic variables then the condition is \(\mathbb{E}\left[\varepsilon \right]=0\)),</p>
+
+<p>3) No autocorrelation: \(\mathbb{Cov}\left(\varepsilon_j, \varepsilon_l\right) = 0 \; (j \neq l)\) (errors are independent)</p>
+
+<p>4) Homoscedasticity: \(\mathbb{E}\left[\varepsilon_j ^ 2 \vert X \right] = \sigma^2\); error terms are of constant variance ie the volatility of errors won’t increase as X increase (if \(X\) are deterministic variables then the condition is \(\mathbb{E}\left[\varepsilon_j ^ 2 \right] = \sigma^2\))</p>
+
+<p>5) Normality: \(\left(\varepsilon \vert X\right) \sim \mathcal{N}\left(0, \sigma^2 I_n\right)\) (where \(I_n\) is an identity matrix of size \(n\)): \(\left(\varepsilon \vert X\right)\) follows a normal centered distribution with variance \(\sigma^2\).</p>
+
+<p><br /></p>
+<h4 id="details-of-these-assumptions">Details of these assumptions</h4>
+
+<p>Hypotheses 1) is mandatory to perform model calibration as calibration requires to invert \(X^tX\). It is also useful to correctly capture relation between explanatory variables and observed variables.</p>
+
+<p>Hypotheses 1) + 2) + 3) + 4) insure that the estimators is unbiased and is BLUE: the best (with lower variance) linear unbiased estimator.</p>
+
+<p>Hypotheses 5) is equivalent and stronger (normality) than hypotheses 2) + 3) + 4). When the normality assumption is satisfied then the OLS estimator is equivalent to the MLE estimator.</p>
+
+<p><br /></p>
+<h4 id="how-to-check-assumptions">How to check assumptions</h4>
+
+<p>1) Variance Inflation Factor (VIF)</p>
+
+<p>2)3)4) Plot of residuals</p>
+
+<p>4) <a href="https://en.wikipedia.org/wiki/Bartlett%27s_test">Bartlett’s test</a></p>
+
+<p>5) QQ-plot or Kolmogorov-Smirnov test</p>
+
+<p><br /></p>
+<h4 id="other-assumptions">Other assumptions</h4>
+
+<p>Some adds others hypotheses like:</p>
+<ul>
+  <li>Model must be correctly specified,</li>
+  <li>The relation between X and Y must be linear,</li>
+  <li>The observed data must represent a random sampling from the population and X must have variation.</li>
+</ul>
+
+<p>These hypotheses are mandatory but may seem obvious.</p>
+
+<p><br /></p>
+<h1 id="calibration">Calibration</h1>
+<p>Calibration of linear regression can be done using three different methods.
+The first two methods uses OLS formulation and the third method uses a probabilistic approach.</p>
+
+<p><br /></p>
+<h2 id="loss-function-ols">Loss function: OLS</h2>
+<p>OLS (Ordinary Least Squares) formulation for linear regression is as follow :</p>
+
+\[J(\beta)=\Vert Y - \beta X \Vert_2^2\]
+
+<p>It is the squared euclidian norm of the difference between Y and \(\beta X\).</p>
+
+<p><br /></p>
+<h4 id="analytical-solution">Analytical solution</h4>
+<p>To find the minimum of \(J(\beta)\), we simply differentiate the loss function with respect to \(\beta\). We obtain:</p>
+
+\[\begin{eqnarray}
+\frac{d}{d\beta} &amp;&amp;= \frac{d \Vert (Y - \beta X) \Vert_2^2}{d(Y - \beta X)}\frac{d(-\beta X)}{d \beta}\\
+&amp;&amp;= -2 (Y - \beta X)^t X \\
+&amp;&amp;= 2 \beta (X^t X) - 2 X^t Y
+\end{eqnarray}\]
+
+<p>As the derivative for the the minimum is 0, we want to set this value to 0 and we find:</p>
+
+\[\hat{\beta}=(X^tX)^{-1}X^tY\]
+
+<p>This can be interprated as the covariance between X and Y over the variance of X.</p>
+
+<p><br /></p>
+<h4 id="using-gradient-descent">Using Gradient descent</h4>
+<p>It is possible to use gradient descent on \(J(\beta)\). \(\beta\) should be randomly initialized and then, at each step:</p>
+
+\[\begin{eqnarray}
+\beta &amp;&amp;= \beta - \alpha \frac{d(J(\beta))}{d \beta} \\
+&amp;&amp;= \beta - \alpha \left(2 \beta (X^t X) - X^t Y\right) \\
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\alpha\) is the learning rate (an hyperparameter).</li>
+</ul>
+
+<p><br /></p>
+<h2 id="probabilistic-approach">Probabilistic approach</h2>
+<p>Under the normality assumption \(\left(\varepsilon \vert X \right)\sim \mathcal{N}(0, \sigma^2)\) we can use maximum likelihood to find \(\beta\).</p>
+
+<p>Let write the density function of \(\varepsilon\):</p>
+
+\[p(\varepsilon_i)=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{\varepsilon_i^2}{2\sigma^2}\right)\]
+
+<p>This implies that:</p>
+
+\[p(Y^{(j)} \vert X^{(j)}; \beta)=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(Y^{(j)}-\beta X^{(j)})^2}{2\sigma^2}\right)\]
+
+<p>This represent the distribution of \(Y^{(j)}\) given \(X^{(j)}\): \(Y^{(j)} \sim \mathcal{N}\left(\beta X^{(j)}, \sigma^2\right)\).</p>
+
+<p>Let’s define the likelihood function:</p>
+
+\[\begin{eqnarray}
+L(\beta) &amp;&amp;= \prod_{j=1}^{n_{pop}} p(Y^{(j)} \vert X^{(j)}; \beta) \\
+&amp;&amp;= \prod_{j=1}^{n_{pop}} \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{\left(Y^{(j)}-\beta X^{(j)}\right)^2}{2\sigma^2}\right)
+\end{eqnarray}\]
+
+<p>We want to maximize this function. It is tricky because of the product but we can apply a log function on \(L(\beta)\) to transform the product in sum. This won’t change the optimization problem as log is a strictly increasing function. We obtain the log likelihood:</p>
+
+\[\begin{eqnarray}
+l(\beta) = \log L(\beta) &amp;&amp;= \prod_{j=1}^{n_{pop}} p(Y^{(j)} \vert X^{(j)}; \beta) \\
+&amp;&amp;= \log \prod_{j=1}^{n_{pop}} \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{\left(Y^{(j)}-\beta X^{(j)}\right)^2}{2\sigma^2}\right) \\
+&amp;&amp;= \sum_{j=1}^{n_{pop}} \log\left[\frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{\left(Y^{(j)}-\beta X^{(j)}\right)^2}{2\sigma^2}\right)\right] \\
+&amp;&amp;= \sum_{j=1}^{n_{pop}} \left[\log\left(\frac{1}{\sqrt{2\pi}\sigma}\right)-\frac{\left(Y^{(j)}-\beta X^{(j)}\right)^2}{2\sigma^2}\right] \\
+&amp;&amp;= n_{pop} \cdot \log\left(\frac{1}{\sqrt{2\pi}\sigma}\right) - \frac{1}{2\sigma^2} \sum_{j=1}^{n_{pop}} \left(Y^{(j)}-\beta X^{(j)}\right)^2
+\end{eqnarray}\]
+
+<p>Maximizing \(\frac{1}{2\sigma^2} \sum_{j=1}^{n_{pop}} \left(Y^{(j)}-\beta X^{(j)}\right)^2\) with respect to \(\beta\) is the same as minimising:</p>
+
+\[\sum_{j=1}^{n_{pop}} (Y^{(j)}-\beta X^{(j)})^2=\Vert Y-\beta X\Vert^2\]
+
+<p>Hence under the normality assumption performing MLE is the same as performing OLS.</p>
+
+<p><br /><br /></p>
+<h1 id="performance-metric-r2">Performance metric: \(R^2\)</h1>
+<p><a href="/Revision/metrics.html">See \(R^2\) part in Metrics page</a>.</p>
+
+\[R^2=1-\frac{SS_{Residual}}{SS_{Total}}=\frac{SS_{Explained}}{SS_{Total}}\]
+
+<p>We can compute estimations for \(SS_{Explained}\), \(SS_{Residual}\) and \(SS_{Total}\) as:</p>
+<ul>
+  <li>\(SS_{Explained} = \sum_{j=1}^{n_{pop}} \left(\hat{Y^{(j)}}-\bar{Y}\right)^2\),</li>
+  <li>\(SS_{Residual} = \sum_{j=1}^{n_{pop}} \left(\hat{Y^{(j)}}-Y^{(j)}\right)^2\),</li>
+  <li>\(SS_{Total} = \sum_{j=1}^{n_{pop}} \left(Y^{(j)}-\bar{Y}\right)^2\).</li>
+</ul>
+
+<p><br /><br /></p>
+<h1 id="hatbeta-moments-and-distribution">\(\hat{\beta}\) moments and distribution</h1>
+<p>Using the analytical formulation of \(\hat{\beta}\): \(\hat{\beta}=(X^tX)^{-1}X^tY\) we can estimate its expected value and variance.
+From the formula of linear regression, \(Y=\beta X + \varepsilon\). Here \(\beta\) is the oracle, the true population parameter.</p>
+
+<p><br /></p>
+<h3 id="moments">Moments</h3>
+<h4 id="expected-value">Expected value</h4>
+<p>\(\begin{eqnarray}
+\mathbb{E}\left[\hat{\beta}\right] &amp;&amp;= \mathbb{E}\left[(X^tX)^{-1}X^tY\right] \\
+&amp;&amp;= \mathbb{E}\left[(X^tX)^{-1}X^t(\beta X+\varepsilon)\right] \\
+&amp;&amp;= \beta + \mathbb{E}\left[(X^tX)^{-1}X^t\varepsilon\right] \\
+&amp;&amp;= \beta + \mathbb{E}\left[\mathbb{E}\left[(X^tX)^{-1}X^t\varepsilon \vert X \right]\right] \\
+&amp;&amp;= \beta + \mathbb{E}\left[(X^tX)^{-1}X^t\mathbb{E}\left[\varepsilon \vert X \right]\right] \\
+&amp;&amp;= \beta
+\end{eqnarray}\)</p>
+
+<p>So the estimator \(\hat{\beta}\) is an unbiased estimator of \(\beta\).</p>
+
+<p><br /></p>
+<h3 id="variance">Variance</h3>
+<p>Now recall that \(\mathbb{E}\left[\hat{\beta}\right]=\beta\) and let’s check the variance of \(\hat{\beta}\).</p>
+
+<p>First as \(\mathbb{E}\left[\hat{\beta}\right]=\beta\), then \(\left(\mathbb{E}\left[\hat{\beta}-\beta\right]\right)^2=0\) and thus \(Var(\hat{\beta})=\mathbb{E}\left[(\hat{\beta}-\beta)^t(\hat{\beta}-\beta)\right]\).</p>
+
+\[\begin{eqnarray}
+\mathbb{E}\left[(\hat{\beta}-\beta)(\hat{\beta}-\beta)^t\right] &amp;&amp;=  \mathbb{E}\left[\left((X^tX)^{-1}X^tY-\beta\right)\left((X^tX)^{-1}X^tY-\beta\right)^t\right] \\
+&amp;&amp;= \mathbb{E}\left[\left((X^tX)^{-1}X^t(\beta X+\varepsilon)-\beta\right)\left((X^tX)^{-1}X^t(\beta X+\varepsilon)-\beta\right)^t\right] \\
+&amp;&amp;= \mathbb{E}\left[\left((X^tX)^{-1}X^t\varepsilon\right)\left((X^tX)^{-1}X^t\varepsilon\right)^t\right] \\
+&amp;&amp;= \mathbb{E}\left[(X^tX)^{-1}X^t\varepsilon^t\varepsilon X(X^tX)^{-1}\right] \\
+&amp;&amp;= (X^tX)^{-1}X^t\mathbb{E}\left[\varepsilon^t\varepsilon\right] X(X^tX)^{-1} \\
+&amp;&amp;= (X^tX)^{-1}X^t \sigma^2 X(X^tX)^{-1} \\
+&amp;&amp;= \sigma^2 \left((X^tX)^{-1}X^tX\right)(X^tX)^{-1} \\
+&amp;&amp;= \sigma^2(X^tX)^{-1} \\
+\end{eqnarray}\]
+
+<p><br /></p>
+
+<p>So \(Var(\hat{\beta})=\sigma^2(X^tX)^{-1}\). Note that \(\sigma^2\) is unknown.</p>
+
+<p>It is estimated by \(s^2\):</p>
+
+\[s^2=\frac{1}{n-2}\sum_{j=1}^{n_{pop}}\left(\hat{\varepsilon}_i-\bar{\varepsilon}\right)^2=\frac{1}{n-2}\sum_{j=1}^{n_{pop}}\hat{\varepsilon}_i^2\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\hat{\varepsilon}_i\) are the estimated residuals</li>
+  <li>\(\bar{\varepsilon}\) is the mean of the estimated residuals and is 0 by definition (\(\hat{\varepsilon}_i\) are centered)</li>
+</ul>
+
+<p>The \(n-2\) at the denominator comes from the fact that the total sum of squares from the \(\hat{\varepsilon}_i\) will underestimate the true total sum of squares (from the \(\varepsilon_i\)).</p>
+
+<p><br /></p>
+
+<p>For a regression with only 1 factor: \(Var(\hat{\beta})=\frac{\sigma^2}{\sum_{j=1}^{n_{pop}} (X^{(j)}-\bar{X})^2}\).</p>
+
+<p><br /></p>
+<h3 id="distribution">Distribution</h3>
+<p>Assuming normality of \(\varepsilon\) (\(\varepsilon \sim \mathcal{N}(0, \sigma^2 I_n)\)), \(\hat{\beta}\) is also normal and:</p>
+
+\[\hat{\beta} \sim \mathcal{N}(\beta, \sigma^2(X^t X)^{-1})\]
+
+<p>With \(s^2\) the approximation of \(\sigma^2\) being:</p>
+
+\[s^2=\frac{1}{n-2}\sum_{j=1}^{n_{pop}}\hat{\varepsilon}_i^2\]
+
+<p>For more info see:</p>
+<ul>
+  <li><a href="https://scholar.princeton.edu/sites/default/files/bstewart/files/lecture5handout.pdf">This Priceton course (slide 41)</a>,</li>
+  <li><a href="https://stats.stackexchange.com/questions/16030/distribution-of-betas-in-multiple-linear-regression">This StackExchange answer</a>.</li>
+</ul>
+
+<p><br /></p>
+
+<p>Using the variance estimator \(s^2\) we can write:</p>
+
+\[\hat{\beta} \sim \mathcal{N}(\beta, s^2(X^t X)^{-1})\]
+
+<p>Note that \(s^2\) is a chi-2 random variable as it is a sum of squares random variables.
+The variance of \(\hat{\beta_i}\) is \(s_{\hat{\beta_i}}^2\) (the errors have the same variance but the \(\hat{\beta_i}\) variance also depend on X).</p>
+
+<p>Note also that if n tends to infinity (in practice \(n \geq 100\)), the distribution of the estimator \(s^2\) tends to a gaussian distribution (thanks to CLT and the fact that a chi-2 distribution is a sum of chi-2).</p>
+
+<p><br /></p>
+<h1 id="statistical-tests-student-test-and-fisher-test">Statistical tests: Student test and Fisher test</h1>
+<p>Under the normality assumption, some tests my be performed on the \(\hat{\beta_i}\) to check their are significantly different from a given \(\beta_i\) value. In general we want to test if \(\hat{\beta}_i\) is significantly different from 0 (in this case we choose \(\beta_i=0\)).</p>
+
+<p><br /></p>
+<h2 id="student-test">Student test</h2>
+<p>Student test perform a test on each \(\hat{\beta_i}\) separately.
+The test follows a student distribution as \(\hat{\beta_i}\) follows a normal distribution and its variance estimation a chi-2 distribution.</p>
+
+<p>The hypotheses H0 is \(\hat{\beta_i}=\beta_i\) and the hypotheses H1 is \(\hat{\beta_i} \neq \beta_i\).</p>
+
+<p>The t-statistic is as follow:</p>
+
+\[T=\frac{\hat{\beta}_i-\beta_i}{s_{\hat{\beta}_i}} \sim t_{n-2}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\hat{\beta}_i\) is the parameter to test,</li>
+  <li>\(\beta_i\) is the value to test against (generally 0),</li>
+  <li>\(s_{\hat{\beta}_i}=s^2\left((X^t X)^{-1}\right)_{(i,i)}\) is the standard error of \(\beta_i\)</li>
+</ul>
+
+<p>Once the T-statistic is computed, one can use the inverse cdf of the Student distribution (with \(n-2\) degrees of freedom) to get the p-value of the test.</p>
+
+<p>When n is large enough, a Z-test can be used.</p>
+
+<p><br /></p>
+<h2 id="fisher-test">Fisher test</h2>
+<p>Fisher test tests nullity of all parameters.</p>
+
+<p>Hence the hypotheses are:</p>
+<ul>
+  <li>H0: \(\hat{\beta_i}=0 \text{    } \forall i \in [1, n]\)</li>
+  <li>H1: \(\exists i \in [1, n] \text{  st  } \hat{\beta_i} \neq 0\)</li>
+</ul>
+
+<p>The F-statistics is then:</p>
+
+\[F=\frac{SS_{Explained}}{SS_{Residual}}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(SS_{Explained} = \sum_{j=1}^{n_{pop}} \left(\hat{Y^{(j)}}-\bar{Y}\right)^2\),</li>
+  <li>\(SS_{Residual} = \sum_{j=1}^{n_{pop}} \left(\hat{Y^{(j)}}-Y^{(j)}\right)^2\),</li>
+  <li>(\(SS_{Total} = \sum_{j=1}^{n_{pop}} \left(Y^{(j)}-\bar{Y}\right)^2\)).</li>
+</ul>
+
+<p>The p-value can be obtained applying the inverse cdf function of the Fisher distribution to this F-statistic.</p>
+
+<p><br /></p>
+<h1 id="confidence-interval">Confidence interval</h1>
+<p>Using the notation from the Student test we can write the \(\alpha\) confidence interval as:</p>
+
+\[\beta_i \in \left[\hat{\beta}_i-s_{\hat{\beta}_i}t_{n-2}; \hat{\beta}_i+s_{\hat{\beta}_i}t_{n-2}\right]\]
+
+<p>So \(\beta_i\) is in this interval with confidence level \(1-\alpha\).</p>
+
+<p><br /></p>
+<h1 id="lasso-ridge-elasticnet">Lasso, Ridge, ElasticNet</h1>
+<p>Lasso, Ridge and ElasticNet are three alternative to the classical linear regression.
+These methods add penalizations on the \(\beta\) parameters in order to regularize the model (add biais but reduce the variance).</p>
+
+<p><br /></p>
+<h2 id="ridge">Ridge</h2>
+<p>Ridge adds an \(L_2\) penalty (euclidian distance). The minimization problem is then:</p>
+
+\[\begin{eqnarray}
+J(\beta) &amp;&amp;= \Vert Y - \beta X \Vert_2^2\\
+&amp;&amp; \text{ st  } \Vert \beta \Vert_2^2 \leq C
+\end{eqnarray}\]
+
+<p>The Lagrangian is used to perform the optimization. The Lagrangian minimization problem is:</p>
+
+\[\min \Vert Y - \beta X \Vert_2^2 + \lambda \Vert \beta \Vert_2^2\]
+
+<p>Generally, the hyperparameter we set is the \(\lambda\) and not the \(t\).</p>
+
+<p>The \(\beta^{Ridge}\) can be find easily computing the derivative with respect to \(\beta\) and setting it to 0.</p>
+
+\[\begin{eqnarray}
+\frac{d}{d\beta} &amp;&amp;= \frac{d \Vert (Y - \beta X) \Vert_2^2}{d(Y - \beta X)}\frac{d\beta X}{d \beta} + \lambda \frac{d\Vert \beta \Vert_2^2}{d\beta} \\
+&amp;&amp;= 2 (Y - \beta X)^t X + 2 \lambda \beta \\
+&amp;&amp;= 2 \beta (X^t X + \lambda I_n) - X^t Y
+\end{eqnarray}\]
+
+<p>Setting the derivative to 0 we obtain:</p>
+
+\[\hat{\beta^{Ridge}}=(X^tX+\lambda I_n)^{-1}X^tY\]
+
+<p><br /></p>
+<h2 id="lasso">Lasso</h2>
+<p>Lasso adds an \(L_1\) penalty (manhattan distance). The minimization problem is then:</p>
+
+\[\begin{eqnarray}
+J(\beta) &amp;&amp;= \Vert Y - \beta X \Vert_2^2\\
+&amp;&amp; \text{ st  } \Vert \beta \Vert_1 \leq C
+\end{eqnarray}\]
+
+<p>The Lagrangian is used to perform the optimization. The Lagrangian minimization problem is:</p>
+
+\[\min \Vert Y - \beta X \Vert_2^2 + \lambda \Vert \beta \Vert_1\]
+
+<p>Generally, the hyperparameter we set is the \(\lambda\) and not the \(t\).</p>
+
+<p><br /></p>
+<h3 id="advantages">Advantages</h3>
+<p>Lasso performs a selection of variables so it works better if only a few features are useful. Also it is easier to interpret the model.
+However if important variables are correlated, Lasso algorithm will only keep one of these variables.</p>
+
+<p><br /></p>
+<h4 id="proof-of-the-variable-selection">Proof of the variable selection</h4>
+<h5 id="visual-proof">Visual proof</h5>
+<p>The most famous proof of the variable selection performed by the Lasso algorithm is a visual proof:</p>
+
+<p><img src="assets/images/lasso.png" width="30%" height="30%" /></p>
+
+<p>The unit ball in norm 1 has it angles on the axis. The probability to touch an angle is high and corresponds to the probability to have a null coefficient.</p>
+
+<p><br /></p>
+<h5 id="mathematical-proof">Mathematical proof</h5>
+<p>A mathematical proof also exists but is complex.</p>
+
+<p>Here is a sketch of proof:</p>
+
+<p><br /></p>
+
+<p>We differentiate with respect to \(\beta\) to find the min and we find:</p>
+
+\[(X^t X)\beta - X^t Y \pm \lambda = 0\]
+
+<p>The sign applied to \(\lambda\) depends on the value of \(\beta_i\) (as \(\frac{d\Vert \beta \Vert_1}{d\beta}\) is \(1\) if \(\beta \geq 0\) and \(-1\) if \(\beta \lt 0\)).</p>
+
+<p><br /></p>
+
+<p>The Lasso estimator \(\hat{\beta_i}\) must have the same sign as \((X^t Y)_{(i)}\) as \(\hat{\beta_i}\) captures the relation between \(X\) and \(Y\). The sign of \((X^t Y)_{(i)}\), the covariance of \(X\) and \(Y\), is the sign of their relation.</p>
+
+<p>If \((X^t Y)_{(i)} \gt 0\) then \(\beta_i\) is positive and \(\hat{\beta_i}\) must also be positive:</p>
+
+\[\hat{\beta_i^{Lasso}} = \max\left(0, (X^t X)_{(i,i)}^{-1}(X^t Y)_{(i)} - \lambda\right)\]
+
+<p>If \((X^t Y)_{(i)} \lt 0\) then \(\beta_i\) is negative and \(\hat{\beta_i}\) must also be negative:</p>
+
+\[\hat{\beta_i^{Lasso}} = \min\left(0, (X^t X)_{(i,i)}^{-1}(X^t Y)_{(i)} + \lambda\right)\]
+
+<p><br /></p>
+
+<p>Hence in both case if the absolute value of \(\lambda\) is greater than the absolute value of \((X^t X)^{-1}_{(i,i)}(X^t Y)_{(i)}\) then the \(\hat{\beta_i^{Lasso}}\) estimator will be 0.
+Lasso will select columns of X that are more correlate (positively or negatively) to Y. Indeed if \((X^t X)^{-1}_{(i,i)}(X^t Y)_{(i)}\) is large (which mean they are collinear ie with high correlation) then a large \(\lambda\) would be required to set \(\hat{\beta_i^{Lasso}}\) to 0.</p>
+
+<p>This proof is freely inspired by <a href="https://freakonometrics.hypotheses.org/tag/karush-kuhn-tucker">this proof by Arthur Charpentier</a> and <a href="https://stats.stackexchange.com/questions/17781/derivation-of-closed-form-lasso-solution">this proof on StackExchange</a>.</p>
+
+<p><br /></p>
+<h2 id="elasticnet">ElasticNet</h2>
+<p>ElasticNet uses a mix of \(L_1\) and \(L_2\) penalties:</p>
+
+\[\begin{eqnarray}
+J(\beta) &amp;&amp;= \Vert Y - \beta X \Vert_2^2\\
+&amp;&amp; \text{ st  } \alpha \Vert \beta \Vert_1 + (1-\alpha) \Vert \beta \Vert_2^2 \leq C
+\end{eqnarray}\]
+
+<p>The Lagrangian is used to perform the optimization. The Lagrangian minimization problem is:</p>
+
+\[\min \Vert Y - \beta X \Vert_2^2 + \lambda \left[\alpha \Vert \beta \Vert_1 + (1-\alpha) \Vert \beta \Vert_2^2 \right]\]
+
+<p>We can also write:</p>
+
+\[\min \Vert Y - \beta X \Vert_2^2 + \lambda_1 \Vert \beta \Vert_1 + \lambda_2 \Vert \beta \Vert_2^2\]
+
+<p><br /></p>
+<h1 id="references">References</h1>
+<p>See these Wikipedia pages:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Simple_linear_regression">Simple linear regression</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Ordinary_least_squares">Ordinary least squares</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Proofs_involving_ordinary_least_squares">Proofs involving ordinary least squares</a></li>
+</ul>
+
+<p>And :</p>
+<ul>
+  <li><a href="https://cs229.stanford.edu/syllabus.html">CS229 course on linear regression (course 1 on supervised learning)</a></li>
+  <li><a href="https://scholar.princeton.edu/sites/default/files/bstewart/files/lecture5handout.pdf">Priceton course on linear regression</a></li>
+</ul>
 
   </body>
 </html>

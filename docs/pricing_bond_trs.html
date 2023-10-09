@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Finance - Credit Pricing - TRS</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-finance---pricing-credit"><a href="/Revision/pricing_credit.html">Back to Finance - Pricing Credit</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>A Total Return Swap is a financial derivative contract between 2 party where the 2 party agree to exchange, at periodic dates, 2 cash flows. The buyer of the TRS agrees to receive the total performance of an asset or a basket of asset in exchange of paying a reference rate. Note that if the performance of the underlying is negative, the buyer is obliged to pay the value.</p>
+
+<p>Here is a visual representation of flow exchanged in a TRS:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/trs.jpg" width="30%" height="30%" />
+</div>
+
+<p>It is important to note that TRS are funding cost arbitrages products.</p>
+
+<p><br /><br /></p>
+<h1 id="advantages">Advantages</h1>
+<ul>
+  <li>TRS allow an investor to enjoy all of the cash flow benefits of a security without actually owning the security,</li>
+  <li>TRS are off balanced sheet asset (the asset owner retains ownership of the asset): an institutional investor who has surpassed its balance sheet capacity may still speculate (or hedge) through a TRS,</li>
+  <li>TRS are leveraged derivatives: hedge fund can use TRS to take leveraged positions,</li>
+  <li>Investors can create new assets with a specific maturity not currently available in the market,</li>
+  <li>Investors can reduce administrative costs via an off balance sheet purchase,</li>
+  <li>A long-term investor who feels that a reference asset in portfolio may widen in spread in the short term, but then will recover, may enter into a TRS which is shorter than the maturity of the asset.</li>
+</ul>
+
+<p><br /><br /></p>
+<h1 id="formula">Formula</h1>
+
+\[\begin{cases}
+    \text{Leg}_{\text{Total Return}} &amp;&amp; = N * \left(\sum_{i=1}^{T}\left[(B_{t_i} - B_{t_{i-1}}) + C_{(t_{i-1}, t_i)}\right] * DF_{t_i}\right)\\
+    \text{Leg}_{\text{Floating}} &amp;&amp; = N * \left(\sum_{i=1}^{T} B_{t_{i-1}} * \left(DF_{t_i}^{financing}\right)^{-1} * DF_{t_i}\right)
+\end{cases}\]
+
+<p>With:</p>
+<ul>
+  <li>\(N\) being the notional of the TRS,</li>
+  <li>\(B_{t_0}\) being the spot price of the underlying bond,</li>
+  <li>\(B_{t_i}\) being the futur price of the underlying bond as seen at \(t_0\),</li>
+  <li>\(C_{(t_{i-1}, t_i)}\) being the coupon received during the period between \(t_{i-1}\) and \(t_i\),</li>
+  <li>\(DF_{t_i}\) being the risk free Discount Factor at time \(t_i\),</li>
+  <li>\(DF_{(t_i)}^{financing}\) being the discount factor associated with the financing rate at time \(t_i\).</li>
+</ul>
+
+<p>The repo rate is the key driver of the financing rate: if the holder of the collateral bond receive income from lending the bond at the repo rate, TRS would expect the spread to be subtracted from the financing cost.</p>
+
+<p>\(DF_{(t_i,t_j)}^{financing}\) (equivalent to \(DF_{(t_i,t_j)}^{repo}\)) is the discount factor associated with the combination of the risk free rate on the period and the repo spread on the period (with the repo spread almost always negative - ie positive quotation as the quotation for repo is inverted).</p>
+
+<p><br /></p>
+<h2 id="implied-repo">Implied repo</h2>
+<p>Implied repo can be easily obtained if different market values are known:</p>
+<ul>
+  <li>The risk free rate curve and the associated discount factors,</li>
+  <li>The spot and forward values of \(B\).</li>
+</ul>
+
+<p><br /><br /></p>
+<h1 id="ressources">Ressources:</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://www.tavakolistructuredfinance.com/trs/">Introduction to Total Return Swaps by Janet Tavakoli</a>,</li>
+  <li><a href="https://www.eurexchange.com/resource/blob/34718/622649dd378e4338d2f56cae1adf8a6f/data/eurostoxx-repo-trf.pdf">Eurex research on Equity Repo and TRS</a>.</li>
+</ul>
+
+  </body>
+</html>

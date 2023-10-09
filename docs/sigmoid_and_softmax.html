@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sigmoid and Softmax</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="machine-learning"><a href="/Revision/machine_learning.html">Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>In classification, the output of a model represent the probability of different outcomes.
+Generally it is the probability for the input to belong to a given class.</p>
+
+<p>Depending on the number of possible classes we use a sigmoid or a softmax function in order to insure that our outputs sum to 1.</p>
+
+<ul>
+  <li>Sigmoid function is for binary class problems</li>
+  <li>Softmax function is for multi class problems</li>
+</ul>
+
+<p>The sigmoid and softmax functions are not so similar but it can be shown that sigmoid is just a special case of softmax.</p>
+
+<p><br /></p>
+<h1 id="softmax">Softmax</h1>
+<p>Softmax insures that the outputs of a multi class model sum to 1.</p>
+
+<p>Imagine a problem with 3 possible classes. Our model will give a score to each of the class. In the end what we want to know is ‘what is the class of this input?’ (is it a cat, a dog or a rabbit, …).</p>
+
+<p>The softmax function will take \(K\) scores as input and normalize them to make them sum to 1:</p>
+
+<p><br /></p>
+
+\[\sigma(z)_i = \frac{e^{z_i}}{\sum_{j=1}^K e^{z_j}} \;\;\; \text{ for} i = 1, \ldots, K and z=(z_i, \ldots, z_k) \in \mathbb{R}^K\]
+
+<p>Where:</p>
+<ul>
+  <li>\(K\) is the number of classes,</li>
+  <li>\(z\) is the input vector (the scores),</li>
+  <li>\(z_j\) is the input (the score) of class \(j\),</li>
+  <li>\(\sigma(z)_i\) returns the probability to be of class \(i\).</li>
+</ul>
+
+<p><br /></p>
+<h1 id="sigmoid">Sigmoid</h1>
+<p>Sigmoid insures that the outputs of a binary class model sum to 1.
+When dealing with binary class problems with two class 0 and 1, we just look at the probability for an input of being of class 1. The probability of being of class 0 is juste the complement.</p>
+
+\[\sigma(z) = \frac{1}{1+e^{-z}} = \frac{e^{z}}{e^{z}+1}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(z\) is the input (the scores) for class 1,</li>
+  <li>\(\sigma(z)\) is the probability of being of class 1,</li>
+  <li>We go from left to right by multiplying by \(\frac{e^{z}}{e^{z}}=1\).</li>
+</ul>
+
+<p>Here is a plot showing \(\sigma(z)\):</p>
+
+<div style="text-align: center">
+<img src="assets/images/sigmoid.png" width="20%" height="20%" />
+</div>
+
+<p><br /></p>
+<h2 id="derivative-of-the-softmax-function">Derivative of the Softmax function</h2>
+<p>The derivative of \(\sigma(z)\) is:</p>
+
+\[\begin{eqnarray}
+\frac{d\sigma(z)}{dz} &amp;&amp;= \frac{d}{dz}\frac{1}{1+e^{-z}} \\
+&amp;&amp;= \left(-\frac{1}{\left(1+e^{-z}\right)^2}\right)\left(-e^{-z}\right) \\
+&amp;&amp;= \left(\frac{1}{\left(1+e^{-z}\right)^2}\right)\left(e^{-z}\right) \\
+&amp;&amp;= \frac{1}{1+e^{-z}}\frac{1}{1+e^{-z}}\left(1+e^{-z}-1\right) \\
+&amp;&amp;= \frac{1}{1+e^{-z}}\left(\frac{1+e^{-z}}{1+e^{-z}}-\frac{1}{1+e^{-z}}\right) \\
+&amp;&amp;= \frac{1}{1+e^{-z}}\left(1-\frac{1}{1+e^{-z}}\right) \\
+&amp;&amp;= \sigma(z)\left(1-\sigma(z)\right)
+\end{eqnarray}\]
+
+<p>The format of the derivative is useful in some computations (for <a href="/Revision/logistic_regression.html">Logistic regression</a> for example).</p>
+
+<p><br /></p>
+<h2 id="link-with-softmax">Link with Softmax</h2>
+<p>In binary classification we compare the probability of being of one class vs the other.</p>
+
+<p>It is equivalent of comparing the input (the score) of class 1 vs the score of class 0. In binary classification the score of class 0 is just set to 0. Then the comparison is juste to compare the score of class 1 vs 0. If the score of class 1 is greater than 0 then its probability is greater than 0.5 and it is lower than 0.5 otherwize.</p>
+
+<p>Using this fact, the link with softmax is obvious:</p>
+
+\[\begin{eqnarray}
+\sigma(z)_1 &amp;&amp;= \frac{e^{z_1}}{e^{z_0} + e^{z_1}} \\
+&amp;&amp;= \frac{e^{z_1}}{e^0 + e^{z_1}}\\
+&amp;&amp;= \frac{e^{z}}{1 + e^z} = \frac{1}{1+e^{-z}} = \sigma(z)
+\end{eqnarray}\]
+
+<p>And for class 0:</p>
+
+\[\begin{eqnarray}
+\sigma(z)_0 &amp;&amp;= \frac{e^{z_0}}{e^{z_0} + e^{z_1}}\\
+&amp;&amp;= \frac{e^0}{e^0 + e^{z_1}}\\
+&amp;&amp;= \frac{1}{1 + e^z}\\
+&amp;&amp;= \frac{e^{-z}}{1+e^{-z}}\\
+&amp;&amp;= \frac{1+e^{-z}-1}{1+e^{-z}}\\
+&amp;&amp;= \frac{1+e^{-z}}{1+e^{-z}} - \frac{1}{1+e^{-z}} \\
+&amp;&amp;= 1 - \frac{1}{1+e^{-z}} = 1 - \sigma(z)
+\end{eqnarray}\]
+
+<p>Starting from the Softmax formulation we finally obtain the sigmoid formulation.</p>
+
+<p><br /></p>
+<h1 id="logit-function">Logit function</h1>
+<p>The Logit function is the inverse of the sigmoid function.</p>
+
+<p>It is the function \(logit\) such that \(logit(g(z))=z\) (for \(g\) the sigmoid function).</p>
+
+\[logit(p) = \log\left(\frac{p}{1-p}\right) \forall p \in ]0, 1[\]
+
+<p>Here is a plot showing \(logit(p)\) (called \(f(x)\) in the plot):</p>
+
+<div style="text-align: center">
+<img src="assets/images/logit.png" width="20%" height="20%" />
+</div>
+<p><br /></p>
+
+<p>Logistic regression is called a regression as their exit a linear relation between the input data \(X\) and the logit of the prediction made by the model.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://web.stanford.edu/~nanbhas/blog/sigmoid-softmax/">This page by Stanford</a>,</li>
+  <li><a href="https://willwolf.io/2017/04/19/deriving-the-softmax-from-first-principles/">This page by Will Wolf</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Softmax_function">Wikipedia page of Softmax function</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Sigmoid_function">Wikipedia page of Sigmoid function</a>.</li>
+</ul>
+
+  </body>
+</html>

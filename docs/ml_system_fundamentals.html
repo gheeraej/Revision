@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - System Fundamentals</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<ul>
+  <li>Framing: transforming the business problem in ML problem,</li>
+  <li>Objectives: transforming the business objectives in ML losses,</li>
+  <li>Constraints: time &amp; budget, privacy</li>
+</ul>
+
+<p><br /></p>
+<h1 id="framing">Framing</h1>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/framing.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>For example (from <a href="https://stanford-cs329s.github.io/syllabus.html">CS329 lecture 2</a>), predicting the next app a user will use is complex in multiclass framework as each time an app is added or removed the model must be retrained. In multilabel framework it is much easier just by taking the app with max probability: in this framework the number of apps does not impact the model.</p>
+
+<p><br /></p>
+<h1 id="objectives">Objectives</h1>
+<p>ML objectives:</p>
+<ul>
+  <li>Performance,</li>
+  <li>Latency,</li>
+  <li>Etc.</li>
+</ul>
+
+<p><br /></p>
+
+<p>Business objectives:</p>
+<ul>
+  <li>Cost,</li>
+  <li>ROI,</li>
+  <li>Regulation and Compliance</li>
+</ul>
+
+<p><br /></p>
+
+<p>Business objectives can be:</p>
+<ul>
+  <li>Direct: increasing sales (ads, conversion rates), cutting costs,</li>
+  <li>Indirect: increasing customer satisfaction, increasing time spent on a website.</li>
+</ul>
+
+<p><br /></p>
+
+<p>Also sometimes a model should optimise different objectives. In this case 2 options are possible:</p>
+<ul>
+  <li>1 model optimizing combined loss,</li>
+  <li>Multiple models: each optimizing one objective.</li>
+</ul>
+
+<p>It is better to make on model per objective and then to weight their decision for the final decision instead of a model that optimises a weighted loss. Using one model per objective, if the weights of each objective changes it is easy to update the prediction without retraining the model:</p>
+
+\[loss_{total} = \sum_{i=1}^N \alpha_i loss_{obj_i}\]
+
+<p><br /></p>
+<h1 id="constraints">Constraints</h1>
+<p>Time &amp; Budget:</p>
+<ul>
+  <li>Time: Rule of thumb: 20% time to get initial working system, 80% on iterative development,</li>
+  <li>Budget: Data, resources, talent</li>
+</ul>
+
+<p><br /></p>
+
+<p>Tradeoff Time &amp; Budget:</p>
+<ul>
+  <li>More (powerful) machines,</li>
+  <li>Hire more people to label data faster,</li>
+  <li>Run more experiments in parallel,</li>
+  <li>Buy existing solution</li>
+</ul>
+
+<p><br /></p>
+
+<p>Privacy:</p>
+<ul>
+  <li>Annotation: Can data be shipped outside organizations for annotation?</li>
+  <li>Storage: What kind of data are you allowed to store? How long can you store it?</li>
+  <li>Third-party solutions: Can you share your data with a 3rd party (e.g. managed service)?</li>
+  <li>Regulations: What regulations do you have to conform to?</li>
+</ul>
+
+<p><br /></p>
+
+<p>Technical constrains:</p>
+<ul>
+  <li>Competitor,</li>
+  <li>Legacy systems.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329 lecture 2</a>.</li>
+</ul>
+
+  </body>
+</html>

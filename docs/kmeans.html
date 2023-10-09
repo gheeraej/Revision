@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>K-means</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="definition">Definition</h2>
+<p>See <a href="https://cs229.stanford.edu/notes2021fall/cs229-notes7a.pdf">CS229 course on K-means</a>.</p>
+
+<h2 id="algorithm">Algorithm</h2>
+<p>Based on EM algorithm.</p>
+
+<h2 id="k-means">K-means++</h2>
+<p>K-means is really sensitive to initialisation. Bad initialisation can lead to poor results.
+Initialisation in K-means is done randomly.</p>
+
+<p>K-means++ just modified a bit the initialisation. It works as follows:</p>
+
+<ul>
+  <li>Choose one center uniformly at random among the data points,</li>
+  <li>For each data point x not chosen yet, compute D(x), the distance between x and the nearest center that has already been chosen.</li>
+  <li>Choose one new data point at random as a new center, using a weighted probability distribution where a point x is chosen with probability proportional to D(x)2.</li>
+  <li>Repeat Steps 2 and 3 until k centers have been chosen.</li>
+</ul>
+
+<p>Now that the initial centers have been chosen, proceed using standard k-means clustering.</p>
+
+<p>K-means++ part was extract from <a href="https://en.wikipedia.org/wiki/K-means%2B%2B">the Wikipedia page on K-means++</a>.</p>
+
+<h2 id="choosing-k">Choosing K</h2>
+
+<ul>
+  <li>Elbow-point</li>
+  <li>Validation set</li>
+  <li>Clustering quality metrics</li>
+</ul>
+
+<h2 id="pros-and-cons">Pros and Cons</h2>
+<h3 id="pros">Pros</h3>
+<ul>
+  <li>Easy to understand</li>
+</ul>
+
+<h3 id="cons">Cons</h3>
+<ul>
+  <li>Can’t handle complex structure shapes</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<p>See <a href="https://cs229.stanford.edu/notes2021fall/cs229-notes7a.pdf">CS229 course on K-means</a>.</p>
+
+  </body>
+</html>

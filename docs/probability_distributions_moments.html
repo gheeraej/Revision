@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Probability distributions - Moments</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-probability-distribution"><a href="/Revision/probability_distributions.html">Back to Probability distribution</a></h2>
+
+<p><br /></p>
+<h1 id="moments">Moments</h1>
+<h2 id="expected-value">Expected value</h2>
+<h3 id="definition">Definition</h3>
+
+\[\mathbb{E}(X)=\int_{-\infty}^{\infty}x \cdot f(x)dx\]
+
+<p>Where:</p>
+<ul>
+  <li>\(f\) is the probability density function of \(X\).</li>
+</ul>
+
+<p><br /></p>
+<h3 id="estimator">Estimator</h3>
+<p>The estimator of the expected value or mean is:</p>
+
+\[\mathbb{E}(X)=\frac{1}{n}\sum_{i=1}^{n}x_i\]
+
+<p><br /></p>
+<h3 id="resources">Resources</h3>
+<p>See : <a href="https://en.wikipedia.org/wiki/Expected_value">Wikipedia page for expected value</a>.</p>
+
+<p><br /></p>
+<h2 id="variance-and-standard-deviation">Variance and standard deviation</h2>
+<h3 id="definition-1">Definition</h3>
+
+\[Var(X)
+=\sigma^2
+=\mathbb{E}\left[\left(X-\mathbb{E}(X)\right)^2\right]
+=\mathbb{E}\left[X^2-2X\mathbb{E}(X)+\mathbb{E}(X)^2\right]
+=\mathbb{E}\left(X^2\right)-2\mathbb{E}(X)\mathbb{E}(X)+\mathbb{E}(X)^2
+=\mathbb{E}\left(X^2\right)-\mathbb{E}(X)^2\]
+
+\[Var(X)=\sigma^2=\int_{-\infty}^{\infty}(x-\mu)^2f(x)dx=\int_{-\infty}^{\infty}x^2f(x)dx-\mu^2\]
+
+<p>Where:</p>
+<ul>
+  <li>\(f\) is the probability density function of \(X\).</li>
+</ul>
+
+<p>The standard deviation is the square root of the variance it is \(\sigma\).</p>
+
+<p><br /></p>
+<h3 id="estimator-1">Estimator</h3>
+<p>Unbiased variance (with <a href="https://en.wikipedia.org/wiki/Bessel%27s_correction">Bessel’s correction</a> ie n-1 in place of n in the denominator):</p>
+
+\[Var(X)=\sigma^2=\frac{1}{n-1}\sum_{i=1}^{n}\left(x_i-\bar{x}\right)^2=\left(\frac{1}{n}\sum_{i=1}^{n}x_i^2\right)-\bar{x}^2\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\bar{x}\) is the estimator of the mean</li>
+</ul>
+
+<p>The estimator of the standard deviation is just \(\sigma\), the square root of the estimated variance.</p>
+
+<p><br /></p>
+<h3 id="properties">Properties</h3>
+<p>For X and Y two random variables and a and b two determistic values:</p>
+<ul>
+  <li>\(Var(X) \geq 0\),</li>
+  <li>\(Var(a) = 0\),</li>
+  <li>\(Var(X+a)=Var(X)\),</li>
+  <li>\(Var(aX)=a^2Var(X)\),</li>
+  <li>\(Var(aX+bY) = a^2 Var(X) + b^2 Var(Y) + 2 ab Cov(X,Y)\).</li>
+</ul>
+
+<p><br /></p>
+<h3 id="resources-1">Resources</h3>
+<p>See : <a href="https://en.wikipedia.org/wiki/Variance">Wikipedia page for variance</a>.</p>
+
+<p><br /></p>
+<h2 id="covariance">Covariance</h2>
+<h3 id="definition-2">Definition</h3>
+<p>\(Cov(X, Y)=\mathbb{E}\left[\left(X-\mathbb{E}(X)\right)\left(Y-\mathbb{E}(Y)\right)\right]=\mathbb{E}(XY)-\mathbb{E}(X)\mathbb{E}(Y)\)</p>
+
+<p><br /></p>
+<h3 id="estimator-2">Estimator</h3>
+<p>Unbiased covariance estimator (with <a href="https://en.wikipedia.org/wiki/Bessel%27s_correction">Bessel’s correction</a> ie n-1 in place of n in the denominator):</p>
+
+\[Cov(X, Y)=\frac{1}{n-1}\sum_{i=1}^{n}\left(x_i-\bar{x}\right)\left(y_i-\bar{y}\right)\]
+
+<p><br /></p>
+<h3 id="properties-1">Properties</h3>
+<p>For X and Y two random variables and a and b two determistic values:</p>
+<ul>
+  <li>\(X\text{, }Y\text{ independents } \implies Cov(X,Y)=0\),</li>
+  <li>\(Cov(X,Y)=0 \not\implies X\text{, }Y\text{ independents}\),</li>
+  <li>\(Cov(X,X)=Var(X)\),</li>
+  <li>\(Cov(X,a)=0\),</li>
+  <li>\(Cov(X,Y)=Cov(Y,X)\),</li>
+  <li>\(Cov(aX,bY) = ab Cov(X,Y)\),</li>
+  <li>\(Cov(a+X,b+Y) = Cov(X,Y)\),</li>
+  <li>\(Cov(aX+bY,cW+dV) = ac\;Cov(X,W) + ad\;Cov(X,V) + bc\;Cov(Y,W) + bd\;Cov(Y,V)\) (for V, W random variables and c, d deterministic).</li>
+</ul>
+
+<p>For \(Cov(X,Y)=0 \not\implies X\text{, }Y\text{ independents}\), an example is to take \(X\) centered on 0 and \(Y=X^2\).
+Covariance is null but \(Y\) is totally determined by \(X\).</p>
+
+<p><br /></p>
+<h3 id="resources-2">Resources</h3>
+<p>See : <a href="https://en.wikipedia.org/wiki/Covariance">Wikipedia page for covariance</a>.</p>
+
+<p><br /></p>
+<h2 id="correlation">Correlation</h2>
+
+\[\rho(X, Y)=\frac{Cov(X,Y)}{\sigma_X \sigma_Y}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\sigma_X\) is the standard deviation of X</li>
+  <li>\(\sigma_Y\) is the standard deviation of Y</li>
+</ul>
+
+<p><br /></p>
+<h3 id="estimator-3">Estimator</h3>
+<p>The estimator of the correlation is the estimator of the covariance of X and Y divided by the product of the estimated standard deviation of X and Y.</p>
+
+<p><br /></p>
+<h3 id="properties-2">Properties</h3>
+<p>For X and Y two random variables and a and b two determistic values:</p>
+<ul>
+  <li>\(X\text{, }Y\text{ independents } \implies \rho(X,Y)=0\),</li>
+  <li>\(\rho(X,Y)=0 \not\implies X\text{, }Y\text{ independents}\),</li>
+</ul>
+
+<p>For \(rho(X,Y)=0 \not\implies X\text{, }Y\text{ independents}\), an example is to take \(X\) centered on 0 and \(Y=X^2\).
+Correlation is null but \(Y\) is totally determined by \(X\).</p>
+
+<p><br /></p>
+<h3 id="resources-3">Resources</h3>
+<p>See : <a href="https://en.wikipedia.org/wiki/Correlation">Wikipedia page for correlation</a>.</p>
+
+<p><br /></p>
+<h2 id="skewness">Skewness</h2>
+<p>Skewness is the third moment of a distribution.
+It measures the asymmetry of a probability distribution.</p>
+
+<p><br /></p>
+<h2 id="kurtosis">Kurtosis</h2>
+<p>Kurtosis is the forth moment of a distribution.
+It describes the shape of a probability distribution and in particular the probability of extreme values (fat tails).</p>
+
+<p><br /><br /></p>
+<h1 id="characteristic-function">Characteristic function</h1>
+<p>The characteristic function of a random variable X is:</p>
+
+\[\phi_X(t)=\mathbb{E}\left[e^{itX}\right]=\mathbb{E}\left[\cos(tX)\right]+i\mathbb{E}\left[\sin(tX)\right]\]
+
+<p>If the distribution of this random variable has a probability density then its characteristic function is the inverse Fourier transform of this probability density function:</p>
+
+\[\phi_X(t)=\int_{\mathbb{R}}f_X(x)e^{itx}dx\]
+
+<p>The characteristic function is very useful to compute the moments of a distribution. Its successive derivatives taken at 0 give the moment of equivalent order.</p>
+
+\[\frac{d\phi_X(t)}{dt}=\mathbb{E}\left[iXe^{itX}\right]\]
+
+\[\frac{d\phi_X(0)}{dt}=i\mathbb{E}[X]\]
+
+<p>So the first derivative gives the mean.</p>
+
+  </body>
+</html>

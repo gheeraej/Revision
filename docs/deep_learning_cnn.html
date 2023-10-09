@@ -1,0 +1,248 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Deep Learning - Convolutional Neural Network for Computer Vision</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-deep-learning"><a href="/Revision/deep_learning.html">Back to Deep Learning</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>A Convolutional Neural Network or CNN is a type of neural network specifically designed to be applied to images.</p>
+
+<p>A CNN uses layers of filters made of weights that are designed to extract features from the images. As we go deeper in the model, the features extracted are more and more complex:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/cnn_filters.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h1 id="advantages-of-cnn-for-images">Advantages of CNN for images</h1>
+<p>The advantages of using a CNN over a classical feed forward neural network for images are:</p>
+
+<ul>
+  <li>The extraction of features done by the filters is invariant with respect to the positions of pixels: the same filter will be able to extract the same feature wherever it is in the picture (a classical NN could not do that),</li>
+  <li>The number of parameters is lower,</li>
+  <li>2 dimensions filters are particularly suited to extract visual (2d) features.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="mathematical-convolution">Mathematical convolution</h1>
+<p>Convolution is a mathematical operation. CNN uses 2d convolutions.</p>
+
+<p>The mathematical convolution is:</p>
+
+\[(f \ast g)(x)= \int_{-\infty}^{+\infty} f(x-t) g(t) \; \mathrm{d}t = \int_{-\infty }^{+\infty} f(t) g(x-t) \; \mathrm{d}t\]
+
+<p>In discrete space it is:</p>
+
+\[(f \ast g)(n)= \sum_{m=-\infty}^{+\infty} f(n-m) g(m) = \sum_{m=-\infty }^{+\infty} f(m) g(n-m)\]
+
+<p>CNN uses 2d convolution.</p>
+
+<p><br /></p>
+<h2 id="example">Example</h2>
+<p>Here is a representation of convolution in dimension 1 of a function applied to itself ie \(f=g\):
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/conv1d.gif" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>In the above example:</p>
+
+\[f(x) = g(x) = \begin{cases}
+                1 &amp;&amp; \text{if } -0.5 \leq x \leq 0.5\\
+                0 &amp;&amp; \text{otherwise}
+              \end{cases}\]
+
+<p>\((f \ast g)(x)\) is not null if:</p>
+
+\[0.5 \leq t \leq 0.5 \text{and} 0.5 \leq x-t \leq 0.5 \; \forall t \in \mathbb{R}\]
+
+<p>In this special case, the convolution can be rewrite:</p>
+
+\[(f \ast g)(x) = \int_{-0.5}^{+0.5} f(x-t) \; \mathrm{d}t\]
+
+<p>It is easy to see that it is non null for \(-1 \leq x \leq 1\).</p>
+
+<p><br /></p>
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Convolution">Convolution page on Wikipedia</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/Produit_de_convolution">Convolution page on Wikipedia (in french)</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="architecture">Architecture</h2>
+<p>A CNN model is a succession of convolution layers, activation functions, pooling and that ends with fully connected layers:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/vgg16.png" width="40%" height="40%" />
+</div>
+<p>Representation of <a href="https://arxiv.org/pdf/1409.1556.pdf">VGG-16 model</a>.</p>
+
+<p><br /></p>
+<h3 id="encoder-decoder">Encoder decoder</h3>
+<p>Some CNN are also encoder decoder. This means that the information of an image is encoded in a smaller dimension and then is decoded to a larger resolution to perform, for example, image segmentation:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/segnet.png" width="40%" height="40%" />
+</div>
+<p>Representation of <a href="https://arxiv.org/pdf/1511.00561.pdf">SegNet</a>.</p>
+
+<p><br /></p>
+
+<p>Another (fancier) encoder decoder model is <a href="https://arxiv.org/pdf/1505.04597.pdf">U-Net</a>:</p>
+<div style="text-align: center">
+<img src="assets/images/unet.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="convolutional-layers">Convolutional layers</h2>
+<p>The main blocks of a CNN are convolutional layers.</p>
+
+<p>Convolutional layers apply \(K\) convolutional filters (also called kernels) on the output of the precedent layer (or directly on the input for the first convolutional layer).</p>
+
+<p>Convolutional filters are of size \((F \times F \times C)\) where \(F\) is the height and width of the filter and \(C\) the number of output channels from previous layers (an RGB image has 3 channels).</p>
+
+<p><br /></p>
+
+<p>Here is a representation of a layer of \(K\) filters of size \(F \times F \times C\).</p>
+<div style="text-align: center">
+<img src="assets/images/filters.png" width="50%" height="50%" />
+</div>
+<p><br /></p>
+
+<p>And here is a representation of a filter (in red) of size \((5 \times 5 \times 3)\) (3 being the number of channel of the input - or precedent layer) applied to an input (input data or output of precedent layer) of size \((32 \times 32 \times 3)\):</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/filter.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>Generally, a convolutional filter is of size \((3 \times 3)\) as a serie of \((3 \times 3)\) convolutional layer can achieve the same receptive field as larger convolution filters.</p>
+
+<p>For example a stack of 3 layers of \(C\) filters of size \((3 \times 3 \times C)\) has the same receptive fields as a single layer of \(C\) filter of size \((7 \times 7 \times C)\). However the first setup has \(3 \times (C \times (3 \times 3 \times C)) = 27C^2\) parameters and the second setup has \((C \times (7 \times 7 \times C)) = 49C^2\)  parameters (see <a href="https://cs231n.github.io/convolutional-networks/">CS231n course on CNN, paragraph on Layer Patterns</a>).</p>
+
+<p><br /></p>
+<h3 id="size-decreasing">Size decreasing</h3>
+<p>A \((F \times F)\) filter applied to a \((H \times H)\) image will decrease its size. The output size will be: \(\left[(H-F+1) \times (H-F+1)\right]\).</p>
+
+<p><br /></p>
+<h3 id="receptive-field">Receptive field</h3>
+<p>The receptive field at layer \(k\) is the area denoted \(R_k \times R_k\) of the input that each pixel of the \(k\)-th activation map can ‘see’.</p>
+
+<p>Here is a visual representation of the receptive field:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/receptive_field.png" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>More information on receptive field on <a href="https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-convolutional-neural-networks">CS230n cheatsheet on CNN</a>.</p>
+
+<p><br /></p>
+<h3 id="visual-representation">Visual representation</h3>
+<p>Here is a visual representation of a filter of size \((3 \times 3 \times 1)\) applied to an input image of \(0\) and \(1\) of size \((5 \times 5 \times 1)\):</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/input_filter.png" width="25%" height="25%" />
+</div>
+<p><br /></p>
+
+<p>The kernel is applied to every possible position:</p>
+<div style="text-align: center">
+<img src="assets/images/input_filter.gif" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>Note that the size in decreased by the application of a filter.</p>
+
+<p><br /></p>
+<h2 id="stride">Stride</h2>
+<p>Naturally a convolutional filter moves by 1 pixel at a time but it can move 2 pixels by 2 pixels or by any number of pixel. This is called the stride.</p>
+
+<p>Here is a \((3 \times 3)\) filter with stride 1:</p>
+<div style="text-align: center">
+<img src="assets/images/stride1.gif" width="25%" height="25%" />
+</div>
+<p><br /></p>
+
+<p>Here is a \(3 \times 3\) filter with stride 2:</p>
+<div style="text-align: center">
+<img src="assets/images/stride2.gif" width="25%" height="25%" />
+</div>
+
+<p><br /></p>
+<h3 id="size-decreasing-1">Size decreasing</h3>
+<p>A \((F \times F)\) filter with stride \(S\) applied to a \((H \times H)\) image will decrease its size. The output size will be: \(\left[\left(\frac{H-F}{S}+1\right) \times \left(\frac{H-F}{S}+1\right)\right]\).</p>
+
+<p><br /></p>
+<h2 id="padding">Padding</h2>
+<p>Padding consist in adding null pixels around the input in order to not decrease (or limit) the size of the input.</p>
+
+<p>Here is a \(3 \times 3\) filter with stride 1 and padding 1:</p>
+<div style="text-align: center">
+<img src="assets/images/padding.gif" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h3 id="size-decreasing-2">Size decreasing</h3>
+<p>The output size of a \(F \times F\) filter with stride \(S\) and padding \(P\) applied to a \(H \times H\) image will be: \(\left[\left(\frac{H-F+2P}{S}+1\right) \times \left(\frac{H-F+2P}{S}+1\right)\right]\).</p>
+
+<p><br /></p>
+<h2 id="pooling">Pooling</h2>
+<p>Pooling is an operation that reduce the dimension of the input. The goal of pooling is to reduce the number of parameters of the model which both shorten the training time and combat overfitting.</p>
+
+<p>The most common pooling is max pooling which only keep the most import (greater) value in an area:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/maxpool.png" width="30%" height="30%" />
+</div>
+<p>Here the max pooling operation is of size \((2 \times 2)\) with stride 2. This is the commonly used max pooling.</p>
+
+<p><br /></p>
+
+<p>Instead of max pooling one can use average pooling which average the features of the area.</p>
+
+<p><br /></p>
+
+<p>Here is a representation of dimension reduction done by max pooling operation:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/maxpool_dim_reduction.png" width="25%" height="25%" />
+</div>
+
+<p><br /></p>
+<h1 id="resources-1">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://cs231n.github.io/convolutional-networks/">CS231n</a>,</li>
+  <li><a href="https://towardsdatascience.com/applied-deep-learning-part-4-convolutional-neural-networks-584bc134c1e2">This Toward Data Science blog post</a>,</li>
+  <li><a href="https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-convolutional-neural-networks">CS230n cheatsheet on CNN</a>,</li>
+  <li><a href="https://arxiv.org/pdf/1311.2901v3.pdf">Visualizing and Understanding Convolutional Networks by M. Zeiler and R. Fergus</a>,</li>
+  <li><a href="https://towardsdatascience.com/gentle-dive-into-math-behind-convolutional-neural-networks-79a07dd44cf9">This Toward Data Science blog post</a>.</li>
+</ul>
+
+  </body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Transformers - Positional Encoding</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-transformers"><a href="/Revision/transformers.html">Back to Transformers</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>A Transformers model using attention block does not have any information about the positions or order of the words it uses.</p>
+
+<p>However position and order of words are the essential parts of any language. They define the grammar and thus the actual semantics of a sentence. For example Recurrent Neural Networks (RNNs) inherently take the order of word into account; They parse a sentence word by word in a sequential manner. This will integrate the words’ order in the backbone of RNNs.</p>
+
+<p>To counter this problem, positional encoding is used, which encodes the position of each word of a text.</p>
+
+<p><br /></p>
+<h1 id="intuition">Intuition</h1>
+<p>The first idea that might come to mind is to assign a number to each time-step within the \([0, 1]\) range in which \(0\) means the first word and \(1\) is the last time-step. One of the problems of this method is that is can’t figure out how many words are present within a specific range. In other words, time-step delta doesn’t have consistent meaning across different sentences.</p>
+
+<p><br /></p>
+
+<p>Another idea is to assign a number to each time-step linearly. That is, the first word is given \(1\), the second word is given \(2\), and so on. The problem with this approach is that not only the values could get quite large, but also our model can face sentences longer than the ones in training. In addition, our model may not see any sample with one specific length which would hurt generalization of our model.</p>
+
+<p><br /></p>
+<h1 id="sinusoidal-positional-encoding">Sinusoidal Positional Encoding</h1>
+<p>The idea from <a href="https://arxiv.org/pdf/1706.03762.pdf">Attention is all you need by A Vaswani and al.</a> is to encode the position in \(d\) dimension (where \(d\) is the same dimension as the token encoding) using sinus and cosinus function:</p>
+
+\[PE_i(t) = \begin{cases}
+              \sin(\omega_{i/2} \cdot t) \text{, if } i % 2 = 0\\
+              \cos(\omega_{(i/-1)2} \cdot t) \text{, if } i % 2 = 1\\
+            \end{cases}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(t\) is the position of the token,</li>
+  <li>\(i\) is the \(i\)-th dimension of the vector \(PE\) of dimension \(d\),</li>
+</ul>
+
+<p>And where:</p>
+
+\[\omega_k = \frac{1}{10000^{2k/d}}\]
+
+<p>With:</p>
+
+<ul>
+  <li>\(d\) the dimension of the positional encoding.</li>
+</ul>
+
+<p>The frequencies are decreasing along the vector dimension. Thus it forms a geometric progression from \(2\pi\) to \(10000 \cdot 2\pi\) on the wavelengths.</p>
+
+<p>Here is a visualisation of the \(d\)-dimensional vector \(PE\):</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/positional_encoding.png" width="10%" height="10%" />
+</div>
+
+<p><br /></p>
+<h2 id="visualisation">Visualisation</h2>
+<p>Here is a visual representation of a 128 dimensional sinusoidal positional encoding:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/pe_128.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<h2 id="incorporation-with-token-encoding">Incorporation with token encoding</h2>
+<p>The token encoding and the positional encoding are just added.
+Recall that the two encoding are choosen to have the same dimension.</p>
+
+\[E(w_t) = PE(t) + WE(w_t)\]
+
+<p>Where:</p>
+<ul>
+  <li>\(E(w_t)\) is the final encoding of word (token) \(w_t\),</li>
+  <li>\(PE(t)\) is the positional encoding of word (token) \(w_t\) with position \(t\),</li>
+  <li>\(WE(w_t)\) is the word (token) encoding of word (token) \(w_t\).</li>
+</ul>
+
+<p><br /></p>
+<h2 id="relative-positioning">Relative Positioning</h2>
+<p>A intersting feature of sinusoidal positional encoding is that ‘it would allow the model to easily learn to attend by relative positions, since for any fixed offset \(k\), \(PE(t+k)\) can be represented as a linear function of \(PE(t)\)’.</p>
+
+<p>It means that, for any offset \(k\), the relation between 2 tokens separated by \(k\) does not depend on the position of these two 2 tokens.</p>
+
+<p><br /></p>
+<h3 id="proof">Proof</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://kazemnejad.com/blog/transformer_architecture_positional_encoding/">The proof on this blog post on Positional Encoding by Amirhossein Kazemnejad</a>,</li>
+  <li><a href="https://timodenk.com/blog/linear-relationships-in-the-transformers-positional-encoding/">The proof on this blog post on Positional Encoding by Tim Denk</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://kazemnejad.com/blog/transformer_architecture_positional_encoding/">This blog post on Positional Encoding by Amirhossein Kazemnejad</a>,</li>
+  <li><a href="https://timodenk.com/blog/linear-relationships-in-the-transformers-positional-encoding/">This blog post on Positional Encoding by Tim Denk</a>,</li>
+  <li><a href="https://jalammar.github.io/illustrated-transformer/">The illustrated Transformer by Jay Alammar</a>.</li>
+</ul>
+
+  </body>
+</html>

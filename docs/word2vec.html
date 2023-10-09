@@ -1,0 +1,300 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Word2Vec</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-nlp"><a href="/Revision/deep_learning_nlp.html">Back to NLP</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>Word2Vec is an unsupervised method to generate vector representations of words.
+Once each word is assigned to an ID, a dictionary or a one-hot matrix representation is used to map every word to its vector representation.</p>
+
+<p>This vector representations of words are computed such as similar words have similar representations.</p>
+
+<p><br /></p>
+<h1 id="cbow">CBOW</h1>
+<p>CBOW for Continuous Bag of Word predicts a word given context, ie it tries to predict a word given surrounding words in a given window:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/cbow.png" width="20%" height="20%" />
+</div>
+<p><br /></p>
+
+<p>Where:</p>
+<ul>
+  <li>\(x_{i,k} := w_i\) represent the one hot encoding of the \(i\)-th word of the context which is 0 everywhere except for index \(k\),</li>
+  <li>\(x_{1,k}, \ldots, x_{C,k}\) represent the one hot encoding of the \(C\) surrounding context words,</li>
+  <li>\(y_j\) represents the probability to predict word \(j\) given the context,</li>
+  <li>\(W_{V \times N}\) is a matrix of weights that encodes the context words to vector representation,</li>
+  <li>\(W_{N \times V}\) is another matrix of weights that encodes the tested central words to vector representations.</li>
+  <li>\(V\) is the size of the vocabulary,</li>
+  <li>\(N\) is the size of the vector representation (hyperparameter),</li>
+  <li>The hidden layer \(h\) contains the representation of the context words.</li>
+</ul>
+
+<p>The two matrix \(W_{V \times N}\) and \(W_{N \times V}\) are different even if they have a similar meaning.</p>
+
+<p>Also note that word with ID \(x_i\) will have as context representation \(W_{V \times N}(x_i)\) and as central word representation \(W_{N \times V}(x_i)\).</p>
+
+<p><br /></p>
+
+<p>The hidden layer \(h\) is an average of the representation of each context word ie:</p>
+
+\[\begin{eqnarray}
+h &amp;&amp;= \frac{1}{C} (W_{V \times N})^T (x_1 + x_2 + \ldots + x_C) \\
+h &amp;&amp;= \frac{1}{C} (v_{w_1} + v_{w_2} + \ldots + v_{w_C})^T
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(v_{w_i}\) represent the context representation of word \(x_i\)</li>
+</ul>
+
+<p><br />
+The probability of word \(w_j\) given context is then:</p>
+
+\[\begin{eqnarray}
+p(w_j \vert (w_{j-c/2}, \ldots, w_{j-1}, w_{j+1}, \ldots, w_{j+c/2})) &amp;&amp; = p(w_j \vert h) \\
+&amp;&amp; = \frac{\exp((v'_{w_j})^T h)}{\sum_k^V \exp((v'_{w_k})^T h)} \\
+&amp;&amp; = \frac{\exp(u'_{w_j})}{\sum_k^V \exp(u'_{w_k})} \\
+&amp;&amp; = y_j
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(v'_{w_i}\) represent the central word representation of word \(w_i\),</li>
+  <li>\(u'_{w_i} = (v'_{w_i})^T h\).</li>
+</ul>
+
+<p><br /></p>
+<h3 id="optimization">Optimization</h3>
+<p>The goal of the model is to maximize \(p(w_O \vert h)\):</p>
+
+\[\begin{eqnarray}
+p(w_O \vert h) &amp;&amp;= \max y_O \\
+&amp;&amp;= \log y_O \\
+&amp;&amp;= \log \frac{\exp((v'_{w_O})^T h)}{\sum_k^V \exp((v'_{w_k})^T h)} \\
+&amp;&amp;= \log \exp((v'_{w_O})^T h) - \log \sum_k^V \exp((v'_{w_k})^T h)\\
+&amp;&amp;= (v'_{w_O})^T h - \log \sum_k^V \exp((v'_{w_k})^T h)\\
+&amp;&amp;= u'_{w_O} - \log \sum_k^V \exp(u'_{w_k}) := E
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(E = -\log p(w_O \vert h)\) is the loss function to minimize.</li>
+</ul>
+
+<p><br /></p>
+
+<p>We will use <a href="/Revision/mathematics_optimization.html#gradient-descent">Gradient Descent</a> to minimize \(E\). The derivative of \(E\) with respect to \(u_j\) is:</p>
+
+\[\begin{eqnarray}
+\frac{dE}{du_j} &amp;&amp;= \frac{d}{du_j} -\log(w_O \vert h) \\
+&amp;&amp;= -\log \sum_k^V \exp(u'_{w_k}) - u'_{w_O} \\
+&amp;&amp;= \exp(u'_{w_j}) \frac{1}{\sum_k^V \exp(u'_{w_k})} -  \frac{u'_{w_O}}{du_j} \\
+&amp;&amp;= y_j - t_j := e_j
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(t_j = \mathrm{1}_{j=O}\) is 1 when \(w_j\) is the actual output word \(w_O\), otherwise \(t_j = 0\).</li>
+</ul>
+
+<p>The derivative with respect to \(v'_{w_j}\), the central vector word representation of word \(w_j\) is then</p>
+
+\[\begin{eqnarray}
+\frac{dE}{dw_j} &amp;&amp;= \frac{dE}{du_j} \frac{du_j}{dv'_{w_j}} \\
+&amp;&amp;= e_j \frac{d}{dv'_{w_j}}(v'_{w_j})^T h \\
+&amp;&amp;= e_j \cdot h
+\end{eqnarray}\]
+
+<p>The Gradient Descent update rule for central word representation of word \(w'_j\) (hidden -&gt; output) is then:</p>
+
+\[(v'_{w_j})^{(new)} = (v'_{w_j})^{(old)} - \alpha \cdot e_j \cdot h\]
+
+<p>For context word we have:</p>
+
+\[\begin{eqnarray}
+\frac{dE}{dh} &amp;&amp;= \sum_{j=1}^V \frac{dE}{du_j} \frac{du_j}{dh} \\
+&amp;&amp;= \sum_{j=1}^V e_j w'_j := EH \\
+\end{eqnarray}\]
+
+<p>Intuitively, since vector EH is the sum of output vectors of all words in vocabulary weighted by their prediction error \(e_j = y_j − t_j\), we can understand the above equation as adding a portion of every output vector in vocabulary to the input vector of the context word. If, in the output layer, the probability of a word \(w_j\) being the output word is overestimated (\(y_j \gt t_j\)), then the input vector of the context word \(w_I\) will tend to move farther away from the output vector of \(w_j\); conversely if the probability of \(w_j\) being the output word is underestimated (\(y_j \lt t_j\)), then the input vector wI will tend to move closer to the output vector of \(w_j\); if the probability of \(w_j\) is fairly accurately predicted, then it will have little effect on the movement of the input vector of \(w_I\).</p>
+
+<p>And:</p>
+
+\[\begin{eqnarray}
+\frac{dE}{dw_k} &amp;&amp;= \frac{dE}{dh}  \frac{dh}{dw_k}\\
+&amp;&amp;= EH \cdot w_k\\
+\end{eqnarray}\]
+
+<p>\(w_k\) is just a one-hot vector having a 1 on its \(k\)-th row.</p>
+
+<p>The the update rule for context word representations (input -&gt; hidden) is then:</p>
+
+\[(v_{w_{I,c}})^{(new)} = (v_{w_{I,c}})^{(old)} - \frac{1}{C} \alpha \cdot EH^T \;\;\;\; \text{for } c \in \{1, \ldots, C\}\]
+
+<p>Only the weights of input words \((I, c)\) from the context are updated.</p>
+
+<p><br /></p>
+<h1 id="skip-gram">Skip-gram</h1>
+<p>Skip-gram model predicts context words given the central word ie it tries to predict context words in a window given the central word:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/skip-gram.png" width="20%" height="20%" />
+</div>
+<p><br /></p>
+
+<p>Where:</p>
+<ul>
+  <li>\(x_k\) represent the central word,</li>
+  <li>\(y_{i,j}\) represents the probability to predict word \(j\) as context word \(i\),</li>
+  <li>\(W_{V \times N}\) is a matrix of weights that encodes the context words to vector representation,</li>
+  <li>\(W_{N \times V}\) is another matrix of weights that encodes the tested central words to vector representations.</li>
+  <li>\(V\) is the size of the vocabulary,</li>
+  <li>\(N\) is the size of the vector representation (hyperparameter),</li>
+  <li>The hidden layer \(h\) contains the representation of the central word.</li>
+</ul>
+
+<p>The two matrix \(W_{V \times N}\) and \(W_{N \times V}\) are different even if they have a similar meaning.</p>
+
+<p>Also note that word with ID \(x_i\) will have as central word representation \(W_{V \times N}(x_i)\) and as context word representation \(W_{N \times V}(x_i)\).</p>
+
+<p><br /></p>
+
+<p>The hidden layer \(h\) is:</p>
+
+\[h = (W_{V \times N})^T x_k = v_{x_k}\]
+
+<p><br /></p>
+
+<p>The probability of \(c\)-th word of the context being word \(j\), \(w_{c,j}\) given central word \(w_I\) is then:</p>
+
+\[\begin{eqnarray}
+p(w_{c,j} \vert w_I) &amp;&amp; = p(w_j \vert h) \\
+&amp;&amp; = \frac{\exp((v'_{w_{c,j}})^T h)}{\sum_k^V \exp((v'_{w_{c,k}})^T h)} \\
+&amp;&amp; = \frac{\exp(u'_{w_{c,j}})}{\sum_k^V \exp(u'_{w_{c,k}})} \\
+&amp;&amp; = y_j
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(v'_{w_i}\) represent the central word representation of word \(w_i\),</li>
+  <li>\(u'_{w_i} = (v'_{w_i})^T h\).</li>
+</ul>
+
+<p>Where:</p>
+<ul>
+  <li>\(v'_{w_i}\) represent the central word representation of word \(w_i\).</li>
+</ul>
+
+<p><br /></p>
+<h3 id="optimization-1">Optimization</h3>
+<p>The goal of the model is to maximize \(p((w_{1,O}, \ldots, w_{C,O}) \vert h)\):</p>
+
+\[\begin{eqnarray}
+p((w_{1,O}, \ldots, w_{C,O}) \vert h) &amp;&amp;= \max \prod_{i=1}^C y_i \\
+&amp;&amp;= \prod_{c=1}^C \frac{\exp((v'_{w_{c,O}})^T h)}{\sum_k^V \exp((v'_{w_k})^T h)} \\
+&amp;&amp;= \prod_{c=1}^C \frac{\exp(u'_{w_{c,O}})}{\sum_k^V \exp(u'_{w_k})} \\
+&amp;&amp;= \log \prod_{c=1}^C \frac{\exp(u'_{w_{c,O}})}{\sum_k^V \exp(u'_{w_k})} \\
+&amp;&amp;= \log \frac{1}{\sum_k^V \exp(u'_{w_k})} \prod_{c=1}^C \exp(u'_{w_{c,O}}) \\
+&amp;&amp;= \sum_{i=1}^C \log \exp(u'_{w_{c,O}}) - \log \sum_k^V \exp(u'_{w_k}))\\
+&amp;&amp;= \sum_{c=1}^C u'_{w_{c,O}} + C \cdot \log \sum_k^V  \exp(u'_{w_k})) := -E
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(E = -\log p((w_{1,O}, \ldots, w_{C,O}) \vert h)\) is the loss function to minimize.</li>
+  <li>\(u_{w_k}\) does not depend on the position of the context word \(c\) ie \(u_{w_{c,k}}=u_{w_k}\)</li>
+</ul>
+
+<p><br /></p>
+
+<p>We will use <a href="/Revision/mathematics_optimization.html#gradient-descent">Gradient Descent</a> to minimize \(E\). The derivative of \(E\) with respect to \(u_j\) is:</p>
+
+\[\begin{eqnarray}
+\frac{dE}{du'_{c,j}} &amp;&amp;= \frac{d}{du'_{w_{c,j}}} -\log p((w_{1,O}, \ldots, w_{C,O}) \\
+&amp;&amp;= \frac{d}{du'_{w_{c,j}}} \left[-\sum_{c=1}^C u'_{w_{c,O}} + C \cdot \log \sum_k^V  \exp(u'_{w_k}))\right] \\
+&amp;&amp;= C \cdot \frac{\exp(u'_{w_{c,j}}}{\sum_k^V  \exp(u'_{w_k}))} - \frac{du'_{w_{c,O}}}{du'_{w_{c,j}}} \\
+&amp;&amp;= y_{c,j} - t_{c,j} := e_{c,j}
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(t_{c,j} = \mathrm{1}_{j=O}\) is 1 when \(w_{c,j}\) is the actual output word \(w'_{c,O}\), otherwise \(t_{c,j} = 0\).</li>
+</ul>
+
+<p>The derivative with respect to \(v'_{w_{c,j}}\), the context vector word representation of word \(w'_{c,j}\) is then</p>
+
+\[\begin{eqnarray}
+\frac{dE}{dw'_j} &amp;&amp;= \sum_{c=1}^{C} \frac{dE}{du'_{w_{c,j}}} \frac{du'_{w_{c,j}}} {dv'_{w_j}} \\
+&amp;&amp;= \sum_{c=1}^{C} e_{c,j} \cdot h := EI_j \cdot h
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(EI_j := \sum_{c=1}^{C} e_{c,j}\).</li>
+</ul>
+
+<p>The Gradient Descent update rule for context word representation of word \(w_j\) (hidden -&gt; output) is then:</p>
+
+\[(v'_{w_j})^{(new)} = (v'_{w_j})^{(old)} - \alpha \cdot EI_j \cdot h \;\;\; \text{for } j \in \{1, \ldots, V\}\]
+
+<p><br /></p>
+
+<p>For the central word we have:</p>
+
+\[\begin{eqnarray}
+\frac{dE}{dh} &amp;&amp;= \sum_{j=1}^V \frac{dE}{du_j} \frac{du_j}{dh} \\
+&amp;&amp;= \sum_{j=1}^V e_j w'_j := EH \\
+\end{eqnarray}\]
+
+<p>And:</p>
+
+\[\begin{eqnarray}
+\frac{dE}{dw_k} &amp;&amp;= \frac{dE}{dh}  \frac{dh}{dw_k}\\
+&amp;&amp;= EH \cdot w_k\\
+\end{eqnarray}\]
+
+<p>\(w_k\) is just a one-hot vector having a 1 on its \(k\)-th row.</p>
+
+<p>The the update rule for central word representation (input -&gt; hidden) is:</p>
+
+\[(v_{w_I})^{(new)} = (v_{w_I})^{(old)} - \alpha \cdot EH^T\]
+
+<p>Only the weights of the current central word are updated.</p>
+
+<p><br /></p>
+<h1 id="hierarchical-softmax">Hierarchical Softmax</h1>
+<p>To speed up the computation of the softmax function (that require to compute at each update of the parameters the constant \(\sum_k^V \exp(w_k)\)), one can use hierarchical softmax.</p>
+
+<p>Hierarchical softmax computes the softmax using a tree representation:</p>
+
+<p>See <a href="https://arxiv.org/pdf/1411.2738.pdf">word2vec Parameter Learning Explained by Xin Rong</a> for more informations.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources:</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://arxiv.org/pdf/1411.2738.pdf">word2vec Parameter Learning Explained by </a>,</li>
+  <li><a href="https://jalammar.github.io/illustrated-word2vec/">Illustrated Word2Vec</a>,</li>
+  <li><a href="https://arxiv.org/pdf/1301.3781.pdf">Efficient Estimation of Word Representations in Vector Space by Mikolov et al.</a>.</li>
+</ul>
+
+  </body>
+</html>

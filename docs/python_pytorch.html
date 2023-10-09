@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Python - Pytorch</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-python"><a href="/Revision/python.html">Back to Python</a></h2>
+
+<p><br /></p>
+<h1 id="import">Import</h1>
+<p>Base import of Pytorch requires <code class="language-plaintext python highlighter-rouge">torch</code> and <code class="language-plaintext python highlighter-rouge">torch.nn</code> which contains most deep learning blocks.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span></code></pre></figure>
+
+<p><br /><br /></p>
+<h1 id="model-creation">Model Creation</h1>
+<p>A Pytorch model is created as a class that inherits from <code class="language-plaintext python highlighter-rouge">nn.Module</code>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">NeuralNetwork</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">flatten</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Flatten</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">linear_relu_stack</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">28</span><span class="o">*</span><span class="mi">28</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">linear_relu_stack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logits</span></code></pre></figure>
+
+<p>The <code class="language-plaintext python highlighter-rouge">forward</code> method must be defined.<br />
+In this example from Pytorch documentation it uses the attribute <code class="language-plaintext python highlighter-rouge">self.linear_relu_stack</code> which is created as a <code class="language-plaintext python highlighter-rouge">nn.Sequential</code>.</p>
+
+<p>The <code class="language-plaintext python highlighter-rouge">backward</code> is implicitly created from the forward method and the Pytorch composants used.</p>
+
+<p><br /><br /></p>
+<h1 id="training">Training</h1>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="n">dataloader</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">loss_fn</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataloader</span><span class="p">.</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">batch</span><span class="p">,</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataloader</span><span class="p">):</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="p">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">y</span><span class="p">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="c1"># Compute prediction error
+</span>        <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="c1"># Backpropagation
+</span>        <span class="n">optimizer</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">batch</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">loss</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="n">loss</span><span class="p">.</span><span class="n">item</span><span class="p">(),</span> <span class="p">(</span><span class="n">batch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"loss: </span><span class="si">{</span><span class="n">loss</span><span class="p">:</span><span class="o">&gt;</span><span class="mi">7</span><span class="n">f</span><span class="si">}</span><span class="s">  [</span><span class="si">{</span><span class="n">current</span><span class="p">:</span><span class="o">&gt;</span><span class="mi">5</span><span class="n">d</span><span class="si">}</span><span class="s">/</span><span class="si">{</span><span class="n">size</span><span class="p">:</span><span class="o">&gt;</span><span class="mi">5</span><span class="n">d</span><span class="si">}</span><span class="s">]"</span><span class="p">)</span></code></pre></figure>
+
+<p>The training of the model is easily done following these steps:</p>
+<ol>
+  <li>Set the model in train mode,</li>
+  <li>Make predictions using input data and the model (more specifically using the forward method of the model),</li>
+  <li>Compute the loss using the predictions, the true labels and the defined loss function,</li>
+  <li>Reinitialize then compute the gradients by backpropagating the loss using the implicitly define backward method of the model,</li>
+  <li>Update the parameters of the model (its weights) using the computed gradients and the chosen optimizer.</li>
+</ol>
+
+<p>These steps are done batch by batch. Also the input and output must be transfer to the device used for computation (GPU for example).</p>
+
+<p><br /><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html">QuickStart page of Pytorch</a>.</li>
+</ul>
+
+  </body>
+</html>

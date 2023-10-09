@@ -1,0 +1,409 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Decision Tree</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-machine-learning"><a href="/Revision/machine_learning.html">Back to Machine Learning</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>A decision tree is a classification or regression model based on a tree structure with input X and outputs Y.
+In a classification decision tree Y is a categorical variable and each leaf corresponds to a given class.
+In a regression decision tree Y is a continuous variable and the goal is to obtain leafs with minimum variances intra.</p>
+
+<p>At each step, the algorithm chooses the explanatory variables that best splits the data (we will see after how to measure that).</p>
+
+<p>Different types of decision trees exist depending on the split criterion.</p>
+
+<p><br /></p>
+<h1 id="output-type">Output type</h1>
+<h2 id="categorical">Categorical</h2>
+<p>Categorical outputs for a classification problem is the natural application of a decision tree.
+For a given leaf, the associated value is the most popular class in the leaf (most popular class during training).</p>
+
+<p><br /></p>
+<h2 id="continuous">Continuous</h2>
+<p>For continuous output, for a given leaf, the associated value is the mean of the values of the leaf (mean of the training values).</p>
+
+<p><br /></p>
+<h1 id="binary-vs-multi-way-splitting">Binary vs multi-way splitting</h1>
+<p>A multi way splitting can always be reproduced by series of binary splits.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/tree_binary.jpg" width="30%" height="30%" />
+</div>
+<p><br /></p>
+
+<p>The majority of the implementations use binary splitting but some implementation (in R for example or in <a href="/Revision/tokenizers.html">lightGBM</a>) use multi-way splittings (see Resource 1).</p>
+
+<p>A argument against multi-way splits is that data is fragmented too quickly leaving insufficient data at the next level (see Resource 2).</p>
+
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://stackoverflow.com/questions/12526882/can-tree-models-in-r-handle-n-way-splits-at-nodes-for-n-4">StackOverflow page</a>,</li>
+  <li><a href="https://hastie.su.domains/ElemStatLearn/printings/ESLII_print12_toc.pdf">Element of Statistical Learning (p. 295)</a>).</li>
+</ul>
+
+<p><br /></p>
+<h1 id="stopping-criteria-pre-pruning">Stopping criteria: Pre-pruning</h1>
+<p>If no stopping criterion is specified, the algorithm will split the data until obtaining a perfect tree (each value are correctly labeled for categorical output or each value is map to its true value for continuous variables).
+Also note that a single explanatory variable may be reused multiple time (thus, even with a simple explanatory variable it is possible to perfectly match the true labels).</p>
+
+<p>Different stopping criteria exist:</p>
+<ul>
+  <li>Maximum depth of the tree</li>
+  <li>Maximum number of leafs</li>
+  <li>Minimum number of values in each leaf</li>
+  <li>Minimum number of values in a leaf to split it</li>
+  <li>Minimum quality criterion increase (minimum impurity decrease)</li>
+</ul>
+
+<p>The methods of setting an early stopping criterion is know as pre-pruning.
+Post-pruning is another technic that will reduce the size of the tree after creating it (see the part on Pruning at the end).</p>
+
+<p><br /></p>
+<h1 id="type-of-explanatory-variables">Type of explanatory variables</h1>
+<p>Depending of the feature’s type, the splitting may be more or less complicated.
+Indeed, the algorithm will choose the explanatory variable that best splits the data but for continuous or categorical (with more than 2 categories) variables, different possible splittings exist.</p>
+
+<p>For example if the variable is the age, should the algorithm split in older than 50 and younger than 50 or older than 30 and younger than 30?
+For a categorical variables with unordered categories 1, 2, 3, 4, should the algorithm splits 1 vs 2, 3 and 4 or 1 and 2 vs 3 and 4 or 1 and 3 vs 2 and 4 etc.?</p>
+
+<p><br /></p>
+<h2 id="binary-explanatory-variables">Binary explanatory variables</h2>
+<p>For a binary explanatory variable, the split decision is easy, the algorithm splits the data in two groups based on the selected feature’s value.</p>
+
+<p><br /></p>
+<h2 id="continuous-explanatory-variables">Continuous explanatory variables</h2>
+<p>For continuous explanatory variables, the split may be done anywhere in the space of this variable. Theoretically, the number of possible splits is thus infinite. Two different methods exist to deal with this.</p>
+
+<p><br /></p>
+<h3 id="pre-sort-based-algorithm">Pre-sort based algorithm</h3>
+<p>This number of possible splits can be reduce to the number of different values as splitting anywhere between 2 consecutive values will output the same result. For example if my values are 1.2, 2.3, 2.6 and 3.6, splitting at 3 or 3.1 will lead to the same result.</p>
+
+<p>Hence pre-sort-based algorithm sorts the continuous variable considered and then choose the best possible split among the \(n_{value}-1\) possibilities.</p>
+
+<p>Each sort of a feature costs \(O(n\log(n))\) time complexity and then each \(n-1\) splits are tested.</p>
+
+<p><br /></p>
+<h3 id="histogram-based-algorithm">Histogram based algorithm</h3>
+<p>Histogram based algorithm buckets the continuous variables into bins and treats them as sorted categorical values.
+The cost of bucketing a feature is \(O(n)\) and then \(n_{bins}\) splits are tested.</p>
+
+<p><br /></p>
+<h2 id="categorical-explanatory-variables">Categorical explanatory variables</h2>
+<p>Categorical unordered variable are a little bit more complex to deal with as c categories can be binary split in \(2^{c-1}-1\) different splits. The solution is to ordered this categories and apply the same method as for continuous variables.</p>
+
+<p>The ordered is done using the output variables (see below).</p>
+
+<p><br /></p>
+<h4 id="binary-output">Binary output</h4>
+<p>If the output variable is a binary category, the ordering is done using the proportion of category 1 (or 0) in each class.</p>
+
+<p><br /></p>
+<h4 id="continuous-output">Continuous output</h4>
+<p>If the output variable is continuous, the ordering is done using the mean output value of each of the feature’s category.</p>
+
+<p><br /></p>
+<h4 id="categorical-output">Categorical output</h4>
+<p>If the output variable is a category, different methods exist, list in <a href="https://fr.mathworks.com/help/stats/splitting-categorical-predictors-for-multiclass-classification.html">this Matlab page</a>.</p>
+
+<ul>
+  <li>
+    <p>One-vs-all may be used: each output class is tried as the ‘one’ and the feature’s category are then sorted using the proportion of this category (as for a binary output),</p>
+  </li>
+  <li>
+    <p>Pull left by purity: 1) Start with all feature categories on the right leaf; 2) inspect the \(K\) categories that have the largest class probabilities for each output class; 3) Move the category with the maximum value of the split criterion (we will see later the split criteria) to the left branch; 4) Continue moving categories from right to left, recording the split criterion at each move, until the right child has only one category remaining; 5) Choose the split that gave the best criterion value during the sequence.</p>
+  </li>
+  <li>
+    <p>Principal Component-Based Partitioning: see Matlab page</p>
+  </li>
+</ul>
+
+<h2 id="resources-1">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://hastie.su.domains/ElemStatLearn/printings/ESLII_print12_toc.pdf">Element of Statistical Learning (p 307)</a>,</li>
+  <li><a href="https://towardsdatascience.com/what-makes-lightgbm-lightning-fast-a27cf0d9785e">This Toward Data Science blog post</a>,</li>
+  <li><a href="https://fr.mathworks.com/help/stats/splitting-categorical-predictors-for-multiclass-classification.html">This Matlab page</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="splitting-methods">Splitting methods</h1>
+<p>Depending on the output data type (continuous or categorical), different measure for splits exist.</p>
+
+<p><br /></p>
+<h2 id="categorical-output-splitting-methods">Categorical output splitting methods</h2>
+<p>For categorical outputs, different splitting methods with similar but different results exist. See this graph for an overview:</p>
+
+<p><img src="assets/images/impurity.png" width="30%" height="30%" /></p>
+
+<p>Let’s now look more in details these three metrics and their associated algorithms.</p>
+
+<p><br /></p>
+<h3 id="cart-gini-impurity">CART: Gini impurity</h3>
+<p>CART (for Classification And Regression Tree) is an algorithm based on a split criterion called Gini impurity.</p>
+
+<p>Assume that, at a given step, we have G different groups. Let g be one of the group in G and let \(n_{class}\) be the total number of class (with some class present in g and other not present). The Gini impurity measure for the group g is then:</p>
+
+\[I^{Gini}(g)=\sum_{i=1}^{n_{class}} p(i \vert g)(1-p(i \vert g))=\sum_{i=1}^{n_{class}}(p(i \vert g)-p(i \vert g)^2)=\sum_{i=1}^{n_{class}} p(i \vert g)-\sum_{i=1}^{n_{class}} p(i \vert g)^2=1-\sum_{i=1}^{n_{class}} p(i \vert g)^2\]
+
+<p>Where:</p>
+<ul>
+  <li>\(p(i \vert g)\) is the probability to be of class i in group g. It is computed as \(f_g(i)\), the fraction of elements of class i in group g.</li>
+</ul>
+
+<p>To compare different splittings (using different features) we compare the weighted sum of the Gini impurity measure over all the obtained groups.</p>
+
+<p><br /></p>
+<h4 id="example">Example</h4>
+<p>Assume a sample of data where \(Y \in \{A, B\}\) with 10 A and 10 B.
+X are the explanatory variables.</p>
+
+<p>Let’s compare the total Gini impurity measure obtained splitting via 2 different features:</p>
+
+<p><br /></p>
+<h6 id="split-using-feature-1">Split using feature 1</h6>
+<ul>
+  <li>Group 1: 9 A and 1 B</li>
+  <li>Group 2: 1 A and 9 B</li>
+</ul>
+
+<p>The total Gini impurity measure splitting using feature 1 is :</p>
+
+\[\frac{10}{20}\left[1-\left(\frac{9}{10}\right)^2-\left(\frac{1}{10}\right)^2\right]+\frac{10}{20}\left[1-\left(\frac{1}{10}\right)^2-\left(\frac{9}{10}\right)^2\right]=0.04+0.04=0.08\]
+
+<p><br /></p>
+<h6 id="split-using-feature-2">Split using feature 2</h6>
+<ul>
+  <li>Group 1: 10 A and 2 B</li>
+  <li>Group 2: 8 B</li>
+</ul>
+
+<p>The total Gini impurity measure splitting using feature 2 is :</p>
+
+\[\frac{12}{20}\left[1-\left(\frac{10}{12}\right)^2-\left(\frac{2}{12}\right)^2\right]+\frac{8}{20}\left[1-\left(\frac{0}{8}\right)^2-\left(\frac{8}{8}\right)^2\right]=0.17+0=0.17\]
+
+<p>So given the Gini impurity measure, the split using feature 1 is better (lower is better).</p>
+
+<p><br /></p>
+<h3 id="id3-c45-entropy-impurity-information-gain">ID3, C4.5: Entropy impurity (Information gain)</h3>
+<p>Entropy impurity is a measure similar to Gini impurity measure used by algorithm <a href="https://en.wikipedia.org/wiki/ID3_algorithm">ID3</a> and its successor <a href="https://en.wikipedia.org/wiki/C4.5_algorithm">C4.5</a>.</p>
+
+<p>Once again, assume that, at a given step, we have G different groups. Let g be one of the group in G and let \(n_{class}\) be the total number of class (with some class present in g and other not present). The entropy impurity measure for the group g is then:</p>
+
+\[I^{Entropy}(g)=-\sum_{i=1}^{n_{class}}p(i \vert g) \log_2 (p(i \vert g))\]
+
+<p>Where:</p>
+<ul>
+  <li>\(p(i \vert g)\) is the probability to be of class i in group g. It is computed as \(f_g(i)\), the fraction of elements of class i in group g.</li>
+</ul>
+
+<p>To compare different splittings (using different features) we compare the weighted sum of the Entropy impurity measure over all the obtained groups.</p>
+
+<p>Information gain is the difference between the</p>
+
+<p><br /></p>
+<h4 id="example-1">Example</h4>
+<p>Assume a sample of data where \(Y \in \{A, B\}\) with 10 A and 10 B.
+X are the explanatory variables.</p>
+
+<p>Let’s compare the total Entropy impurity measure obtained splitting via 2 different features:</p>
+
+<p><br /></p>
+<h6 id="split-using-feature-1-1">Split using feature 1</h6>
+<ul>
+  <li>Group 1: 9 A and 1 B</li>
+  <li>Group 2: 1 A and 9 B</li>
+</ul>
+
+<p>The total Entropy impurity measure splitting using feature 1 is :</p>
+
+\[-\frac{10}{20} \left[\left(\frac{9}{10}\right)\log\left(\frac{9}{10}\right) + \left(\frac{1}{10}\right)\log\left(\frac{1}{10}\right)\right] -\frac{10}{20} \left[\left(\frac{1}{10}\right)\log\left(\frac{1}{10}\right)+\left(\frac{9}{10}\right)\log\left(\frac{9}{10}\right)\right]=0.23+0.23=0.46\]
+
+<p><br /></p>
+<h6 id="split-using-feature-2-1">Split using feature 2</h6>
+<ul>
+  <li>Group 1: 10 A and 2 B</li>
+  <li>Group 2: 8 B</li>
+</ul>
+
+<p>The total Entropy impurity measure splitting using feature 2 is :</p>
+
+\[-\frac{12}{20} \left[\left(\frac{10}{12}\right)\log\left(\frac{10}{12}\right) + \left(\frac{2}{12}\right)\log\left(\frac{2}{12}\right)\right] -\frac{8}{20} \left[\left(\frac{0}{8}\right)\log\left(\frac{0}{8}\right)+\left(\frac{8}{8}\right)\log\left(\frac{8}{8}\right)\right]=0.41+0=0.41\]
+
+<p>So given the Entropy impurity measure, the split using feature 2 is better (lower is better).</p>
+
+<p><br /></p>
+<h3 id="classification-error">Classification Error</h3>
+<p>Another measure can be the classification error. We associate all the elements of a group to the majority of the group.</p>
+
+<p>Once again, assume that, at a given step, we have G different groups. Let g be one of the group in G and let \(n_{class}\) be the total number of class (with some class present in g and other not present). The classification error measure for the group g is then:</p>
+
+\[I^{ClassErr}(g) = 1 - \max_i(p(i \vert g))\]
+
+<p>Where:</p>
+<ul>
+  <li>\(p(i \vert g)\) is the probability to be of class i in group g. It is computed as \(f_g(i)\), the fraction of elements of class i in group g.</li>
+</ul>
+
+<p>To compare different splittings (using different features) we compare the sum of the Classification error measure over all the obtained groups.</p>
+
+<p><br /></p>
+<h4 id="example-2">Example</h4>
+<p>Assume a sample of data where \(Y \in \{A, B\}\) with 10 A and 10 B.
+X are the explanatory variables.</p>
+
+<p>Let’s compare the total Classification Error measure obtained splitting via 2 different features:</p>
+
+<p><br /></p>
+<h6 id="split-using-feature-1-2">Split using feature 1</h6>
+
+<ul>
+  <li>Group 1: 9 A and 1 B</li>
+  <li>Group 2: 1 A and 9 B</li>
+</ul>
+
+<p>The total Classification Error measure splitting using feature 1 is :</p>
+
+\[\frac{10}{20}\left[1-\max\left(\frac{9}{10}, \frac{1}{10}\right)\right]+\frac{10}{20}\left[1-\max\left(\frac{1}{10}, \frac{9}{10}\right)\right]=0.05+0.05=0.1\]
+
+<p><br /></p>
+<h6 id="split-using-feature-2-2">Split using feature 2</h6>
+<ul>
+  <li>Group 1: 10 A and 2 B</li>
+  <li>Group 2: 8 B</li>
+</ul>
+
+<p>The total Classification Error measure splitting using feature 2 is :</p>
+
+\[\frac{12}{20}\left[1-\max\left(\frac{10}{12}, \frac{2}{12}\right)\right]+\frac{8}{20}\left[1-\max\left(\frac{0}{8}, \frac{8}{8}\right)\right]=0.1+0.0=0.102\]
+
+<p>So given the Classification Error measure measure, the split using feature 1 is a little bit better (lower is better).</p>
+
+<p><br /></p>
+<h3 id="mars">MARS</h3>
+<p>MARS for Multivariate adaptive regression spline is another decision tree algorithm.</p>
+
+<h4 id="resources-2">Resources</h4>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Multivariate_adaptive_regression_spline">MARS Wikipedia page</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="pruning">Pruning</h1>
+<p>Pruning are a set of methods to limit or reduce a decision tree size.</p>
+
+<p><br /></p>
+<h2 id="pre-pruning">Pre-pruning</h2>
+<p>See the part <a href="#stopping-criteria-pre-pruning">Stopping criteria: Pre-pruning</a>.</p>
+
+<p><br /></p>
+<h2 id="post-pruning">Post-pruning</h2>
+<h3 id="top-down-pruning">Top down pruning</h3>
+<p>Top down pruning starts at the initial node of the tree and decides to cut one of the two substrees depending on a criteria.</p>
+
+<p><br /></p>
+<h4 id="pessimistic-error-pruning">Pessimistic error pruning</h4>
+<p>See:</p>
+<ul>
+  <li><a href="https://link.springer.com/content/pdf/10.1023/A:1022604100933.pdf">An empirical comparison of pruning methods for decision tree induction p. 234</a> (document starting p. 228).</li>
+</ul>
+
+<p><br /></p>
+<h3 id="bottom-up-pruning">Bottom up pruning</h3>
+<p>Bottom up pruning starts at the leafs and decides to cut it or not depending on a criteria.</p>
+
+<p><br /></p>
+<h4 id="reduced-error-pruning">Reduced error pruning</h4>
+<p>Reduced error pruning requires a validation set and works as follow:</p>
+
+<ul>
+  <li>Starting at the leaves, each node is replaced with its most popular class (ie its leaves are cut),</li>
+  <li>If the prediction accuracy on validation set is not affected then the change is kept.</li>
+</ul>
+
+<p><br /></p>
+<h4 id="information-gain-pruning">Information gain pruning</h4>
+<p>Information gain pruning cut the leaf with smaller information gain.
+Leafs are cut until the desired number of leafs is obtained (this number of leafs is then an hyperparameter).</p>
+
+<p><br /></p>
+<h4 id="minimum-cost-complexity-pruning">Minimum cost complexity pruning</h4>
+<p>Cost complexity pruning is the method implemented in Scikit-Learn. It recursively cut subtrees of the tree based on a criteria.
+The goal of cost complexity pruning is to find subtrees to cut that minimise the size of the tree and the error rate.</p>
+
+<p>The algorithm generates a series of tree \(T_0\), \(T_1\), \(T_2\), …, \(T_m\) where \(T_0\) is the initial tree and \(T_m\) is the root alone.
+At each step \(i\), the subtree \(t\) that minimise the following criteria is chosen to be cut:</p>
+
+\[\min_{t \in Subtree(T_{i-1})} \text{   } \frac{Error(prune(T_{i-1}, t))-Error(T_{i-1})}{\alpha(leaves(T_{i-1})-leaves(prune(T_{i-1}, t)))}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(T_{i-1}\) is the tree from the previous step, \(T_0\) being the initial unpruned tree,</li>
+  <li>\(Subtree(T_{i-1})\) is the ensemble all possible subtree of \(T_{i-1}\),</li>
+  <li>\(t\) is one of the subtrees of \(Subtree(T_{i-1})\),</li>
+  <li>\(prune(T_{i-1}, t)\) is the tree obtained by cutting \(t\) from \(T_{i-1}\),</li>
+  <li>\(Error(T)\) is the sum of classification errors of the tree \(T\) on training data,</li>
+  <li>\(leaves(T)\) is the number of leaves in tree \(T\),</li>
+  <li>\(\alpha\) is an hyperparameter that defines how important obtaining a shallow tree is.</li>
+</ul>
+
+<p>At the end, the output decision tree is the tree from the series \(T_0\), \(T_1\), …, \(T_m\) that minimises the loss on the training set or a validation set.
+A high \(\alpha\) will lead to very shallow decision tree.</p>
+
+<p><br /></p>
+<h2 id="resources-3">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Decision_tree_pruning#Bottom-up_pruning">Pruning page on Wikipedia</a>,</li>
+  <li><a href="https://cs229.stanford.edu/notes2021fall/lecture11-decision-tree-overfitting.pdf">CS229 - Pruning</a>,</li>
+  <li><a href="https://link.springer.com/content/pdf/10.1023/A:1022604100933.pdf">An empirical comparison of pruning methods for decision tree induction p. 234</a>,</li>
+  <li><a href="https://www.cs.cmu.edu/~bhiksha/courses/10-601/decisiontrees/">This page from Carnegie Mellon’s University</a></li>
+  <li><a href="http://mlwiki.org/index.php/Cost-Complexity_Pruning">This page from mlwiki</a>,</li>
+  <li><a href="https://scikit-learn.org/stable/modules/tree.html#minimal-cost-complexity-pruning">The Sklearn page of Minimal cost complexity pruning</a>.</li>
+</ul>
+
+<p><br /></p>
+<h4 id="optimistic-pruning">Optimistic pruning</h4>
+<h2 id="algorithms-summary">Algorithms summary</h2>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/tree_algos.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h3 id="resources-4">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://www.cs.cmu.edu/afs/cs/project/jair/pub/volume17/nock02a-html/node15.html">This CMU page</a>,</li>
+  <li><a href="https://stackoverflow.com/questions/9979461/different-decision-tree-algorithms-with-comparison-of-complexity-or-performance">This StackOverflow page</a>.</li>
+</ul>
+
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Decision_tree_learning">Wikipedia page on Decision Tree</a>,</li>
+  <li><a href="https://hastie.su.domains/ElemStatLearn/printings/ESLII_print12_toc.pdf">Element of Statistical Learning (p. 295)</a>,</li>
+  <li><a href="https://sites.cs.ucsb.edu/~yfwang/courses/cs290i_prann/pdf/tree.pdf">These slides by University of Santa Barbara</a>,</li>
+  <li><a href="https://victorzhou.com/blog/gini-impurity/">This simple explanation by Victor Zhou</a>,</li>
+  <li><a href="https://github.com/rasbt/python-machine-learning-book/blob/master/faq/decision-tree-binary.md">This github page</a>.</li>
+</ul>
+
+  </body>
+</html>

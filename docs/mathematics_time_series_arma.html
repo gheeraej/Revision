@@ -1,0 +1,328 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mathematics - Time Series - ARMA</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-time-series"><a href="/Revision/mathematics_time_series.html">Back to Time series</a></h2>
+
+<p><br /></p>
+<h2 id="ar">AR</h2>
+<p>An AR model is a representation of a time serie which specifies that the output variable depends linearly on its own previous values and on an inpredictable stochastic term (a white noise).</p>
+
+<p>An AR processus has one hyperparameter \(p\), that represents its order ie the number of dependances:</p>
+
+<p><br /></p>
+<h3 id="formula">Formula</h3>
+<p>Let \(X_t\) be an \(AR_p\) process. Then:</p>
+
+\[X_t = c + \sum_{k=1}^{p} \varphi_k X_{t-k} + \varepsilon_t\]
+
+<p>Where:</p>
+<ul>
+  <li>\(c\) is a constant,</li>
+  <li>\(\varphi_i\) are the parameters of the model,</li>
+  <li>\(\varepsilon_t\) is a white noise.</li>
+</ul>
+
+<p>\(X_t\) is weighted sum of its \(p\) more recent past values and an inpredictable value \(\varepsilon_t\).
+\(\varepsilon_t\) is also called the innovation of the processus.</p>
+
+<p>Introducing the lag (or backshift) operator \(L\) such as \(L^h X_t = X_{t-h}\) we can write:</p>
+
+\[\left(1-\sum_{k=1}^p L^k \varphi_k \right) X_t = c + \varepsilon_t\]
+
+<p>Let define the <strong>characteristic polynomial</strong> of the \(AR_p\) processus as:</p>
+
+\[\Phi(L) := 1 - \sum_{k=1}^{p} \varphi_{k} L^k\]
+
+<p>We can finally rewrite:</p>
+
+\[\Phi(L) X_t= c + \varepsilon_t\]
+
+<p><br /></p>
+<h3 id="properties">Properties</h3>
+<h4 id="condition-of-stationarity">Condition of stationarity</h4>
+<p>For \(X_t\) to be a stationary process, the roots of the polynomial \(\Phi(L)\) must all have an absolute value greater than 1 (they must lie outside the unit circle).</p>
+
+<p><br /></p>
+<h4 id="yule-walker-equations">Yule-Walker equations</h4>
+<p>Yule-Walker equations create a direct link between the parameters of the \(AR_p\) process and its autocovariances:</p>
+
+\[\gamma_j = \sum_{k=1}^p \varphi_k \gamma_{j-k} \text{,} \;\;\; \forall j \in [1, p]\]
+
+<p>And:</p>
+
+\[\gamma_0 = \sum_{k=1}^p \varphi_k \gamma_{-k} \sigma^2\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\sigma^2\) is the variance of the residuals (the white noise),</li>
+  <li>\(\gamma_{j-k}\) are the autocovariance that we need to estimate.</li>
+</ul>
+
+<p><br /></p>
+<h5 id="estimation">Estimation</h5>
+<p>To estimate the \(\gamma_{j-k}\) we must resolve this linear equation:</p>
+
+<p><img src="assets/images/yule-walker.png" width="25%" height="25%" /></p>
+
+<p>And then \(\gamma_0\) is deduced from the other values.</p>
+
+<p><br /></p>
+<h4 id="moments">Moments</h4>
+<ul>
+  <li>\(\mathbb{E}[X_{t}] = \frac{c} {1 - \sum_{k=1}^{p} \varphi_{k}}\),</li>
+  <li>\(Var[X_{t}] = \sum_{k=1}^{p} \gamma_k \varphi_{k} + \sigma^2\).</li>
+</ul>
+
+<p><br /></p>
+<h5 id="autocorrelation-and-partial-autocorrelation">Autocorrelation and partial autocorrelation</h5>
+<ul>
+  <li>The autocorrelation of an \(AR_p\) processus converges exponentially to 0 as the lag increase,</li>
+  <li>The partial autocorrelation of an \(AR_p\) processus is null for \(h \gt p\) as the projection of \(X_t\) on \((X_{t-1}, ..., X_{t-h})\) has a null coefficient associated with \(X_{t-h}\) for \(h \gt p\).</li>
+</ul>
+
+<p>See:</p>
+<ul>
+  <li><a href="https://www.imo.universite-paris-saclay.fr/~goude/Materials/time_series/cours5_ARMA.pdf">Course on time series by Unviersité Paris Saclay (in french)</a>.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="ma_infty-representation-of-an-ar_1">\(MA_\infty\) representation of an \(AR_1\)</h3>
+<p>An \(AR_1\) process can be represented as a \(MA_\infty\) process.</p>
+
+<p>An \(AR_1\) process is:</p>
+
+\[\begin{eqnarray}
+X_{t} &amp;&amp;= c + \varphi X_{t-1} + \varepsilon_{t} \\
+&amp;&amp;= c + \varphi (c + \varphi X_{t-2} + \varepsilon_{t-1}) + \varepsilon_{t} \\
+&amp;&amp;= (c + \varphi c) + \varphi^2 (c + X_{t-3} + \varepsilon_{t-2}) + (\varepsilon_{t} + \varphi \varepsilon_{t-1}) \\
+&amp;&amp;= c \sum_{k=0}^\infty \varphi^k + \sum_{k=0}^\infty \varphi^k \varepsilon_{t-k}
+\end{eqnarray}\]
+
+<p>Hence:</p>
+
+\[X_{t} = c + \varphi X_{t-1} + \varepsilon_{t} = c \sum_{k=0}^\infty \varphi^k + \sum_{k=0}^\infty \varphi^k \varepsilon_{t-k}\]
+
+<p>Which is an \(MA_\infty\) representation.</p>
+
+<p><br /></p>
+<h4 id="resources">Resources</h4>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Autoregressive_model">Wikipedia page of AR models</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/Processus_autorégressif">Wikipedia page of AR models (in french)</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/ARMA">Wikipedia page of ARMA models (in french)</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="ma">MA</h2>
+<p>A moving-average model or moving-average process specifies that the output variable depends linearly on the current and various past values of an inpredictable stochastic term (a white noise).</p>
+
+<p><br /></p>
+<h3 id="formula-1">Formula</h3>
+<p>Let \(X_t\) be an \(MA_q\) process. Then:</p>
+
+\[X_t = c + \sum_{k=1}^{q} \theta_k \varepsilon_{t-k} + \varepsilon_t\]
+
+<p>Where:</p>
+<ul>
+  <li>\(c\) is a constant,</li>
+  <li>\(\theta_i\) are the parameters of the model,</li>
+  <li>\(\varepsilon_t\) are white noises.</li>
+</ul>
+
+<p>\(X_t\) is weighted sum of its \(q\) more recent observed values of the white noise \(\varepsilon_{t-q}\).
+\(\varepsilon_t\) is also called the innovation of the processus.</p>
+
+<p>Introducing the lag (or backshift) operator \(L\) such as \(L^h X_t = X_{t-h}\) we can write:</p>
+
+\[\left(1-\sum_{k=1}^q L^k \theta_i \right) \varepsilon_t = X_t - c\]
+
+<p>Let define the <strong>characteristic polynomial</strong> of the \(MA_q\) processus as:</p>
+
+\[\Theta(L) := 1 - \sum_{k=1}^{q} \varphi_{k} L^k\]
+
+<p>We can finally rewrite:</p>
+
+\[X_t = \Theta(L) \varepsilon_t + c\]
+
+<p><br /></p>
+<h3 id="properties-1">Properties</h3>
+<h4 id="condition-of-stationarity-1">Condition of stationarity</h4>
+<p>A MA process is always stationary.</p>
+
+<p><br /></p>
+<h4 id="moments-1">Moments</h4>
+<ul>
+  <li>\(\mathbb{E}[X_{t}] = c\),</li>
+  <li>\(Var[X_{t}] = \sigma^2 \left(1 + \sum_{k=1}^{q} \theta_{k}^2 \right)\).</li>
+</ul>
+
+<p><br /></p>
+<h5 id="autocorrelation-and-partial-autocorrelation-1">Autocorrelation and partial autocorrelation</h5>
+<ul>
+  <li>The autocorrelation of an \(MA_q\) is null for \(h \gt q\),</li>
+  <li>The partial autocorrelation of an \(MA_q\) processus converges exponentially to 0 as the lag increase.</li>
+</ul>
+
+<p>See:</p>
+<ul>
+  <li><a href="https://www.imo.universite-paris-saclay.fr/~goude/Materials/time_series/cours5_ARMA.pdf">Course on time series by Unviersité Paris Saclay (in french)</a>.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="ar_infty-representation-of-a-ma_1">\(AR_\infty\) representation of a \(MA_1\)</h3>
+<p>An \(MA_1\) process can be represented as a \(AR_\infty\) process.</p>
+
+<p>An \(MA_1\) process can be written as</p>
+
+\[\begin{eqnarray}
+\varepsilon_{t} &amp;&amp;= X_{t} - c - \theta \varepsilon_{t-1} \\
+&amp;&amp;= - c - \theta (X_{t-1} - c - \theta \varepsilon_{t-2}) + X_{t} \\
+&amp;&amp;= -c + \theta c + \theta^2 (X_{t-2} - c - \theta \varepsilon_{t-3}) + (X_{t} + \theta X_{t-1}) \\
+&amp;&amp;= c \sum_{k=0}^\infty (-\theta)^k + \sum_{k=0}^\infty (-\theta)^k X_{t-k} + X_{t}
+\end{eqnarray}\]
+
+<p>Hence:</p>
+
+\[X_{t} = c \sum_{k=1}^\infty (-\theta)^k + \sum_{k=1}^\infty (-\theta)^k X_{t-k} + \varepsilon_{t}\]
+
+<p><br /></p>
+<h4 id="invertibility-condition">Invertibility condition</h4>
+<p>If \(\vert \theta \vert \lt 1\), the infinite serie \(\sum_{k=0}^\infty (-\theta)^k\) converges to a finite value and under this condition, \(MA_1\) has an \(AR_\infty\) representation.</p>
+
+<p><br /></p>
+<h4 id="resources-1">Resources</h4>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Moving-average_model">Wikipedia page of MA models</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/ARMA">Wikipedia page of ARMA models (in french)</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="arma">ARMA</h2>
+<p>An autoregressive–moving-average (ARMA) models provides a parsimonious description of a (weakly) stationary stochastic process in terms of two polynomials, one for the autoregression (AR) and the second for the moving average (MA).</p>
+
+<p><br /></p>
+<h3 id="formula-2">Formula</h3>
+<p>Let \(X_t\) be an \(ARMA_{p,q}\) process. Then:</p>
+
+\[X_t + \sum_{k=1}^{p} \varphi_k X_{t-k} = \varepsilon_t + \sum_{k=1}^{q} \theta \varepsilon_{t-k}\]
+
+<p>Or using the characteristic polynomial and the lag operator:</p>
+
+\[\Phi(L)X_t = \Theta(L)\epsilon_t\]
+
+<p>With the underlying conditions:</p>
+<ul>
+  <li>The polynomials \(\Phi\) and \(\Theta\) do not have common roots,</li>
+  <li>\(\epsilon_t\) is a white noise.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="properties-2">Properties</h3>
+<h4 id="condition-of-stationarity-2">Condition of stationarity</h4>
+<p>The condition for stationarity is the same than for an \(AR_p\) process:</p>
+
+<p>For \(X_t\) to be a stationary process, the roots of the polynomial \(\Phi(L)\) must all have an absolute value greater than 1 (they must lie outside the unit circle).</p>
+
+<p><br /></p>
+<h4 id="representation">Representation</h4>
+<p>The representation of an ARMA is said to be minimal if: \(\varphi_k \lt 1\) and \(\theta_k \lt 1\) and \(\forall i,j \varphi_i \neq \theta_j\).</p>
+
+<p>If \(X_t\) is a minimal \(ARMA_{p,q}\) process then:</p>
+
+<p>it has a \(MA_\infty\) representation:</p>
+
+\[\begin{eqnarray}
+X_t &amp;&amp;= \frac{\Theta(L)}{\Phi(L)} \epsilon_t \\
+&amp;&amp;= \sum_{k=0}^{\infty} \psi_k \epsilon_{t-k}
+\end{eqnarray}\]
+
+<p>it has a \(AR_\infty\) representation:</p>
+
+\[\begin{eqnarray}
+\frac{\Phi(L)}{\Theta(L)} X_t &amp;&amp;= \epsilon_t \\
+&amp;&amp;= \sum_{k=0}^{\infty} \pi_k X_{t-k} \text{, } \;\;\; \pi_0 = 1
+\end{eqnarray}\]
+
+<p><br /></p>
+<h4 id="moments-2">Moments</h4>
+<h5 id="autocorrelation-and-partial-autocorrelation-2">Autocorrelation and partial autocorrelation</h5>
+<ul>
+  <li>The autocorrelation of an \(ARMA_{p,q}\) converges exponentially to 0 as the lag increase (for \(k \gt q\)),</li>
+  <li>The partial autocorrelation of an \(ARMA_{p,q}\) processus converges exponentially to 0 as the lag increase (for \(k \gt \max(p, q)\)).</li>
+</ul>
+
+<p>See: <a href="https://www.imo.universite-paris-saclay.fr/~goude/Materials/time_series/cours5_ARMA.pdf">Course on time series by Unviersité Paris Saclay (in french)</a>.</p>
+
+<p><br /></p>
+<h3 id="arima-and-sarima">ARIMA and SARIMA</h3>
+<p>ARIMA and SARIMA processes are generalisation of the ARIMA process for non stationary processes.</p>
+
+<p><br /></p>
+<h4 id="arima">ARIMA</h4>
+<p>ARIMA is used for process with a trend.</p>
+
+<p>Let \(X_t\) be a process with a polynomial trend of degree \(d\), hence:</p>
+
+\[Y_t = \Delta^d X_t\]
+
+<p>is a stationary process. If \(Y_t\) is an \(ARMA_{p,q}\) hence \(X_t\) is an \(ARIMA_{p,d,q}\).</p>
+
+<p>Where:</p>
+<ul>
+  <li>\(\Delta\) is the <a href="/Revision/mathematics_time_series_decomposition_differentiation.html#differentiation">differentiation operator</a>.</li>
+</ul>
+
+<p><br /></p>
+<h4 id="sarima">SARIMA</h4>
+<p>SARIMA is used for process with a trend and a seasonality.</p>
+
+<p>Let \(X_t\) be a process with a polynomial trend of degree \(d\) and a seasonality \(T\), hence:</p>
+
+\[Y_t = \Delta_T \circ \Delta^d X_t\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\Delta\) is the <a href="/Revision/mathematics_time_series_decomposition_differentiation.html#differentiation">differentiation operator</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="parameter-estimation">Parameter estimation</h2>
+<p>The parameters of an ARMA models (not the hyperparamets) are the \(\phi_k\), the \(\theta_k\) and \(\sigma^2\).</p>
+
+<p>Three methodes exists to estimate theses parameters:</p>
+<ul>
+  <li>Two steps regression (first estimate the \(MA\) parameters via a linear regression on past data, compute the residuals and re-estimate all the parameters - AR + MA - on the past data and residuals),</li>
+  <li>Yule-Walker estimation, based on the Yule-Walker equations and using the empirical autocovariance,</li>
+  <li>Maximul likelihood, using the assumpation that \(\epsilon_t\) is a gaussian weak noise.</li>
+</ul>
+
+<p>See: <a href="http://www.phdeconomics.sssup.it/documents/Lesson12.pdf">these slides by Umberto Triacca</a>.</p>
+
+<p><br /></p>
+<h3 id="resources-2">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Autoregressive–moving-average_model">Wikipedia page of ARMA models</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/ARMA">Wikipedia page of ARMA models (in french)</a>,</li>
+  <li><a href="https://www.imo.universite-paris-saclay.fr/~goude/Materials/time_series/cours5_ARMA.pdf">Course on time series by Unviersité Paris Saclay (in french)</a>,</li>
+  <li><a href="https://eric.univ-lyon2.fr/~jjacques/Download/Cours/ST-Cours.pdf">Introduction aux séries temporelles by Julien Jacques (in french)</a>.</li>
+</ul>
+
+  </body>
+</html>

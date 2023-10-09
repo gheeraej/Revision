@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>A3C</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-actor-critic"><a href="/Revision/reinforcement_learning_actor_critic.html">Back to Actor Critic</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>A3C for Asynchronous Advantage ActorCritic is an actor critic model with some tricks to improve training of the network.</p>
+
+<p>It uses an actor that maintain the policy and interact with the environment and an critic that computes the advantage function that the actor will use to update its parameters.</p>
+
+<p><br /></p>
+<h1 id="tricks">Tricks</h1>
+<h2 id="n-steps-bootstraping">n-steps Bootstraping</h2>
+<p>n-steps Bootstraping is a generalisation of TD estimate for more than one step.</p>
+
+<p>Vanilla TD estimate for a state \(s\) and an action \(a\) uses the obtained reward \(s\) and the state value function of next state \(s'\) to update the parameters. It computes the advantage function \(A(s,a)\) only using these 2 informations (reward and next state):</p>
+
+\[A_{\theta_V}(s,a) = r + \gamma V_{\theta_V}(s') - V_{\theta_V}(s)\]
+
+<p><br /></p>
+
+<p>n-steps Bootstraping uses the same ideas but uses n steps instead of one step:</p>
+
+\[A_{\theta_V}(s,a) = \sum_{i=1}^{n} \gamma^{i-1} r_i +  V_{\theta_V}(s^n) - V_{\theta_V}(s)\]
+
+<p>It allows to reduce biais of TD estimate and keeping low variance in the same time.</p>
+
+<p><br /></p>
+<h2 id="parallel-training">Parallel training</h2>
+<p>A3C replaces <a href="/Revision/reinforcement_learning_dqn.html#experience-replay">experience replay</a> by parallel training:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/parallel_training.png" width="50%" height="50%" />
+</div>
+
+<p>The model uses different agent to train its weights. Each agent uses sequence of state and actions that are correlated but the decorrelation comes from the use of different agents.</p>
+
+<p><br />
+The updates of the parameters of the model are done asynchronously that means that each agent sends its gradients at different time and the model makes updates every time its receives a gradient. Their is no synchonisation among the agents.</p>
+
+<p><br /></p>
+<h3 id="on-policy-learning">On-policy learning</h3>
+<p>Parallel training is a on-policy learning algorithm as the training replicates exactly the interaction with the environment.</p>
+
+<p>On the other hand, experience replay, buy cutting the sequence in small pieces, does not replicate the interaction with the environment in its training process hence it is a off-policy learning.</p>
+
+<p>On-policy learning is more stable and have more consitent convergeance particularly with deep neural networks.</p>
+
+<p><br /></p>
+<h5 id="other-example-of-on-and-off-policy-learning-algorithms">Other example of on and off policy learning algorithms</h5>
+<p>See: <a href="/Revision/reinforcement_learning_td.html#on-policy-and-off-policy-algorithms">Sarsa and Sarsamax as on and off policy methods</a>.</p>
+
+<p><br /></p>
+<h2 id="shared-layers">Shared layers</h2>
+<p>The actor and the critic can share the same first layers of the network. It is especially useful for Convolutional Neural Network where both actor and critic need to understand the visible environment.</p>
+
+<p><br /></p>
+<h1 id="difference-with-a2c">Difference with A2C</h1>
+<p>The only difference between A2C and A3C is that the parallel computing is done synchonously among agents in A2C and asynchronously among agents for A3C.</p>
+
+<p>A3C is easier to train on CPU and A2C on GPU. A2C works better with large bactch sizes.</p>
+
+<p>Here is an illustration of the difference:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/A3C_vs_A2C.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h1 id="limitation">Limitation</h1>
+<ul>
+  <li>Choice of the number \(n\) of n-steps</li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li>UDRLN videos 3.4.8, 3.4.9, 3.4.10, 3.4.11,</li>
+  <li><a href="https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html">Blog post by Lilian Weng</a>.</li>
+</ul>
+
+  </body>
+</html>

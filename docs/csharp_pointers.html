@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>C# Types</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-c"><a href="/Revision/csharp.html">Back to C#</a></h2>
+
+<p><br /></p>
+<h1 id="pointers">Pointers</h1>
+<h2 id="unsafe-mode">Unsafe mode</h2>
+<p>Pointers can be used in C# in unsafe mode.<br />
+C# code is generally <em>verifiably safe code</em>.</p>
+
+<p><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code">Microsoft defines safe code as follow</a>:<br />
+<em>Verifiably safe code means .NET tools can verify that the code is safe. In general, safe code doesn’t directly access memory using pointers. It also doesn’t allocate raw memory. It creates managed objects instead.</em></p>
+
+<p>As said previously, pointers can be used in C# in unsafe mode.<br />
+<code class="language-plaintext highlighter-rouge">unsafe</code> code should either be included in a block:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">unsafe</span>
+  <span class="p">{</span>
+    <span class="c1">//Your code</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>or the a function can call unsafe code if it uses the keyword <code class="language-plaintext highlighter-rouge">unsafe</code>:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">static</span> <span class="k">unsafe</span> <span class="k">void</span> <span class="nf">myFunction</span><span class="p">(</span><span class="kt">int</span><span class="p">*</span> <span class="n">myInt</span><span class="p">,</span> <span class="kt">float</span><span class="p">*</span> <span class="n">myFloat</span><span class="p">){</span>
+    <span class="c1">// Function definition</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>Also to use unsafe code in your project you must activate unsafe code compilation in your project parameters.</p>
+
+<p><br /></p>
+<h2 id="pointers-declaration">Pointers declaration</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span><span class="p">*</span> <span class="n">p</span><span class="p">;</span> <span class="c1">// p is a pointer to an integer</span>
+  <span class="kt">int</span><span class="p">**</span> <span class="n">p</span><span class="p">;</span> <span class="c1">// p is a pointer to a pointer to an integer</span>
+  <span class="kt">int</span><span class="p">*[]</span> <span class="n">p</span><span class="p">;</span> <span class="c1">// p is a single-dimensional array of pointers to integers</span>
+  <span class="kt">char</span><span class="p">*</span> <span class="n">p</span><span class="p">;</span> <span class="c1">// p is a pointer to a char</span>
+  <span class="k">void</span><span class="p">*</span> <span class="n">p</span><span class="p">;</span> <span class="c1">// p is a pointer to an unknown type</span></code></pre></figure>
+
+<p>As a pointer points to a memory slot, you should assign it the memory adress of a variable. You access the memory adress of a variable using <code class="language-plaintext highlighter-rouge">&amp;</code>:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span><span class="p">*</span> <span class="n">pi</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
+
+  <span class="n">pi</span> <span class="p">=</span> <span class="p">&amp;</span><span class="n">i</span><span class="p">;</span> <span class="c1">// pi is a pointer to the adress of i</span>
+  <span class="kt">int</span><span class="p">*</span> <span class="n">pj</span> <span class="p">=</span> <span class="p">&amp;</span><span class="n">j</span><span class="p">;</span> <span class="c1">// pj is a pointer to the adress of j</span></code></pre></figure>
+
+<p>Once a pointer points to the memory adress of a variable, modifying the value stored at this adress will also modify the variable value (ie if you modify <code class="language-plaintext highlighter-rouge">*pi</code> - the value store where <code class="language-plaintext highlighter-rouge">pi</code> points - you will modify <code class="language-plaintext highlighter-rouge">i</code>).</p>
+
+<p><br /></p>
+<h2 id="access">Access</h2>
+<p>You can then access the value stored at the adress of your pointer using <code class="language-plaintext highlighter-rouge">*</code> (<code class="language-plaintext highlighter-rouge">*p</code> for a pointer <code class="language-plaintext highlighter-rouge">p</code>):</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="kt">int</span><span class="p">*</span> <span class="n">pi</span> <span class="p">=</span> <span class="p">&amp;</span><span class="n">i</span><span class="p">;</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(*</span><span class="n">pi</span><span class="p">);</span> <span class="c1">// Output: 1</span>
+
+  <span class="p">*</span><span class="n">pi</span> <span class="p">=</span> <span class="p">*</span><span class="n">pi</span> <span class="p">+</span> <span class="m">1</span><span class="p">;</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(*</span><span class="n">pi</span><span class="p">);</span> <span class="c1">// Output: 2</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="c1">// Output: 2</span></code></pre></figure>
+
+<h2 id="fixed">Fixed</h2>
+<p>You can block a pointer adress value using <code class="language-plaintext highlighter-rouge">fixed</code>. You assign the pointers value using <code class="language-plaintext highlighter-rouge">fixed</code> and then apply code in this <code class="language-plaintext highlighter-rouge">fixed</code> statement. Using this if you copy this pointer to another pointer and change the location of this second pointer, the first one will not be impacted:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">int</span><span class="p">[]</span> <span class="n">a</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="p">{</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span> <span class="p">};</span>
+  <span class="k">unsafe</span>
+  <span class="p">{</span>
+    <span class="k">fixed</span> <span class="p">(</span><span class="kt">int</span><span class="p">*</span> <span class="n">p</span> <span class="p">=</span> <span class="p">&amp;</span><span class="n">a</span><span class="p">[</span><span class="m">0</span><span class="p">])</span>
+    <span class="p">{</span>
+      <span class="kt">int</span><span class="p">*</span> <span class="n">p2</span> <span class="p">=</span> <span class="n">p</span><span class="p">;</span>
+      <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(*</span><span class="n">p2</span><span class="p">);</span> <span class="c1">// Output: 1</span>
+      <span class="n">p2</span> <span class="p">+=</span> <span class="m">1</span><span class="p">;</span> <span class="c1">// move memory pointed by p2 (by four bytes)</span>
+      <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(*</span><span class="n">p2</span><span class="p">);</span> <span class="c1">// Output: 2 - p2 now points to the second element of the list</span>
+
+      <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(*</span><span class="n">p</span><span class="p">);</span> <span class="c1">// Output: 1 - p1 still points to the first element of the list</span>
+      <span class="p">*</span><span class="n">p</span> <span class="p">+=</span> <span class="m">10</span><span class="p">;</span>
+      <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(*</span><span class="n">p</span><span class="p">)</span> <span class="c1">// Output: 11</span>
+      <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="m">0</span><span class="p">])</span> <span class="c1">// Output: 11</span>
+    <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="operatorstatement">Operator/Statement</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Operator/Statement</th>
+      <th>Use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">*</code></td>
+      <td>Performs pointer indirection.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">-&gt;</code></td>
+      <td>Accesses a member of a struct through a pointer.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">[]</code></td>
+      <td>Indexes a pointer.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&amp;</code></td>
+      <td>Obtains the address of a variable.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">++</code> and <code class="language-plaintext highlighter-rouge">--</code></td>
+      <td>Increments and decrements pointers</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">+</code> and <code class="language-plaintext highlighter-rouge">-</code></td>
+      <td>Performs pointer arithmetic.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">==</code>, <code class="language-plaintext highlighter-rouge">!=</code>, <code class="language-plaintext highlighter-rouge">&lt;</code>, <code class="language-plaintext highlighter-rouge">&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;=</code>, and <code class="language-plaintext highlighter-rouge">&gt;=</code></td>
+      <td>Compares pointers.</td>
+    </tr>
+    <tr>
+      <td>stackalloc</td>
+      <td>Allocates memory on the stack.</td>
+    </tr>
+    <tr>
+      <td>fixed statement</td>
+      <td>Temporarily fixes a variable so that its address may be found.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+<h1 id="c-reference">C# Reference</h1>
+<h2 id="passing-an-argument-by-reference">Passing an argument by reference</h2>
+<p>When used on a method’s parameter, the ref keyword indicates that the argument is passed by reference, not by value. Any operation on the parameter is made on the argument (from <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/ref">Microsoft documentation on Reference</a>).</p>
+
+<p><br />
+To use a ref parameter, both the method definition and the calling method must explicitly use the ref keyword:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">void</span> <span class="nf">MethodRef</span><span class="p">(</span><span class="k">ref</span> <span class="kt">int</span> <span class="n">argumentRef</span><span class="p">){</span>
+    <span class="n">argumentRef</span> <span class="p">+=</span> <span class="m">44</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kt">int</span> <span class="n">number</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="nf">MethodRef</span><span class="p">(</span><span class="k">ref</span> <span class="n">number</span><span class="p">);</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">number</span><span class="p">);</span> <span class="c1">// Output: 45</span></code></pre></figure>
+
+<p><br /></p>
+
+<p>You can also overload a method using the <code class="language-plaintext highlighter-rouge">ref</code> keyword:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">public</span> <span class="k">void</span> <span class="nf">SampleMethod</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+  <span class="k">public</span> <span class="k">void</span> <span class="nf">SampleMethod</span><span class="p">(</span><span class="k">ref</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span></code></pre></figure>
+
+<p>However a method can’t have signatures that differ only by ref, in, or out.</p>
+
+<p><br /></p>
+<h2 id="ref-out-and-in">ref, out and in</h2>
+<h3 id="out">out</h3>
+<p>From <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier">Microsoft documentation on out</a>: <em>out is like the ref keyword, except that ref requires that the variable be initialized before it is passed.</em><br />
+To use an out parameter, both the method definition and the calling method must explicitly use the out keyword:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">void</span> <span class="nf">MethodOut</span><span class="p">(</span><span class="k">out</span> <span class="kt">int</span> <span class="n">argumentOut</span><span class="p">){</span>
+    <span class="n">argumentOut</span> <span class="p">=</span> <span class="m">44</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kt">int</span> <span class="n">number</span><span class="p">;</span> <span class="c1">// no need to initialized number</span>
+  <span class="nf">MethodOut</span><span class="p">(</span><span class="k">out</span> <span class="n">number</span><span class="p">);</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">number</span><span class="p">);</span> <span class="c1">// Output: 44</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="in">in</h3>
+<p>From <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier">Microsoft documentation on in</a>: <em>in is like the ref or out keywords, except that in arguments cannot be modified by the called method.</em></p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">void</span> <span class="nf">MethodIn</span><span class="p">(</span><span class="k">in</span> <span class="kt">int</span> <span class="n">argumentIn</span><span class="p">){</span>
+    <span class="c1">// Uncomment the following line to see error CS8331</span>
+    <span class="c1">// argumentIn = 45;</span>
+  <span class="p">}</span>
+  <span class="kt">int</span> <span class="n">number</span> <span class="p">=</span> <span class="m">44</span><span class="p">;</span>
+  <span class="nf">MethodIn</span><span class="p">(</span><span class="n">number</span><span class="p">);</span> <span class="c1">// Do not (can't) modify number</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="source">Source</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code">Microsoft documentation on Unsafe code</a>,</li>
+  <li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/ref">Microsoft documentation on Reference</a>,</li>
+  <li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier">Microsoft documentation on out</a>,</li>
+  <li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier">Microsoft documentation on in</a>.</li>
+</ul>
+
+  </body>
+</html>

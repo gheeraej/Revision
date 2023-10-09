@@ -1,0 +1,393 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - Deployment</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="training-and-inference-pipeline-example">Training and Inference pipeline example</h1>
+<p><br />
+Different architectures exist: using API, databases or brokers:</p>
+<div style="text-align: center">
+<img src="assets/images/pipeline.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h1 id="online-prediction">Online prediction</h1>
+<p>To perform online prediction, an ML system requires two key elements:</p>
+<ul>
+  <li>Near real-time data pipeline,</li>
+  <li>High model inference speed,</li>
+  <li>Compiling.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="stream-processing">Stream processing</h2>
+<p>Stream processing is a concept that enables us to build ML systems (pipelines) that can respond in real-time and near real-time.</p>
+
+<p><br /></p>
+<h3 id="example-of-ride-sharing-uber-service">Example of ride-sharing (Uber) service</h3>
+<p>A ride-sharing application is composed of 3 parts that need to exchange data:</p>
+<div style="text-align: center">
+<img src="assets/images/ride_sharing1.png" width="40%" height="40%" />
+</div>
+
+<p><br />
+Different architectures exist: using API, databases or brokers:</p>
+<div style="text-align: center">
+<img src="assets/images/ride_sharing2.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h3 id="real-time-transport-service-broker">Real-Time Transport: Service Broker</h3>
+<p>A Broker or Service Broker implements native in-database asynchronous message processing functionalities. It monitors the completion of tasks, usually command messages, between two different applications in the database engine. It is responsible for the safe delivery of messages from one end to another.</p>
+
+<p>When two applications (within or outside of SQL Server) communicate, neither can access the technical details at the opposite end. It is the job of Service Broker to protect sensitive messages and reliably deliver them to the designated location. Service Broker is highly integrated and provides a simple Transact-SQL interface for sending and receiving messages, combined with a set of strong guarantees for message delivery and processing.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ride_sharing3.png" width="40%" height="40%" />
+</div>
+<p>A broker is a real-time transport solution.</p>
+
+<p><br /></p>
+
+<ul>
+  <li>Any service can publish to a stream [producer],</li>
+  <li>Any service can subscribe to a stream to get info they need [consumer].</li>
+</ul>
+
+<p><br /></p>
+<h4 id="request-driven-vs-event-driven">Request driven vs Event driven</h4>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/request_event_driven.png" width="40%" height="40%" />
+</div>
+<ul>
+  <li>Request driven processes send requests,</li>
+  <li>Event driven processes send informations.</li>
+</ul>
+
+<p><br /></p>
+<h4 id="code-example-using-kafka">Code example using Kafka</h4>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/kafka.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h4 id="example-of-real-time-transport-solutions">Example of real-time transport Solutions</h4>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/kafka_rabbitmq.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h4 id="resources">Resources</h4>
+<p>See:</p>
+<ul>
+  <li><a href="https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-service-broker?view=sql-server-ver15">Presentation of Service Broker on Microsoft SQL website</a>,</li>
+  <li><a href="https://www.techopedia.com/definition/30626/service-broker-sql-server-communication">Definition of Service Broker on Techopedia</a>,</li>
+  <li><a href="https://blog.developpez.com/sqlpro/p7230/langage-sql-norme/a_quoi_sert_service_broker">Definition (in french) of Service Broker on developpez.com</a>.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="batch-processing-vs-stream-processing">Batch processing vs. stream processing</h3>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bp_vs_sp.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h4 id="batch-prediction-vs-online-prediction">Batch prediction vs. online prediction</h4>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bp_vs_op1.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+
+<p>Here is a comparison of both methods:</p>
+<div style="text-align: center">
+<img src="assets/images/bp_vs_op2.png" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+<h5 id="batch-prediction">Batch prediction</h5>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bp.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h5 id="online-prediction-1">Online prediction</h5>
+<p>HTTP protocol:</p>
+<div style="text-align: center">
+<img src="assets/images/op_http.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+
+<p>Streaming:</p>
+<div style="text-align: center">
+<img src="assets/images/op_streaming.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h5 id="unified">Unified</h5>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/unified.png" width="35%" height="35%" />
+</div>
+
+<p><br /></p>
+<h4 id="cloud-computing-vs-edge-computing">Cloud computing vs. Edge computing</h4>
+<p>Cloud computing means a large chunk of computation is done on the cloud, either public clouds or private clouds.</p>
+
+<p>Edge computing means a large chunk of computation is done on the consumer devices</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/cp_vs_ep.png" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+<h5 id="edge-computing">Edge computing</h5>
+<p>Benefits:</p>
+<ul>
+  <li>Can work without (Internet) connections or with unreliable connections:
+    <ul>
+      <li>Many companies have strict no-Internet policy,</li>
+      <li>Caveat: devices are capable of doing computations but apps need external information:
+        <ul>
+          <li>e.g. ETA needs external real-time traffic information to work well,</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Don’t have to worry about network latency:
+    <ul>
+      <li>Network latency might be a bigger problem than inference latency,</li>
+      <li>Many use cases are impossible with network latency:
+        <ul>
+          <li>e.g. predictive texting,</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Fewer concerns about privacy:
+    <ul>
+      <li>Don’t have to send user data over networks (which can be intercepted),</li>
+      <li>Cloud database breaches can affect many people,</li>
+      <li>Easier to comply with regulations (e.g. GDPR),</li>
+      <li>Caveat: edge computing might make it easier to steal user data by just taking the device,</li>
+    </ul>
+  </li>
+  <li>Cheaper:
+    <ul>
+      <li>The more computations we can push to the edge, the less we have to pay for servers.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p>Challenges of ML on the edge:</p>
+<ul>
+  <li>Device not powerful enough to run models:
+    <ul>
+      <li>Energy constraint,</li>
+      <li>Computational power constraint,</li>
+      <li>Memory constraint.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Solutions:</p>
+<ol>
+  <li>Hardware: Make hardware more powerful,</li>
+  <li>Model compression: Make models smaller,</li>
+  <li>Model optimization: Make models faster.</li>
+</ol>
+
+<p><br /></p>
+<h5 id="hybrid">Hybrid</h5>
+<ul>
+  <li>Common predictions are precomputed and stored on device,</li>
+  <li>Local data centers: e.g. each warehouse has its own server rack,</li>
+  <li>Predictions are generated on cloud and cached on device.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="model-optimization">Model optimization</h1>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bigger_better_slower.png" width="25%" height="25%" />
+</div>
+<p><br /></p>
+
+<p>Solution to speed up model inference:</p>
+<ol>
+  <li>Quantization</li>
+  <li>Knowledge distillation</li>
+  <li>Pruning</li>
+  <li>Low-ranked factorization</li>
+</ol>
+
+<p><br /></p>
+<h2 id="quantization">Quantization</h2>
+<p>Reduces the size of a model by using fewer bits to represent parameter values:</p>
+<ul>
+  <li>E.g. half-precision (16-bit) or integer (8-bit) instead of full-precision (32-bit)</li>
+  <li>1-bit representation: BinaryConnect, Xnor-Net</li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/quantization1.png" width="25%" height="25%" />
+</div>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/quantization2.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h3 id="quantization-in-pytorch">Quantization in PyTorch:</h3>
+<p>Post-training quantization:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/quantization3.png" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h2 id="knowledge-distillation">Knowledge distillation</h2>
+<p>Train a small model (“student”) to mimic the results of a larger model (“teacher”):</p>
+<ul>
+  <li>Teacher &amp; student can be trained at the same time,</li>
+  <li>E.g. DistillBERT, reduces size of BERT by 40%, and increases inference speed by 60%, while retaining 97% language understanding.</li>
+</ul>
+
+<p><br /></p>
+
+<p>Pros:</p>
+<ul>
+  <li>Fast to train student network if teacher is pre-trained,</li>
+  <li>Teacher and student can be completely different architectures.</li>
+</ul>
+
+<p><br /></p>
+
+<p>Cons:</p>
+<ul>
+  <li>If teacher is not pre-trained, may need more data &amp; time to first train teacher,</li>
+  <li>Sensitive to applications and model architectures.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="pruning">Pruning</h2>
+<ul>
+  <li>Originally used for decision trees to remove uncritical sections,</li>
+  <li>Neural networks: reducing over-parameterization.</li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>Remove nodes,</li>
+  <li>Find least useful params &amp; set to 0:
+    <ul>
+      <li>Number of params remains the same,</li>
+      <li>Reducing number of non-zero params,</li>
+      <li>Makes models more sparse:
+        <ul>
+          <li>Lower memory footprint,</li>
+          <li>Increased inference speed.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/dl_pruning.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="low-ranked-factorization">Low-ranked factorization</h2>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/lr_factorization.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h1 id="compiling">Compiling</h1>
+<p>Framework developers tend to focus on providing support to only a handful of server-class hardware, and hardware vendors tend to offer their own kernel libraries for a narrow range of frameworks. Deploying ML models to new hardware requires significant manual effort.</p>
+
+<p>Instead of targeting new compilers and libraries for every new hardware backend, what if we create a middle man to bridge frameworks and platforms? Framework developers will no longer have to support every type of hardware, only need to translate their framework code into this middle man. Hardware vendors can then support one middle man instead of multiple frameworks.</p>
+
+<p>This type of “middle man” is called an intermediate representation (IR). IRs lie at the core of how compilers work. This process is also called “lowering”, as in you “lower” your high-level framework code into low-level hardware-native code.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/compiling1.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="examples-of-cpu-gpu-and-tpu">Examples of CPU, GPU and TPU</h2>
+<p>The compute primitive of CPUs used to be a number (scalar), the compute primitive of GPUs used to be a one-dimensional vector, whereas the compute primitive of TPUs is a two-dimensional vector (tensor). Performing a convolution operator will be very different with 1-dimensional vectors compared to 2-dimensional vectors. You’d need to take this into account to use them efficiently.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/compiling2.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="ml-in-browsers">ML in browsers</h2>
+<p>It is possible to generate code that can run on just any hardware backends by running that code in browsers. If you can run your model in a browser, you can run your model on any device that supports browsers: Macbooks, Chromebooks, iPhones, Android phones, and more. You wouldn’t need to care what chips those devices use. If Apple decides to switch from Intel chips to ARM chips, it’s not your problem.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ml_in_browser.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>JavaScript:</p>
+<ul>
+  <li>Tools exist to help you compile your models into JavaScript, such as TensorFlow.js, Synaptic, and brain.js,</li>
+  <li>JavaScript is slow, and its capacity as a programming language is limited for complex logics such as extracting features from data.</li>
+</ul>
+
+<p><br />
+WebAssembly (WASM):</p>
+<ul>
+  <li>Open standard that allows running executable programs in browsers,</li>
+  <li>Performant, easy to use, has an ecosystem that is growing,</li>
+  <li>Supported by 93% of devices worldwide,</li>
+  <li>Still slower than running code natively on devices (but faster than JavaScript).</li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources-1">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329, lecture 8</a>.</li>
+</ul>
+
+  </body>
+</html>

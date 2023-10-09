@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Gradient Boosting</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-boosting"><a href="/Revision/boosting.html">Back to Boosting</a></h2>
+
+<p><br /></p>
+<h2 id="informal-introduction">Informal introduction</h2>
+<p>Gradient Boosting is an ensemble models. Its goal is to combine weak learners (noted \(h\)) into one strong learner (noted \(F\)).</p>
+
+<p>For this introduction let’s define:</p>
+<ul>
+  <li>The observed variables as \(Y\),</li>
+  <li>The explanatory variables as \(X\),</li>
+  <li>The predictor (strong learner) as \(F_m\),</li>
+  <li>The loss as sum of squares loss with factor \(\frac{1}{2}\).</li>
+</ul>
+
+\[L(h_m(X), Y)=\frac{1}{2} \Vert Y - F_m(X) \Vert_2^2 = \frac{1}{2} \sum_{j=0}^{n_{individuals}}(Y^{(j)} - F_m(X^{(j)}))^2\]
+
+<p>\(F_m\) is the strong learner, sum of the results of \(m\) weak learners \((h_i)_{i \leq m}\).<br />
+Now we want to update \(F_m\) in \(F_{m+1}\) by adding a new weak learner \(h_{m+1}\) that would make the loss decrease.</p>
+
+<p><br /></p>
+
+<p>A natural specification would be to find \(F_{m+1}\) such that:</p>
+
+\[F_{m+1}(X)=Y\]
+
+<p>As \(F_{m+1}(X)=F_m(X)+h_{m+1}(X)\), the problem is equivalently to find \(h_{m+1}\) such that:</p>
+
+\[F_m(X)+h_{m+1}(X)=Y\]
+
+<p>Or:</p>
+
+\[h_{m+1}(X)=Y-F_m(X)\]
+
+<p>So in this configuration the algorithm will fit the new weak learner to the residuals.</p>
+
+<p><br /></p>
+
+<p>Coming back to the loss function, something more interesting appears. Let’s apply the loss function to \(Y\) and \(F_m(X)\):</p>
+
+\[L(F_m(X), Y)=\frac{1}{2}\Vert Y - F_m(X) \Vert_2^2\]
+
+<p>And now taking the negative gradients with respect to \(F_m(X)\):</p>
+
+\[\begin{eqnarray}
+\frac{d}{dF_m(X)}L(F_m(X), Y) &amp;&amp;= -\frac{1}{2}\frac{d}{dF_m(X)}\Vert Y - F_m(X) \Vert_2^2 \\
+&amp;&amp;= -\frac{1}{2}\left(-2(Y - F_m(X))\right) \\
+&amp;&amp;= Y - F_m(X)
+\end{eqnarray}\]
+
+<p><br /></p>
+
+<p>So using this specific loss, fitting a new learner \(h_{m+1}\) on the residuals is equivalent to fit this learner to the negative gradients of the current loss. It is a <a href="/Revision/mathematics_optimization.html#gradient-descent">Gradient Descent</a> approach of the problem optimisation.</p>
+
+<p><br /></p>
+<h2 id="algorithm">Algorithm</h2>
+<p>Fitting learners to the residuals is not necessarly what is wanted.</p>
+
+<p>We now have the capacity to fit learners to the negative gradients of a given loss and it allows us to use any loss function for Gradient Boosting.</p>
+
+<p>Let’s define the process more formally.</p>
+
+<p><br /></p>
+<h4 id="variables-definition">Variables definition</h4>
+<p>The goal is to find a function (a model) \(\hat{T_G}\) that best approximates the observed variables \(Y\) given the explanatory variable \(X\).
+This measure is done using a loss function \(L\).</p>
+
+<p>So:</p>
+
+\[\hat{T_G}=arg\min_{T_G}L(Y, T_G(X))\]
+
+<p>In the case of Gradient Boosting, \(\hat{T_G}\) is a weighted sum of weak learners where the weak learners are <a href="/Revision/decision_tree.html#cart-gini-impurity">CART Decision Trees</a>:</p>
+
+<p><br /></p>
+
+\[\hat{T_G}=\sum_{k=1}{n_{trees}}w_k t_k\]
+
+<p>Where:</p>
+<ul>
+  <li>\(t_k\) is the CART tree from the \(k\)-th iteration of the algorithm,</li>
+  <li>\(w_k\) is the weight associated with the tree \(t_k\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="initialization">Initialization</h4>
+<p>Now let’s define \(T_0=t_0\), the first strong learner, ensemble of 1 weak learner:</p>
+
+\[T_0=arg\min_{t}L(Y, t(X))\]
+
+<p>Where:</p>
+<ul>
+  <li>\(t\) is the CART tree that best fit the data.</li>
+</ul>
+
+<p>Now the recursion is the following:</p>
+
+<p><br /></p>
+<h4 id="recursion">Recursion</h4>
+<p>The recursion from \(T_{k-1}\) to \(T_k\) is as follow:</p>
+
+\[T_k=T_{k-1}+t_k\]
+
+<p>Where:</p>
+<ul>
+  <li>\(t_k=arg\min_{t}L(Y, T_{k-1}(X)+t(X))\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="trick-using-taylor-expansion">Trick using Taylor expansion</h4>
+<p>An approximation using the <a href="/Revision/mathematics_functional_analysis.html#taylor-expansion">Taylor expansion</a> accelerates the estimation of \(L(Y, T_{k-1}+t(X))\) (considering \(t(X)\) as a small step):</p>
+
+<p><br /></p>
+
+\[L(Y, T_{k-1}(X)+t(X))=L(Y, T_{k-1}(X))+t(X)\frac{d}{dT_{k-1}(X)}L(Y, T_{k-1}(X)) + o(t(X))\]
+
+<p><br /></p>
+
+<p>Finding the best \(t(X)\) can be done by finding the weak learner that minimizes the Taylor expansion of \(L(Y, T_{k-1}(X)+t(X))\). This reformulation will be useful to easily compute the gradient wrt \(t(X)\).</p>
+
+<p><br /></p>
+<h4 id="link-to-gradient-descent">Link to Gradient Descent</h4>
+<p>Finding the argmin of the Taylor expansion of \(L(Y, T_{k-1}(X)+t(X))\) can be done using <a href="/Revision/mathematics_optimization.html#gradient-descent">gradient descent</a> with respect to \(t(X)\).</p>
+
+<p>The derivative wrt \(t(X)\) is:</p>
+
+\[\frac{d}{dt(X)}\left[L(Y, T_{k-1}(X))+t(X)\frac{d}{dT_{k-1}(X)}L(Y, T_{k-1}(X))\right]=\frac{d}{dT_{k-1}(X)}L(Y, T_{k-1}(X))\]
+
+<p>Thus, the learner \(t(x)\) that will produce the best step is the one that fit the best to \(\frac{d}{dT_{k-1}(X)}L(Y, T_{k-1}(X))\).</p>
+
+<p>Going back the the \(\frac{1}{2}\) MSE loss, the learner \(t\) that optimize the step is the one that fit best to \(Y - F_m(X)\).</p>
+
+<p><br /></p>
+<h4 id="update-of-the-model">Update of the model</h4>
+<p>Using an hyperparameter \(\alpha\) for the learning rate we obtain:</p>
+
+\[T_k=T_{k-1}-\alpha\frac{d}{dT_{k-1}(X)}L(Y, T_{k-1}(X))\]
+
+<p><br /></p>
+<h2 id="different-losses-used-in-gradient-boosting">Different losses used in Gradient Boosting</h2>
+<p>See <a href="https://lightgbm.readthedocs.io/en/latest/Features.html#applications-and-metrics">the lightGBM page with the supported losses</a>.</p>
+
+<p><br /></p>
+<h3 id="logitboost">logitboost</h3>
+<p>logitboost is gradient boosting applied to the log loss (sometimes called deviance loss or logistic loss):</p>
+
+\[L(h(X), Y)=Y \log(h(X)) + (1-Y) (1-\log(h_\beta(X)))\]
+
+<p>or equivalently (without applying the log function):</p>
+
+\[L(h(X), Y)=h(X)^Y + (1-h_\beta(X))^{(1-Y)}\]
+
+<p>See:</p>
+<ul>
+  <li><a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html">Sklearn GradientBoostingClassifier</a>,</li>
+  <li><a href="https://stats.stackexchange.com/questions/157870/scikit-binomial-deviance-loss-function">StackExchange explaination of sklearn deviance loss</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Loss_functions_for_classification#Logistic_loss">Wikipedia page on classification loss function - in particular see logistic loss</a></li>
+</ul>
+
+<p><br /></p>
+<h3 id="l_2-boosting">\(L_2\) boosting</h3>
+<p>\(L_2\) boosting is gradient boosting applied to the \(L_2\) loss also know as mean average loss (MAE):</p>
+
+\[L(h(X), Y)=\frac{1}{2}(Y-h(X))^2\]
+
+<p>And:</p>
+
+\[\frac{d}{dh(X)}L(h(X), Y)=h(X)-Y\]
+
+<p>Hence, each learner \(t_k\) is trained on the error from \(T_{k-1}(X)-Y\) where \(T_{k-1}\) is a strong learner, ensemble of the \({k-1}\) first trees.</p>
+
+<p><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://perso.univ-rennes2.fr/system/files/users/rouviere_l/poly_apprentissage.pdf">Introduction aux méthodes d’agrégation - Laurent Rouvière (in french)</a>.</li>
+  <li><a href="http://www.chengli.io/tutorials/gradient_boosting.pdf">A Gentle Introduction to Gradient Boosting - Cheng Li</a></li>
+  <li><a href="https://cs229.stanford.edu/notes2021fall/lecture11-boosting.pdf">CS229 course</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Gradient_boosting">Gradient Boosting - Wikipedia</a></li>
+  <li><a href="https://mitpress.mit.edu/sites/default/files/titles/content/boosting_foundations_algorithms/chapter007.html">MIT course on Gradient Boosting</a></li>
+</ul>
+
+  </body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>A/B Testing</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-inferential-statistics"><a href="/Revision/mathematics_inferential_statistics.html">Back to Inferential statistics</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>A/B testing is a methodology to test if two solutions A and B are equivalent when their outputs are non deterministic.
+A/B testing is widely used in online marketing to test if a design A is equivalent (or better or worse) than a design B for a given metric.</p>
+
+<p>From a mathematical point of view A/B testing is just a practical application of statistical tests.</p>
+
+<p><br /></p>
+<h1 id="which-test-to-use-ab-testing-decision-tree">Which test to use? A/B Testing decision tree</h1>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ab_testing_map.png" width="50%" height="50%" />
+</div>
+
+<p>This image comes from <a href="https://towardsdatascience.com/a-b-testing-a-complete-guide-to-statistical-testing-e3f1db140499">a Toward Data Science blog post by Francesco Casalegno</a>.</p>
+
+<p><br /></p>
+<h1 id="tests">Tests</h1>
+<p>Different things may be tested in a two samples statistical test. We can check if A and B are equivalent or i A is better than B or if A is worse than B.
+The data type will decide which test to use (as you can see in the A/B Testing decision tree).</p>
+
+<p><br /></p>
+<h2 id="discrete-data">Discrete Data</h2>
+<p>In online marketing, discret metrics may be:</p>
+<ul>
+  <li>Click-through rate — does a user click on a link?</li>
+  <li>Conversion rate — does a user convert into customers?</li>
+  <li>Bounce rate — does a user visit a page from the website after visiting this page?</li>
+</ul>
+
+<p>These data are 0/1 data and they can be visualized in a cross tab.</p>
+
+<p><br /></p>
+<h3 id="fisher-exact-test">Fisher exact test</h3>
+<p>This test is not used a lot because it is computationally inefficient with large sample sizes.</p>
+
+<p>The Fisher exact test will compute all the possible permutations keeping the totals unchanged (total of users for A and for B and total of users who clicked or did not click).</p>
+
+<p>Once all the permutations are available you can recompute, for each permutation, your metric for A and B (let’s say conversion rate).
+Your p-value is more or less the rank of your output (your output would be the difference of conversion rate between solution A and solution B) vs all the possible outputs.
+If you test if A is better than B then the permutation with higher \(CR_A-CR_B\) would represent the possible outcomes that are more extreme than the one we get.</p>
+
+<p><br /></p>
+<h3 id="pearsons-chi-squared-test">Pearson’s chi-squared test</h3>
+<p>This test is the one commonly used for categorical data.
+The idea is to compare the observed proportion to the expected proportion.</p>
+
+\[\chi^2=\sum_i\sum_j\frac{\left(O_{ij}-E_{ij}\right)^2}{E_{ij}}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(E_{ij}=Np_{i,}p_{,j}\),</li>
+  <li>N is the total sample size,</li>
+  <li>\(p_{i,}=\frac{O_i}{N}=\sum_j\frac{O_{ij}}{N}\) is the fraction of population i (A or B),</li>
+  <li>\(p_{,j}=\frac{O_j}{N}=\sum_i\frac{O_{ij}}{N}\) is the fraction of population j (for example click or not click).</li>
+</ul>
+
+<p>\(E_{ij}\) does correspond to the expected proportion under the assumption that A is equivalent to B. It is the case as its computation assumes that the correlation between the outcomes and the populations are null.</p>
+
+<p>The degree of freedom of the Chi-2 distribution depends on the number of outcomes and the number of population. Its degree of freedom is \((nb_{populations}-1)(nb_{outcomes}-1)\). It the classical A/B testing framework this degree of liberty is 1.</p>
+
+<p>A Chi-2 distribution is a sum of normally distributed variables. In this case the random variables are the \(O_{ij}\). It is thus expected that these \(O_{ij}\) follow a gaussian distribution.</p>
+
+<p>\(O_{ij}\) is sum of Bernoulli random variables so \(O_{ij}\) is a Binomial random variable.
+More important, the Central limit theorem establishes that the sum of independent and identically distributed random variables converge in distribution toward the gaussian distribution (generally \(n \geq 30\) for every \(O_{ij}\)) so, for n large enough, \(O_{ij}\) follows a normal distribution (for n large enough, a Binomial distribution converges toward a normal distribution).</p>
+
+<p><br /></p>
+<h2 id="continuous-data">Continuous Data</h2>
+<p>In online marketing, continuous metrics may be:</p>
+<ul>
+  <li>Time spent on a webpage,</li>
+  <li>Total sum of purchase on a website.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="z-test">Z-test</h3>
+<p>The Z-test checks if the means of two populations are equivalent.
+As for the Chi-2 distribution, the observations must follow a gaussian distribution or their sample sizes must be greater than 30 to be able to use the CLT.
+The variances of the population are known (which is generally not the case).</p>
+
+<p>If the conditions are fulfilled, for two populations X and Y, the Z-statistic is written as follow:</p>
+
+\[Z=\frac{\bar{X}-\bar{Y}}{\sqrt{\frac{\sigma_X^2}{n_X} + \frac{\sigma_Y^2}{n_Y}}} \sim \mathcal{N}(0,1)\]
+
+<p><br /></p>
+<h3 id="students-t-test">Student’s t-test</h3>
+<p>The Student’s t-test gets the same assumptions as the Z-test but the variances will be estimated.
+In this case these variances are expected to be similar, ie \(\sigma_X \approx \sigma_Y\) (if it is not the case we can use the Welch’s t-test).</p>
+
+<p>For two populations X and Y, the Student’s t-statistic is written as follow:</p>
+
+\[T=\frac{\bar{X}-\bar{Y}}{S_P\sqrt{\frac{1}{n_X} + \frac{1}{n_Y}}} \sim t_{\nu}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(S_P^2=\frac{\sum_i^k(n_i-1)s_i^2}{\sum_i^k(n_i-1)}\) is the weighted variance (\(s_i^2\) is the variance of population i),</li>
+  <li>\(\nu = n_X + n_Y - 2\).</li>
+</ul>
+
+<p>The use of t-test is justified as \(\bar{X}-\bar{Y} \sim \mathcal{N}\) and \(S_P\sqrt{1/n_X + 1/n_Y} \sim \chi^2\) (a sum of squared gaussian distributed variables).</p>
+
+<p><br /></p>
+<h3 id="welchs-t-test">Welch’s t-test</h3>
+<p>The Welch’s t-test is almost equivalent to the Student’s t-test but the variances are not considered equivalent. Thus we will estimate \(S^2_X\) and \(S^2_Y\) separately.</p>
+
+<p>For two populations X and Y, the Welch’s t-statistic is written as follow:</p>
+
+\[T=\frac{\bar{X}-\bar{Y}}{\sqrt{\frac{S^2_X}{n_X} + \frac{S^2_Y}{n_Y}}} \sim t_{\nu}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\nu=\frac{\left(\frac{S^2_X}{n_X} + \frac{S^2_Y}{n_Y}\right)^2}{\frac{\left(S^2_X / n_X\right)^2}{n_X-1} + \frac{\left(S^2_Y / n_Y \right)^2}{n_Y-1}}\).</li>
+</ul>
+
+<p><br /></p>
+<h3 id="kolmogorov-smirnov-two-samples-test">Kolmogorov-Smirnov two samples test</h3>
+<p>The Kolmogorov-Smirnov test is a non parametric test (ie without hypotheses in the data distribution). It is based on the empirical cumulative distribution function. It can be used to test if a sample of data follows a given distribution or in A/B testing if the distribution of data of each population are equivalent.</p>
+
+<p>First let’s define the empirical functions:
+\(F_{n}(x)={\frac {\text{number of (elements in the sample} \leq x)}{n}}=\frac {1}{n}\sum_{i=1}^{n}1_{[-\infty ,x]}(X_{i})\)</p>
+
+<p>Where:</p>
+<ul>
+  <li>\(1_{[-\infty ,x]}\) is the indicator function equal to 1 if \(X_i \leq x\) and 0 otherwise.</li>
+</ul>
+
+<p>Then the statistic in the Kolmogorov-Smirnov two samples test is computed as follow:</p>
+
+\[D_{n_X,n_Y}=\underset{x}{sup}|F_{1,n_X}(x)-F_{2,n_Y}(x)|\]
+
+<p>Where:</p>
+<ul>
+  <li>\(F_{1,n_X}\) is the empirical cumulative distribution of population X (with size \(n_X\)),</li>
+  <li>\(F_{2,n_Y}\) is the empirical cumulative distribution of population Y (with size \(n_Y\)).</li>
+</ul>
+
+<p>The null hypotheses is rejected if:</p>
+
+\[D_{n_X,n_Y} \gt c(\alpha) \sqrt{\frac{n_X+n_Y}{n_X \cdot n_Y}}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(c(\alpha)=\sqrt{-\ln\left(\frac{\alpha}{2}\right) \cdot \frac{1}{2}}\).</li>
+</ul>
+
+<p><br /></p>
+<h2 id="discrete-or-continuous-data">Discrete or Continuous Data</h2>
+<h3 id="mannwhitney-u-test">Mann–Whitney U test</h3>
+<p>Mann–Whitney U test (or Wilcoxon-Mann-Whitney test) can be used for discrete or continuous data. It is a non parametric test.</p>
+
+<p>For two populations X and Y, the Mann–Whitney U statistic is written as follow:</p>
+
+\[U=\sum_{i=1}^{n_X}\sum_{j=1}^{n_Y}D(X_i, Y_j)\]
+
+<p>Where:</p>
+<ul>
+  <li>\(D_{it} =
+  \begin{cases}
+    0 &amp;&amp; \text{if } X \lt Y\\
+    1 &amp;&amp; \text{if } X \gt Y\\
+    1/2 &amp;&amp; \text{if } X=Y
+  \end{cases}\).</li>
+</ul>
+
+<p>The hypotheses H0 is that the distributions of the populations X and Y are equivalent can be reformulate as follow: “the probability for an observation \(X_i\) of X to be greater than an observation \(Y_j\) of Y is equal to the probability for an observation \(Y_j\) of Y to be greater than an observation \(X_i\) of X”.</p>
+
+<p><br /></p>
+<h1 id="references">References</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://towardsdatascience.com/a-b-testing-a-complete-guide-to-statistical-testing-e3f1db140499">This Toward Data Science blog post</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/Kolmogorov–Smirnov_test#Two-sample_Kolmogorov–Smirnov_test">Wikipedia page on Kolmogorov-Smirnov</a>.</li>
+</ul>
+
+  </body>
+</html>

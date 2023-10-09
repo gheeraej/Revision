@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>GAE</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-actor-critic"><a href="/Revision/reinforcement_learning_actor_critic.html">Back to Actor Critic</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>GAE for Generalized Advantage Estimation is an actor critic model that uses some tricks to improve training of the model.</p>
+
+<h1 id="tricks">Tricks</h1>
+<h2 id="lambda-return">Lambda return</h2>
+<p>GAE uses lambda returns a generalization of n-steps where the model does’nt use only the n-th step but a combination of each n-th first steps. The parameter \(\lambda\) defines the weights associated with each step.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/gae.png" width="50%" height="50%" />
+</div>
+
+<p>\(\lambda=0\) is equivalent to TD estimate and \(\lambda=1\) is equivalent to MC estimate. Every \(\lambda\) in between is a mix.</p>
+
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li>UDRLN videos 3.4.13.</li>
+</ul>
+
+  </body>
+</html>

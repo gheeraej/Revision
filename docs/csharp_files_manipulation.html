@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>C# - Files Manipulation</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-c"><a href="/Revision/csharp.html">Back to C#</a></h2>
+
+<p><br /></p>
+<h1 id="scan-folder">Scan folder</h1>
+<p><code class="language-plaintext cs highlighter-rouge">Directory</code> or <code class="language-plaintext cs highlighter-rouge">DirectoryInfo</code> from <code class="language-plaintext cs highlighter-rouge">System.IO</code> namespace can be used to list files and directories from a given path. For both of the methods you can apply filtering rules.</p>
+
+<h3 id="using-directory">Using <code class="language-plaintext cs highlighter-rouge">Directory</code></h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.IO</span><span class="p">;</span>
+
+  <span class="kt">string</span> <span class="n">path</span> <span class="p">=</span> <span class="s">"path/to/folder"</span><span class="p">;</span>
+
+  <span class="kt">string</span><span class="p">[]</span> <span class="n">subdirs</span> <span class="p">=</span> <span class="n">Directory</span><span class="p">.</span><span class="nf">GetDirectories</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">"*"</span><span class="p">);</span>
+  <span class="k">foreach</span><span class="p">(</span><span class="kt">string</span> <span class="n">subdir</span> <span class="k">in</span> <span class="n">subdirs</span><span class="p">)</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">subdir</span><span class="p">);</span> <span class="c1">// print full path to sub directory</span>
+
+  <span class="kt">string</span><span class="p">[]</span> <span class="n">files</span> <span class="p">=</span> <span class="n">Directory</span><span class="p">.</span><span class="nf">GetFiles</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">"*"</span><span class="p">);</span>
+  <span class="k">foreach</span><span class="p">(</span><span class="kt">string</span> <span class="n">file</span> <span class="k">in</span> <span class="n">files</span><span class="p">)</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">file</span><span class="p">);</span> <span class="c1">// print full path to file</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="using-directoryinfo">Using <code class="language-plaintext cs highlighter-rouge">DirectoryInfo</code></h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.IO</span><span class="p">;</span>
+
+  <span class="kt">string</span> <span class="n">path</span> <span class="p">=</span> <span class="s">"path/to/folder"</span><span class="p">;</span>
+  <span class="n">DirectoryInfo</span> <span class="n">directoryInfo</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DirectoryInfo</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+
+  <span class="n">DirectoryInfo</span><span class="p">[]</span> <span class="n">subDirs</span><span class="p">=</span> <span class="n">directoryInfo</span><span class="p">.</span><span class="nf">GetDirectories</span><span class="p">();</span>
+  <span class="k">foreach</span><span class="p">(</span><span class="n">DirectoryInfo</span> <span class="n">subDir</span> <span class="k">in</span> <span class="n">subDirs</span><span class="p">)</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">subDir</span><span class="p">.</span><span class="n">FullName</span><span class="p">);</span> <span class="c1">// print full path to sub directory</span>
+
+    <span class="n">FileInfo</span><span class="p">[]</span> <span class="n">files</span> <span class="p">=</span> <span class="n">directoryInfo</span><span class="p">.</span><span class="nf">GetFiles</span><span class="p">();</span>
+  <span class="k">foreach</span><span class="p">(</span><span class="n">FileInfo</span> <span class="n">file</span> <span class="k">in</span> <span class="n">files</span><span class="p">)</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">FullName</span><span class="p">);</span> <span class="c1">// print full path to file</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="text-files">Text Files</h1>
+<p><code class="language-plaintext cs highlighter-rouge">StreamReader</code> and <code class="language-plaintext cs highlighter-rouge">StreamWriter</code> from <code class="language-plaintext cs highlighter-rouge">System.IO</code> namespace are used respectively to read and write from or to text files.</p>
+
+<p><br /></p>
+<h2 id="read">Read</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.IO</span><span class="p">;</span>
+
+  <span class="kt">string</span> <span class="n">path</span> <span class="p">=</span> <span class="s">"path/to/read/file.txt"</span><span class="p">;</span>
+  <span class="kt">string</span> <span class="n">line</span><span class="p">;</span>
+  <span class="k">using</span> <span class="p">(</span><span class="n">StreamReader</span> <span class="n">stream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StreamReader</span><span class="p">(</span><span class="n">path</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">while</span> <span class="p">((</span><span class="n">line</span> <span class="p">=</span> <span class="n">stream</span><span class="p">.</span><span class="nf">ReadLine</span><span class="p">())</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Do something on line</span>
+    <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="write">Write</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.IO</span><span class="p">;</span>
+
+  <span class="kt">string</span> <span class="n">path</span> <span class="p">=</span> <span class="s">"path/to/write/file.txt"</span><span class="p">;</span>
+  <span class="kt">string</span><span class="p">[]</span> <span class="n">lines</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"First line."</span><span class="p">,</span> <span class="s">"Second line."</span> <span class="p">};</span>
+  <span class="k">using</span> <span class="p">(</span><span class="n">StreamWriter</span> <span class="n">outputFile</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StreamWriter</span><span class="p">(</span><span class="n">path</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">foreach</span><span class="p">(</span><span class="kt">string</span> <span class="n">line</span> <span class="k">in</span> <span class="n">lines</span><span class="p">)</span>
+      <span class="n">outputFile</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="binary-text-files">Binary Text Files</h1>
+<p><code class="language-plaintext cs highlighter-rouge">FileStream</code> with <code class="language-plaintext cs highlighter-rouge">BinaryReader</code> and <code class="language-plaintext cs highlighter-rouge">BinaryWriter</code> from <code class="language-plaintext cs highlighter-rouge">System.IO</code> namespace are used to respectively read and write from or to binary text files.</p>
+
+<p><br /></p>
+<h2 id="read-1">Read</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.IO</span><span class="p">;</span>
+
+  <span class="kt">string</span> <span class="n">path</span> <span class="p">=</span> <span class="s">"path/to/read/binaryfile"</span><span class="p">;</span>
+  <span class="k">using</span> <span class="p">(</span><span class="n">FileStream</span> <span class="n">inputStream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Open</span><span class="p">))</span>
+  <span class="k">using</span> <span class="p">(</span><span class="n">BinaryReader</span> <span class="n">reader</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BinaryReader</span><span class="p">(</span><span class="n">inputStream</span><span class="p">))</span> <span class="p">{</span>
+    <span class="kt">long</span> <span class="n">length</span> <span class="p">=</span> <span class="n">inputStream</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">bufferSize</span> <span class="p">=</span> <span class="m">1000000</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">length</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kt">byte</span><span class="p">[]</span> <span class="n">buffer</span> <span class="p">=</span> <span class="n">reader</span><span class="p">.</span><span class="nf">ReadBytes</span><span class="p">(</span><span class="n">bufferSize</span><span class="p">);</span>
+      <span class="c1">// Do something on buffer</span>
+      <span class="n">length</span> <span class="p">-=</span> <span class="n">bufferSize</span><span class="p">;</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="write-1">Write</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.IO</span><span class="p">;</span>
+
+  <span class="kt">string</span> <span class="n">path</span> <span class="p">=</span> <span class="s">"path/to/write/binaryfile"</span><span class="p">;</span>
+  <span class="kt">byte</span><span class="p">[][]</span> <span class="n">binaryTexts</span> <span class="p">=</span> <span class="k">new</span> <span class="n">bytes</span><span class="p">[][];</span> <span class="c1">// Empty here but normally filles</span>
+
+  <span class="k">using</span> <span class="p">(</span><span class="n">FileStream</span> <span class="n">outputStream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Create</span><span class="p">))</span>
+  <span class="k">using</span> <span class="p">(</span><span class="n">BinaryWriter</span> <span class="n">writer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BinaryWriter</span><span class="p">(</span><span class="n">outputStream</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">foreach</span><span class="p">(</span><span class="kt">byte</span><span class="p">[]</span> <span class="n">binaryText</span> <span class="k">in</span> <span class="n">binaryTexts</span><span class="p">)</span>
+      <span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">binaryText</span><span class="p">);</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="read-from-one-binary-file-and-write-in-another-one">Read from one binary file and Write in another one</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.IO</span><span class="p">;</span>
+
+  <span class="kt">string</span> <span class="n">pathFrom</span> <span class="p">=</span> <span class="s">"path/to/read/binaryfile"</span><span class="p">;</span>
+  <span class="kt">string</span> <span class="n">pathTo</span> <span class="p">=</span> <span class="s">"path/to/write/binaryfile"</span><span class="p">;</span>
+
+  <span class="k">using</span> <span class="p">(</span><span class="n">FileStream</span> <span class="n">inputStream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">pathFrom</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Open</span><span class="p">))</span>
+  <span class="k">using</span> <span class="p">(</span><span class="n">FileStream</span> <span class="n">outputStream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">pathTo</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Create</span><span class="p">))</span>
+  <span class="k">using</span> <span class="p">(</span><span class="n">BinaryReader</span> <span class="n">reader</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BinaryReader</span><span class="p">(</span><span class="n">inputStream</span><span class="p">))</span>
+  <span class="k">using</span> <span class="p">(</span><span class="n">BinaryWriter</span> <span class="n">writer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BinaryWriter</span><span class="p">(</span><span class="n">outputStream</span><span class="p">))</span>
+  <span class="p">{</span>
+      <span class="kt">long</span> <span class="n">length</span> <span class="p">=</span> <span class="n">inputStream</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+
+      <span class="k">const</span> <span class="kt">int</span> <span class="n">bufferSize</span> <span class="p">=</span> <span class="m">1000000</span><span class="p">;</span>
+      <span class="k">while</span> <span class="p">(</span><span class="n">length</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kt">byte</span><span class="p">[]</span> <span class="n">buffer</span> <span class="p">=</span> <span class="n">reader</span><span class="p">.</span><span class="nf">ReadBytes</span><span class="p">(</span><span class="n">bufferSize</span><span class="p">);</span>
+          <span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+          <span class="n">length</span> <span class="p">-=</span> <span class="n">bufferSize</span><span class="p">;</span>
+      <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="xml">XML</h1>
+<p><code class="language-plaintext cs highlighter-rouge">XmlDocument()</code> from <code class="language-plaintext cs highlighter-rouge">System.Xml</code> namespace is used to respectively load XML files.</p>
+
+<p><br /></p>
+<h2 id="read-2">Read</h2>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.Xml</span><span class="p">;</span>
+
+  <span class="kt">string</span> <span class="n">path</span> <span class="p">=</span> <span class="s">"path/to/read/xmlFile.xml"</span><span class="p">;</span>
+
+  <span class="n">XmlDocument</span> <span class="n">doc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlDocument</span><span class="p">();</span>
+  <span class="n">doc</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="n">path</span><span class="p">);</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="finding-nodes">Finding nodes</h2>
+<p>Once a <code class="language-plaintext cs highlighter-rouge">XmlDocument</code> is created you can search nodes inside it:</p>
+
+<p><br /></p>
+<h3 id="by-absolute-path">By absolute path</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+  <span class="k">using</span> <span class="nn">System.Xml</span><span class="p">;</span>
+
+  <span class="n">XmlNode</span> <span class="n">node</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">DocumentElement</span><span class="p">.</span><span class="nf">SelectSingleNode</span><span class="p">(</span><span class="s">"/link/to/node"</span><span class="p">);</span> <span class="c1">// doc exists and is a XmlDocument</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="children-of-a-node">Children of a node</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">foreach</span><span class="p">(</span><span class="n">XmlNode</span> <span class="n">node</span> <span class="k">in</span> <span class="n">doc</span><span class="p">.</span><span class="n">DocumentElement</span><span class="p">.</span><span class="n">ChildNodes</span><span class="p">){</span>
+    <span class="c1">// Do something on child nodes</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="extract-information">Extract Information</h2>
+<h3 id="getting-text-of-the-node">Getting text of the node</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">string</span> <span class="n">text</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">InnerText</span><span class="p">;</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="getting-text-of-an-attribute-of-the-node">Getting text of an attribute of the node</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="kt">string</span> <span class="n">attrText</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">Attributes</span><span class="p">[</span><span class="s">"attributeName"</span><span class="p">]?.</span><span class="n">InnerText</span><span class="p">;</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://koor.fr/DotNet/SamplesCS/io_fichier_text.wp">Page on text files reading and writing from Koor website</a>,</li>
+  <li><a href="https://koor.fr/DotNet/SamplesCS/io_fichier_binaire.wp">Page on binary text files reading and writing from Koor website</a>,</li>
+  <li><a href="https://stackoverflow.com/questions/642293/how-do-i-read-and-parse-an-xml-file-in-c">This StackOverflow page</a>.</li>
+</ul>
+
+  </body>
+</html>

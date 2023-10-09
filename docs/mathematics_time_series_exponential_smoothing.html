@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mathematics - Time Series - Exponential Smoothing</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-time-series"><a href="/Revision/mathematics_time_series.html">Back to Time series</a></h2>
+
+<p><br /></p>
+<h1 id="exponential-smoothing">Exponential smoothing</h1>
+<h2 id="simple-exponential-smoothing">Simple exponential smoothing</h2>
+<p>Exponential smoothing is a rule of thumb technique for smoothing time series data using the exponential window function.
+It assignes exponentially decreasing weights over time. Older data has smaller weights (importance) than more recent data.</p>
+
+<p><br /></p>
+<h5 id="formula">Formula</h5>
+<p>Let \(x_t\) be the serie of data and \(s_t\) our serie of guesses with \(s_0=x_0\). Then:</p>
+
+\[\begin{cases}
+  s_0 = x_0\\
+  s_t = \alpha x_t + (1 - \alpha) s_{t-1} \; \text{, } t \gt 0
+\end{cases}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(0 \lt \alpha \lt 1\) is the smoothing factor.</li>
+</ul>
+
+<p>A greater \(\alpha\) will give more weigths to recent observations and a smaller \(\alpha\) will give more weights to old observations.</p>
+
+<p>Here the prediction is done at the time where the true observation is known. It is not forward looking.</p>
+
+<p><br /></p>
+<h5 id="prediction">Prediction</h5>
+<p>To make future predictions the formula is:</p>
+
+\[s_{t+h} = \alpha \sum_{i=0}^t (1 - \alpha)^{i} x_{t-i}\]
+
+<p>It can be rewritten:</p>
+
+\[s_{t+h}=\alpha x_{t} + (1 - \alpha) s_{t-1}\]
+
+<p>The future prediction does not depend on the horizon \(h\). The prediction in constant in the future.</p>
+
+<p><br /></p>
+<h5 id="estimator-of-alpha">Estimator of \(\alpha\)</h5>
+<p>The optimal value for \(\alpha\) is estimated using the least squares method:</p>
+
+\[\alpha = \min_\alpha \sum_{t=1}^T \left(x_t - s_t\right)^2\]
+
+<p>Where:</p>
+<ul>
+  <li>\(T\) is the number of observed values,</li>
+  <li>\(s_t\) is defined as above and depends on \(\alpha\).</li>
+</ul>
+
+<p><br /></p>
+<h2 id="double-exponential-smoothing">Double exponential smoothing</h2>
+<p>Simple exponential smoothing is very easy to calibrate and use but does not take into account the trend of the observations.</p>
+
+<p>Double exponential smoothing takes this into account. Two types of double exponential smoothing exist: Holt-Winters and Brown</p>
+
+<p><br /></p>
+<h3 id="holt-winters">Holt-Winters</h3>
+<p>Let again \(x_t\) be the serie of observations starting at \(t=0\). \(s_t\) is the smoothed value for time \(t\) and \(b_t\) is the trend estimate for time \(t\). The prediction at horizon \(h\) is now written \(\bar{x}_{t+h}\).</p>
+
+<p><br /></p>
+<h4 id="without-seasonality">Without seasonality</h4>
+<h5 id="formula-1">Formula</h5>
+
+\[\begin{cases}
+  s_0 = x_0 \\
+  b_0 = x_1 - x_0
+\end{cases}\]
+
+<p>Then, for \(t \gt 0\):</p>
+
+\[\begin{cases}
+  s_t = \alpha x_t + (1 - \alpha)(s_{t-1} + b_{t-1}) \\
+  b_t = \beta (s_t - s_{t-1}) + (1 - \beta) b_{t-1}
+\end{cases}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(0 \leq \alpha \leq 1\) is the data smoothing factor,</li>
+  <li>\(0 \leq \beta \leq 1\) is the trend smoothing factor.</li>
+</ul>
+
+<p><br /></p>
+<h5 id="prediction-1">Prediction</h5>
+<p>The prediction is:</p>
+
+\[\bar{x}_{t+h} = s_t + h \cdot b_t\]
+
+<p>The prediction at time \(t+h\) is the last know smoothed value \(s_t\) plus the trend \(b_t\) times the horizon.</p>
+
+<p><br /></p>
+<h4 id="estimators-of-alpha-and-beta">Estimators of \(\alpha\) and \(\beta\)</h4>
+<p>he optimal values for \(\alpha\) and \(\beta\) are again estimated using the least squares method:</p>
+
+\[\{\alpha, \beta\} = \min_{\{\alpha, \beta\}} \sum_{t=1}^T \left(x_t - s_t\right)^2\]
+
+<p>Where:</p>
+<ul>
+  <li>\(T\) is the number of observed values,</li>
+  <li>\(s_t\) is defined as above and depends on \(\alpha\) and \(\beta\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="additive-seasonality">Additive seasonality</h4>
+<p>Let now suppose a seasonality of length \(L\). We now want to estimate a sequence \(c_t\) of seasonal correction factors.
+We need at least \(2L\) of historical data to initialize the data.</p>
+
+<p>For the additive seasonality the correction factors are factors that we add to the prediction.</p>
+
+<p><br /></p>
+<h5 id="formula-2">Formula</h5>
+<p>\(\begin{cases}
+  s_0 = x_0 \\
+  b_0 = \frac{1}{L}\sum_{j=1}^L \frac{x_{L+j} - x_j}{L} \\
+  c_i = \frac{1}{N}\sum{j=1}^N x_{L \times (j-1) + i} - A_j \; \text{ for } i=1, 2, .., L
+\end{cases}\)</p>
+
+<p>Where:</p>
+<ul>
+  <li>\(N\) is the number of complete historical cycle present in the data,</li>
+  <li>\(A_j=\frac{\sum_{i=1}^L x_{L \times (j-1) + i}} {L} \; \text{ for } j=1, 2, .., L\).</li>
+</ul>
+
+<p>\(b_0\) is the trend computed as the average of the trends taken among two seansons (ie the trend between a point and the same point in the next season).
+\(c_i\) represents the correction for point \(i\) in the season. It is the average of the historical corrections of the \(i\)-th point in the season. In the additive framework the correction factors are additive.</p>
+
+<p>Then for \(t \gt N \times L\):</p>
+
+\[\begin{cases}
+  s_t = \alpha (x_t - c_{t-L}) + (1 - \alpha)(s_{t-1} + b_{t-1})\\
+  b_t = \beta (s_t - s_{t-1}) + (1 - \beta) b_{t-1} \\
+  c_t = \gamma(x_t - s_{t-1} - b_{t-1}) + (1 - \gamma)c_{t-L}
+\end{cases}\]
+
+<p><br /></p>
+<h5 id="prediction-2">Prediction</h5>
+<p>The prediction is:</p>
+
+\[\bar{x}_{t+h} = s_t + h \cdot b_t + c_{(t-L+1)+(m-1) \mod L}\]
+
+<p><br /></p>
+<h4 id="multiplicative-seasonality">Multiplicative seasonality</h4>
+<p>Let now suppose a seasonality of length \(L\). We now want to estimate a sequence \(c_t\) of seasonal correction factors. We need at least \(2L\) of historical data to initialize the data.</p>
+
+<p>For the multiplicative seasonality the correction factors are factors that we multiply the prediction.</p>
+
+<p><br /></p>
+<h5 id="formula-3">Formula</h5>
+<p>\(\begin{cases}
+  s_0 = x_0 \\
+  b_0 = \frac{1}{L}\sum_{j=1}^L \frac{x_{L+j} - x_j}{L} \\
+  c_i = \frac{1}{N}\sum{j=1}^N \frac{x_{L \times (j-1) + i}}{A_j} \; \text{ for } i=1, 2, .., L
+\end{cases}\)</p>
+
+<p>Where:</p>
+<ul>
+  <li>\(N\) is the number of complete historical cycle present in the data,</li>
+  <li>\(A_j=\frac{\sum_{i=1}^L x_{L \times (j-1) + i}} {L} \; \text{ for } j=1, 2, .., L\).</li>
+</ul>
+
+<p>\(b_0\) is the trend computed as the average of the trends taken among two seansons (ie the trend between a point and the same point in the next season).</p>
+
+<p>\(c_i\) represents the correction for point \(i\) in the season. It is the average of the historical corrections of the \(i\)-th point in the season. In the multiplicative framework the correction factors are multiplicative.</p>
+
+<p>Then for \(t \gt N \times L\):</p>
+
+\[\begin{cases}
+  s_t = \alpha \frac{x_t}{c_{t-L}} + (1 - \alpha)(s_{t-1} + b_{t-1})\\
+  b_t = \beta (s_t - s_{t-1}) + (1 - \beta) b_{t-1} \\
+  c_t = \gamma \frac{x_t}{s_t} + (1 - \gamma)c_{t-L}
+\end{cases}\]
+
+<p><br /></p>
+<h5 id="prediction-3">Prediction</h5>
+<p>The prediction is:</p>
+
+\[\bar{x}_{t+h} = \left(s_t + h \cdot b_t \right) c_{(t-L+1)+(m-1) \mod L}\]
+
+<p><br /></p>
+<h3 id="brown">Brown</h3>
+<h4 id="formula-4">Formula</h4>
+
+\[\begin{cases}
+  s^{'}_0 = x_0 \\
+  s^{''}_0 = x_0
+\end{cases}\]
+
+<p>Then, for \(t \gt 0\):</p>
+
+\[\begin{cases}
+  s^{'}_t = \alpha x_t + (1 - \alpha) s^{'}_{t-1}\\
+  s^{''}_t = \alpha s^{'}_t + (1 - \alpha) s^{''}_{t-1}
+\end{cases}\]
+
+<p><br /></p>
+<h4 id="prediction-4">Prediction</h4>
+
+\[\bar{x}_{t+h} = a_t + h \cdot \b_t\]
+
+<p>Where:</p>
+<ul>
+  <li>\(a_t = 2 s^{'}_t - s^{''}_t\),</li>
+  <li>
+\[b_t = \frac{\alpha}{1 - \alpha} (s^{'}_t - s^{''}_t)\]
+  </li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Exponential_smoothing">Wikipedia page on exponential smoothing</a>,</li>
+  <li><a href="https://eric.univ-lyon2.fr/~jjacques/Download/Cours/ST-Cours.pdf">Course on time series by Julien Jacques (in french)</a>,</li>
+  <li><a href="https://fr.coursera.org/lecture/introduction-to-predictive-modeling/holt-winters-additive-model-87Kuf">Coursera course on predictive model by University of Minnesota</a>.</li>
+</ul>
+
+  </body>
+</html>

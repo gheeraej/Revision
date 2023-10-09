@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Reinforcement Learning - Temporal Differences</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-value-based-methods"><a href="/Revision/reinforcement_learning_value_based_methods.html">Back to Value based methods</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>Temporal differences (TD) method is a model free learning method used in finite and stochastic (or deterministic) environments with one or more final states. The underlying model of the environment is unknown ie the rewards \(r\) and the transitions probabilities \(p(s',r \; \vert \; s,a)\) are unknown.</p>
+
+<p>The main advantage compare to Monte-Carlo methods is that the temporal differences methods do not require a full episode to update the state and action value function.</p>
+
+<p>In temporal differences methods the agent also interact with the environment and the TD algorithm compares, for each state and action, the received reward plus the expected returns from the next state/action and the current estimation of returns from the current state/action. It leverages this comparison to update the state/action value function.</p>
+
+<p>Here is an illustration of temporal differences (applied to action value function is \(Q\)-table):
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/TD_intro.png" width="50%" height="50%" />
+</div>
+<p>Here, the agent is in state \(s_0\) (rock) and takes action \(a_0\) (right). The current expected return of this state/action is +6. From state \(s_0\) and action \(a_0\), the agent goes in state \(s_1\) (brick - the outputs of the actions are stochastic, choosing action ‘go right’ does not insure to go right) and it takes action \(a_1\) (here - SARSA algorithm - we need to know the next action of the agent to leverage the \(Q\)-table). The reward from action \(a_0\) is -1 and the expected return of state \(s_1\) and action \(a_1\) is, from the \(Q\)-table +8. The alternative estimate is thus \(+8-1=+7\) that we compare with the current estimate +6. Hence the new estimate will increase a little bit to take advantage of the last information.</p>
+
+<p><br /></p>
+<h1 id="temporal-differences-policy-evaluation">Temporal differences policy evaluation</h1>
+<p>The policy evaluation in the TD setups is done by leveraging the new estimate of the state value function. Here only the state value function is required:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/TD0.png" width="75%" height="75%" />
+</div>
+<p>It updates the state value function by comparing the current estimate for this state to the alternate estimate constructed as the reward obtain by the agent plus the estimate of the next state. The hyperparameter \(\alpha\) modifies the update speed.</p>
+
+\[\underbrace{V(s_t)}_{\text{New V}} = \underbrace{V(s_t)}_{\text{Current V}} + \alpha \; [ \overbrace{\underbrace{r_{t+1}}_{\text{Reward}} + \underbrace{\gamma V(s_{t+1})}_{\text{Actualized returns}}}^{\text{Alternative estimate}} - \underbrace{V(s_t)}_{\text{Current V}} ]\]
+
+<p>Here a terminal state \(S_t\) and a number of episodes are used but TD(0) can be used in environment without terminal state as the update of the state value function is done after each action. In this case, a maximum number of actions would be set.</p>
+
+<p><br /></p>
+<h2 id="action-value-function-estimation">Action value function estimation</h2>
+<p>Three different algorithms exist to estimate the action value function (\(Q\)-table):</p>
+<ul>
+  <li>Sarsa (or Sarsa(0)) requires the next state and next action to make its guess,</li>
+  <li>Sarsamax (\(Q\)-learning) requires the next state and define the next action as the one that maximises the future returns,</li>
+  <li>Expected Sarsa requires the next state and defines the next state return as an average of the returns given each possible action.</li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/TD_summary.png" width="50%" height="50%" />
+</div>
+<p><br /></p>
+
+<p>As for the TD(0) algorithm the three next algorithms uses a terminal state \(S_t\) and a number of episodes but it is possible to apply these algorithms in environment without terminal states as the update of the action value function is done after each action. In this case, a maximum number of actions would be set.</p>
+
+<p><br /></p>
+<h3 id="sarsa">Sarsa</h3>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/Sarsa.png" width="75%" height="75%" />
+</div>
+<p>In Sarsa the agent need to choose the next action using the current policy.</p>
+
+<p><br /></p>
+<h3 id="sarsamax-q-learning">Sarsamax (\(Q\)-learning)</h3>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/Sarsamax.png" width="75%" height="75%" />
+</div>
+<p>In Sarsamax, the algorithm uses the \(Q\)-table to choose the best possible return for the next state.</p>
+
+<p><br /></p>
+<h3 id="expected-sarsa">Expected Sarsa</h3>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ExpectedSarsa.png" width="75%" height="75%" />
+</div>
+<p>In Expected Sarsa, the agent uses the \(Q\)-table to average the next return.</p>
+
+<p><br /></p>
+<h2 id="on-policy-and-off-policy-algorithms">On-policy and off-policy algorithms</h2>
+<h5 id="on-policy-algorithms">On-policy algorithms</h5>
+<p>On-policy learning algorithms are algorithms with training methods that replicate exactly the interactions of the policy with the environment.</p>
+
+<p>Sarsa is an on-policy learning as it replicates the interactions of the envrionment in its training process. The probability to choose any action in the training process it the same as in the distribution of the policy.</p>
+
+<p><br /></p>
+<h5 id="off-policy-algorithms">Off-policy algorithms</h5>
+<p>Off policy learning algorithms are algorithms with training methods that do not replicate exactly the interactions of the policy with the environment.</p>
+
+<p>Sarsamax is an off-policy learning as it does not replicates the interactions of the envrionment in its training process. Sarsamax chooses the best action to make its alternative estimate but the distribution of the policy is different and does not insure to always choose the best action (with \(\varepsilon\)-greedy method).</p>
+
+<p><br /></p>
+<h1 id="temporal-differences-policy-improvment-varepsilon-greedy-policy">Temporal differences policy improvment: \(\varepsilon\)-Greedy policy</h1>
+<p>The policy improvment is the same as in Monte-Carlo method. It takes the \(\varepsilon\)-Greedy policy given the current \(Q\)-table.</p>
+
+<p><br /></p>
+<h1 id="temporal-differences-policy-iteration">Temporal differences policy iteration</h1>
+<p>Once we know how to estimate the \(Q\)-table of a policy \(\pi\) and that we know how to define an \(\varepsilon\)-Greedy policy from \(\pi\) then we can alternate these two steps to find an opitmal policy \(\pi^{*}\).</p>
+
+<p><br /></p>
+<h1 id="limitations">Limitations</h1>
+<ul>
+  <li>Finite number of states,</li>
+  <li>Finite number of actions,</li>
+  <li>Non native stochastic policy (stochasticity comes from the \(\varepsilon\)-greedy method).</li>
+  <li>Biais.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li>UDRLN cheat sheet part 6,</li>
+  <li>UDRLN videos 2.3.4, 2.3.5, 2.3.6, 2.3.7,</li>
+  <li>For on and off policy methods: UDRLN video 3.4.10.</li>
+</ul>
+
+  </body>
+</html>

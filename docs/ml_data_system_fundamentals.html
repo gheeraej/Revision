@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Data System fundamentals</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="data-sources">Data Sources</h1>
+<p>Data can be user generated of systel generated:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/data_sources.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h1 id="data-format">Data Format</h1>
+<p>Different data formats exist:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/data_format.png" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+<h2 id="row-major-vs-column-major">Row-major vs Column-major</h2>
+<p>Here is a representation of Row-major vs Column-major data types:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/rm_vs_cm.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h3 id="example-of-dataframe-and-nparray">Example of DataFrame and np.array</h3>
+<p>Here is a example of difference in access time:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/df_vs_nparray.png" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+<h2 id="data-model-relational-vs-non-relational">Data model: Relational vs Non Relational</h2>
+<p>Relational data model can be summarized as ‘data stored in table’:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/rm.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h3 id="relational-model-normalization">Relational model: normalization</h3>
+<p>Normalization is using associated values to index, the mapping being stored in a table:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/rm_normalization.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h3 id="relational-model-and-sql">Relational model and SQL</h3>
+<ul>
+  <li>SQL model slightly differs from relational model
+    <ul>
+      <li>SQL tables can contain row duplicates. True relations can’t.</li>
+    </ul>
+  </li>
+  <li>SQL is a query language
+    <ul>
+      <li>How to specify the data that you want from a database</li>
+    </ul>
+  </li>
+  <li>SQL is declarative
+    <ul>
+      <li>You tell the data system what you want</li>
+      <li>It’s up to the system to figure out how to execute
+        <ul>
+          <li>Query optimization</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h3 id="nosql-not-only-sql">NoSQL: Not Only SQL</h3>
+<ul>
+  <li>Document model
+    <ul>
+      <li>Central concept: document</li>
+      <li>Relationships between documents are rare</li>
+    </ul>
+  </li>
+  <li>Graph model
+    <ul>
+      <li>Central concept: graph (nodes &amp; edges)</li>
+      <li>Relationships are the priority</li>
+    </ul>
+  </li>
+</ul>
+
+<p>JSON is an example of NoSQL format.</p>
+
+<p><br /></p>
+<h2 id="structured-vs-unstructured">Structured vs Unstructured</h2>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/structured_vs_unstructured.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h1 id="data-storage-engines-and-processing">Data Storage Engines and Processing</h1>
+<h2 id="etl">ETL</h2>
+<ul>
+  <li>
+    <p>Extract is extracting the data you want from data sources. Your data will likely come from multiple sources in different formats. Some of them will be corrupted or malformatted. In the extracting phase, you need to validate your data and reject the data that doesn’t meet your requirements. For rejected data, you might have to notify the sources. Since this is the first step of the process, doing it correctly can save you a lot of time downstream,</p>
+  </li>
+  <li>
+    <p>Transform is the meaty part of the process, where most of the data processing is done. You might want to join data from multiple sources and clean it. You might want to standardize the value ranges (e.g. one data source might use “Male” and “Female” for genders, but another uses “M” and “F” or “1” and “2”). You can apply operations such as transposing, deduplicating, sorting, aggregating, deriving new features, more data validating, etc,</p>
+  </li>
+  <li>
+    <p>Load is deciding how and how often to load your transformed data into the target destination, which can be a file, a database, or a data warehouse.</p>
+  </li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329 lecture 2</a>.</li>
+</ul>
+
+  </body>
+</html>

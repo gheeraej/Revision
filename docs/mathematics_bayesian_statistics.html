@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bayesian Statistics</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <p><br /></p>
+<h1 id="bayes-theorem">Bayes’ theorem</h1>
+<h2 id="definition">Definition</h2>
+<p>In probability theory and statistics, Bayes’ theorem (or Bayes’ law or Bayes’ rule) describes the probability of an event, based on prior knowledge of conditions that might be related to the event.</p>
+
+<p><br /></p>
+<h2 id="formula">Formula</h2>
+<p>The Baye’s theorem is:</p>
+
+\[P\left(A \vert B\right) = \frac{P\left(B \vert A\right) P\left(A\right)}{P\left(B\right)}\]
+
+<p>It is just a derivation of this:</p>
+
+\[P\left(A \vert B\right) P\left(B\right) = P\left(A \cap B\right) = P\left(B \vert A\right) P\left(A\right)\]
+
+<p>Another formulation is:</p>
+
+\[posterior = \frac{prior \times likelihood}{evidence}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(prior\) is the probability of the event \(A\) before taking into account any specific information,</li>
+  <li>\(likelihood\) is the likelihood of observing another event \(B\) given the event \(A\),</li>
+  <li>\(evidence\) is a normalizing constant that is the probability of event \(B\) in the whole population.</li>
+</ul>
+
+<p>In a test for a disease:</p>
+<ul>
+  <li>\(A\) would be ‘presence of disease’,</li>
+  <li>\(B\) would be ‘positive test’,</li>
+  <li>\(prior\) would be ‘probability (percentage) of disease in the whole population’,</li>
+  <li>\(likelihood\) would be ‘probability (percentage) of having positive test if presence of disease’</li>
+  <li>\(evidence\) would be ‘probability (percentage) of positive test in the whole population’</li>
+</ul>
+
+<p><br /></p>
+<h2 id="examples">Examples</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Bayes%27_theorem#Examples">Bayes’ theorem page on Wikipedia, part on examples</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Bayes%27_theorem">Bayes’ theorem page on Wikipedia</a>,</li>
+  <li><a href="https://towardsdatascience.com/understand-bayes-rule-likelihood-prior-and-posterior-34eae0f378c5">This Toward Data Science blog post</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="mcmc-algorithms">MCMC Algorithms</h1>
+<p>In statistics, Markov chain Monte Carlo (MCMC) methods comprise a class of algorithms for sampling from a probability distribution. By constructing a Markov chain that has the desired distribution as its equilibrium distribution, one can obtain a sample of the desired distribution by recording states from the chain. The more steps are included, the more closely the distribution of the sample matches the actual desired distribution.</p>
+
+<p><br /></p>
+<h2 id="metropolis-hasting-algorithm">Metropolis Hasting Algorithm</h2>
+<p>Metropolis–Hastings algorithm is a Markov chain Monte Carlo (MCMC) method for obtaining a sequence of random samples from a probability distribution \(\pi\) from which direct sampling is difficult. This sequence can be used to approximate the distribution (e.g. to generate a histogram) or to compute an integral (e.g. an expected value).</p>
+
+<p><br /></p>
+<h3 id="assumtions">Assumtions</h3>
+<p>Assume:</p>
+
+\[\pi(x) = \frac{f(x)}{\int f(y) \mathrm{d}y}\]
+
+<p>Here \(\frac{1}{\int f(y) \mathrm{d}y}\) is a normalization constant that is difficult to estimate. Metropolis Hasting Algorithm allows to sample from \(\pi\) without computing this normalization constant. It uses the fact that \(f \propto \pi\).</p>
+
+<p>Let \(q(\cdot \vert x)\) be any probability density that depends on \(x\). For the algorithm to work correctly, it should be easy to sample following \(q(\cdot \vert x)\).</p>
+
+<p>\(q(\cdot \vert x)\) may be for example \(\mathcal{N}(x, \sigma^2)\)</p>
+
+<p><br /></p>
+<h3 id="pseudo-code">Pseudo code</h3>
+<ul>
+  <li>Choose an initial \(X_0 \in \mathcal{X}\).</li>
+  <li>Assume \(X_1, \ldots, X_i\) has been generated:
+    <ol>
+      <li>Generate \(Y\) such that \(Y \sim q(\cdot \vert X_i)\),</li>
+      <li>\(\alpha = \min \left(\frac{f(Y) q(X_i \vert Y)}{f(X_i) q(Y \vert X_i)}, 1 \right) = \min \left(\frac{\pi(Y) q(X_i \vert Y)}{\pi(X_i) q(Y \vert X_i)}, 1 \right)\),</li>
+      <li>\(X_{i+1}= \begin{cases}
+             Y &amp;&amp; \text{with probability } &amp;&amp; \alpha\\
+             X_i &amp;&amp; \text{with probability } &amp;&amp; 1-\alpha\\
+           \end{cases}\)    .</li>
+    </ol>
+  </li>
+</ul>
+
+<p><br /></p>
+<h3 id="interpretation">Interpretation</h3>
+<p>At every iteration, the algorithm tries to move in the space of possible states. This move may be accepted or reject. The acceptance rate \(\alpha\) depends on the probability of the new state given the current state and the probability distribution \(\pi\). It the algorithm tries to move to a more probable state (ie \(\alpha = 1\)) then the move is always accepted. Otherwise the probability to reject the move is proportional to the drop of the probability density of the new point compared to the current point.</p>
+
+<p><br /></p>
+<h3 id="resources-1">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Metropolis–Hastings_algorithm">Metroplis-Hasting Wikipedia page</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/Algorithme_de_Metropolis-Hastings">Metroplis-Hasting Wikipedia page (in french)</a>,</li>
+</ul>
+
+<p><br /></p>
+<h2 id="resources-2">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo">Markov Chain Monte-Carlo Wikipedia page</a>,</li>
+  <li><a href="http://www.lpsm.paris/pageperso/castillo/bayes/notes_de_cours.pdf">Introduction aux statistiques bayésiennes by I. Castillo chapter 7.2.2</a>,</li>
+  <li><a href="http://cermics.enpc.fr/~jourdain/MC/polymc.pdf">Méthodes de Monte Carlo et algorithmes stochastiques by B. Jourdain</a>.</li>
+</ul>
+
+  </body>
+</html>

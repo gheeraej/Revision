@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Finance - Equity Pricing - TRS</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-finance---pricing-equity"><a href="/Revision/pricing_equity.html">Back to Finance - Pricing Equity</a></h2>
+
+<p><br /></p>
+<h1 id="definition">Definition</h1>
+<p>A Total Return Swap is a financial derivative contract between 2 party where the 2 party agree to exchange, at periodic dates, 2 cash flows. The buyer of the TRS agrees to receive the total performance of an asset or a basket of asset in exchange of paying a reference rate. Note that if the performance of the underlying is negative, the buyer is obliged to pay the value.</p>
+
+<p>Here is a visual representation of flow exchanged in a TRS:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/trs.jpg" width="30%" height="30%" />
+</div>
+
+<p>Here is another visual representation of flow exchanged in a TRS:</p>
+<div style="text-align: center">
+<img src="assets/images/trs2.png" width="30%" height="30%" />
+</div>
+<p>\(\textit{The Equity Amount reflects the P&amp;L of a long position in the underlying index. The floating rate amount reflects financing cost of the underlying index.}\)
+<br /></p>
+
+<p>It is important to note that TRS are funding cost arbitrages products.</p>
+
+<p><br /><br /></p>
+<h1 id="advantages">Advantages</h1>
+<ul>
+  <li>TRS allow an investor to enjoy all of the cash flow benefits of a security without actually owning the security,</li>
+  <li>TRS are off balanced sheet asset (the asset owner retains ownership of the asset): an institutional investor who has surpassed its balance sheet capacity may still speculate (or hedge) through a TRS,</li>
+  <li>TRS are leveraged derivatives: hedge fund can use TRS to take leveraged positions,</li>
+  <li>Investors can create new assets with a specific maturity not currently available in the market,</li>
+  <li>Investors can reduce administrative costs via an off balance sheet purchase,</li>
+  <li>A long-term investor who feels that a reference asset in portfolio may widen in spread in the short term, but then will recover, may enter into a TRS which is shorter than the maturity of the asset.</li>
+</ul>
+
+<p><br /><br /></p>
+<h1 id="formula">Formula</h1>
+
+\[\begin{cases}
+    \text{Leg}_{\text{Total Return}} &amp;&amp; = N * \left(\sum_{i=1}^{T} \left[(S_{t_i} - S_{t_{i-1}}) + D_{(t_{i-1}, t_i)}\right] * DF_{t_i}\right)\\
+    \text{Leg}_{\text{Floating}} &amp;&amp; = N * \left(\sum_{i=1}^{T} \left[S_{t_{i-1}} * e^{(r_{(t_{i-1}, t_i)} - s)(t_i - t_{i-1})} \right] * DF_{t_i}\right)
+\end{cases}\]
+
+<p>With:</p>
+<ul>
+  <li>\(N\) being the notional of the TRS,</li>
+  <li>\(S_{t_0}\) being the spot price of the underlying equity,</li>
+  <li>\(S_{t_i}\) being the futur price of the underlying equity as seen at \(t_0\),</li>
+  <li>\(D_{(t_{i-1}, t_i)}\) being the dividend received during the period between \(t_{i-1}\) and \(t_i\),</li>
+  <li>\(DF_{t_i}\) being the risk free Discount Factor at time \(t_i\),</li>
+  <li>\(r_{(t_{i-1}, t_i)}\) being the risk free rate for the time period between \(t_{i-1}\) and \(t_i\),</li>
+  <li>\(s\) being the spread over the risk free rate (inverse of the repo rate spread - which is quoted inverted),</li>
+  <li>\(r_{(t_{i-1}, t_i)}-s\) being the financing rate.</li>
+</ul>
+
+<p>The spread is the rate over the reference interest rate that a buyer (receiver) of total returns must pay to the seller (payer) and of which repo rate is the key driver. If the holder of a cash basket can receive income from repo of the underlying stocks then equally the buyer (receiver) of an equity index TRS would expect the spread to be subtracted from the financing cost.</p>
+
+<p><br /></p>
+<h2 id="implied-repo">Implied repo</h2>
+<p>Implied repo can be easily obtained if different market values are known:</p>
+<ul>
+  <li>The risk free rate curve and the associated discount factors,</li>
+  <li>The spot and forward values of \(S\).</li>
+</ul>
+
+<p><br /><br /></p>
+<h1 id="ressources">Ressources:</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://www.tavakolistructuredfinance.com/trs/">Introduction to Total Return Swaps by Janet Tavakoli</a>,</li>
+  <li><a href="https://www.eurexchange.com/resource/blob/34718/622649dd378e4338d2f56cae1adf8a6f/data/eurostoxx-repo-trf.pdf">Eurex research on Equity Repo and TRS</a>.</li>
+</ul>
+
+  </body>
+</html>

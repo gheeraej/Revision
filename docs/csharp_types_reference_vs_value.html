@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>C# Reference vs Value Types</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-c---types"><a href="/Revision/csharp_types.html">Back to C# - Types</a></h2>
+
+<p><br /></p>
+<h1 id="reference-types-and-value-types"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/reference-types">Reference Types</a> and <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-types">Value Types</a></h1>
+<p>Value types and reference types are the two main categories of C# types. A variable of a value type contains an instance of the type (it contains directly its data). This differs from a variable of a reference type, which contains a reference to an instance of the type (it stores a reference to its data).</p>
+
+<p><br /></p>
+
+<p>With reference types, two variables can reference the same object; therefore, operations on one variable can affect the object referenced by the other variable.<br />
+With value types, each variable has its own copy of the data, and it’s not possible for operations on one variable to affect the other (except in the case of in, ref, and out parameter variables; see in, ref, and out parameter modifier).</p>
+
+<p><br /></p>
+
+<p>Here is a visualisation of variable passed to a method by reference and one passed by value. When passed by value, a new instance of the variable is created (from <a href="https://blog.penjee.com/passing-by-value-vs-by-reference-java-graphical/">Penjee’s blog</a>):</p>
+
+<div style="text-align: center">
+  <img src="assets/images/by_value_vs_by_reference.gif" width="30%" height="30%" />
+</div>
+
+<p><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/reference-types">Microsoft Documentation on reference type</a>.</li>
+</ul>
+
+  </body>
+</html>

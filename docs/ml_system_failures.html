@@ -1,0 +1,464 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - System Failures</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>A failure happens when one or more expectations of the system is violated.</p>
+
+<p>Two types of expectations:</p>
+<ul>
+  <li>Operational metrics: e.g. average latency, throughput, uptime,</li>
+  <li>ML metrics: e.g. accuracy, F1, BLEU score.</li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/failures.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h1 id="causes-of-operational-failures">Causes of operational failures</h1>
+<ul>
+  <li>Dependency failures,</li>
+  <li>Deployment failures,</li>
+  <li>Hardware failures,</li>
+  <li>Network failure: downtime / crash.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="causes-of-ml-failures">Causes of ML failures</h1>
+<ol>
+  <li>Production data differing from training data</li>
+  <li>Edge cases</li>
+  <li>Degenerate feedback loops</li>
+</ol>
+
+<p><br /></p>
+<h2 id="production-data-differing-from-training-data">Production data differing from training data</h2>
+<ul>
+  <li>Train-serving skew:
+    <ul>
+      <li>Model performing well during development but poorly after production.</li>
+    </ul>
+  </li>
+  <li>Data distribution shifts:
+    <ul>
+      <li>Model performing well when first deployed, but poorly over time see <a href="#data-distribution-shift">Data Distribution shift</a>.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h2 id="edge-cases">Edge cases</h2>
+<p>Edge cases are the data samples so extreme that they cause the model to make catastrophic mistakes. Even though edge cases generally refer to data samples drawn from the same distribution, if there is a sudden increase in the number of data samples in which your model doesn’t perform well on, it could be an indication that the underlying data distribution has shifted.</p>
+
+<p>Autonomous vehicles are often used to illustrate how edge cases can prevent an ML system from being deployed. But this is also true for any safety-critical application such as medical diagnosis, traffic control, eDiscovery, etc. It can also be true for non-safety-critical applications. Imagine a customer service chatbot that gives reasonable responses to most of the requests, but sometimes, it spits out outrageously racist or sexist content. This chatbot will be a brand risk for any company that wants to use it, thus rendering it unusable.</p>
+
+<p>An ML model that performs well on most cases but fails on a small number of cases might not be usable if these failures cause catastrophic consequences. For this reason, major self-driving car companies are focusing on making their systems work on edge cases.</p>
+
+<p><br /></p>
+<h3 id="edge-cases-and-outliers">Edge cases and outliers</h3>
+<ul>
+  <li>Outliers refer to data: an example that differs significantly from other examples,</li>
+  <li>Edge cases refer to performance: an example where a model performs significantly worse than other examples.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="feedback-loops">Feedback loops</h2>
+<p>Feedback loops is a method to get new labels from the responses of users to the model.</p>
+
+<h3 id="natural-labels">Natural labels</h3>
+<p>Natural labels:</p>
+<ul>
+  <li>The model’s predictions can be automatically evaluated or partially evaluated by the system,</li>
+  <li>Examples:
+    <ul>
+      <li>ETA,</li>
+      <li>Ride demand prediction,</li>
+      <li>Stock price prediction,</li>
+      <li>Ads CTR,</li>
+      <li>Recommender system.</li>
+    </ul>
+  </li>
+  <li>Can be engineered.</li>
+</ul>
+
+<h3 id="delayed-labels">Delayed labels</h3>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/delayed_labels.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h3 id="degenerate-feedback-loops">Degenerate feedback loops</h3>
+<ul>
+  <li>When predictions influence the feedback, which is then used to extract labels to train the next iteration of the model,</li>
+  <li>Common in tasks with natural labels.</li>
+</ul>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/dfl1.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h4 id="detect-degenerate-feedback-loops">Detect Degenerate feedback loops</h4>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/dfl2.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h4 id="mitigate-degenerate-feedback-loops">Mitigate Degenerate feedback loops</h4>
+<ol>
+  <li>Randomization:
+    <ul>
+      <li>Degenerate feedback loops increase output homogeneity</li>
+      <li>Combat homogeneity by introducing randomness in predictions</li>
+      <li>Recsys: show users random items &amp; use feedback to determine items’ quality</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/randomization.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<ol>
+  <li>Positional features
+    <ul>
+      <li>If a prediction’s position affects its feedback in any way, encode it (like first product in research).</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/positional_features.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h1 id="data-distribution-shift">Data Distribution shift</h1>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/dds.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="covariate-shift">Covariate shift</h2>
+<p>Covariate in ML are the features \(X\).</p>
+
+<p>Mathematically, covariate shift is when \(P(X)\) changes, but \(P(Y \vert X)\) remains the same, which means that the distribution of the input changes, but the conditional probability of a label given an input remains the same.</p>
+
+<p><br /></p>
+<h3 id="example">Example</h3>
+<ul>
+  <li>\(Y\) is ‘presence of breast cancer’,</li>
+  <li>\(X\) is ‘age’.</li>
+</ul>
+
+<p>Consider the task of detecting breast cancer. You know that the risk of breast cancer is higher for women over the age of 40, so you have a variable ‘age’ as your input. You might have more women over the age of 40 in your training data than in your inference data, so the input distributions differ for your training and inference data. In this case \(P(Y)\) is higher in the training data than in the inference that as the distribution of \(X\) differ. However for a given age, in the training and in the inference data, the probability \(P(Y \vert X)\) of having breast cancer for a women of this age remains the same.</p>
+
+<p><br /></p>
+<h2 id="label-shift">Label shift</h2>
+<p>Label shift, also known as prior shift, prior probability shift or target shift, is when \(P(Y)\) changes but \(P(X \vert Y)\) remains the same. You can think of this as the case when the output distribution changes but for a given output, the input distribution stays the same.</p>
+
+<p><br /></p>
+<h3 id="example-1">Example</h3>
+<ul>
+  <li>\(Y\) is ‘dead because of disease’,</li>
+  <li>\(X\) is ‘age of the person greater than 60 years old’.</li>
+</ul>
+
+<p>Assume spread and/or letality of a disease (Covid) \(P(Y)\) decreased for the whole population.
+However for a given person that died from this disease, the probability \(P(X \vert Y)\) for this person be older than 60 years old when he died remains the same.</p>
+
+<p><br /></p>
+<h2 id="concept-drift">Concept Drift</h2>
+<p>Concept drift, also known as posterior shift, is when the input distribution remains the same but the conditional distribution of the output given an input changes is $$P(Y \vert X) changes. You can think of this as “same input, different output”.</p>
+
+<p><br /></p>
+<h3 id="example-2">Example</h3>
+<ul>
+  <li>\(Y\) is ‘price of an house in San Francisco’,</li>
+  <li>\(X\) is a set of features to predict the price of an house.</li>
+</ul>
+
+<p>Consider you’re in charge of a model that predicts the price of a house based on its features. Before COVID-19, a 3 bedroom apartment in San Francisco could cost $2,000,000. However, at the beginning of COVID-19, many people left San Francisco, so the same house would cost only $1,500,000. So even though the distribution of house features remains the same, the conditional distribution of the price of a house given its features has changed.</p>
+
+<p><br /></p>
+<h2 id="other-data-changes">Other data changes</h2>
+<ul>
+  <li>Feature change:
+    <ul>
+      <li>A feature is added/removed/updated,</li>
+    </ul>
+  </li>
+  <li>Label schema change:
+    <ul>
+      <li>Original:	{“POSITIVE”: 0, “NEGATIVE”: 1},</li>
+      <li>New: {“POSITIVE”: 0, “NEGATIVE”: 1, “NEUTRAL”: 2}.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h2 id="detecting-data-distribution-shift">Detecting Data Distribution shift</h2>
+<ol>
+  <li>Compare statistics: mean, median, variance, quantiles, skewness, kurtosis, …
+    <ul>
+      <li>Not universal: only useful for distributions where these statistics are meaningful,</li>
+      <li>Inconclusive: if statistics differ, distributions differ. If statistics are the same, distributions can still differ,</li>
+    </ul>
+  </li>
+  <li>Two-sample hypothesis test:
+    <ul>
+      <li>Determine whether the difference between two populations is statistically significant,</li>
+      <li>If yes, likely from two distinct distributions.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+<h3 id="two-sample-test-ks-test-kolmogorovsmirnov">Two-sample test: KS test (Kolmogorov–Smirnov)</h3>
+<p>See <a href="/Revision/ab_testing.html#kolmogorov-smirnov-two-samples-test">Kolmogorov–Smirnov two samples test</a>.</p>
+
+<p>Pros:</p>
+<ul>
+  <li>Doesn’t require any parameters of the underlying distribution,</li>
+  <li>Doesn’t make assumptions about distribution,
+Cons:</li>
+  <li>Only works with one-dimensional data.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="type-of-shifts">Type of shifts</h3>
+<ul>
+  <li>Sudden shifts vs. gradual shifts,</li>
+  <li>Spatial shifts vs. temporal shifts.</li>
+</ul>
+
+<p>Temporal shifts: time window scale matters</p>
+<ul>
+  <li>Too short window: false alarms of shifts,</li>
+  <li>Too long window: takes long to detect shifts.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="addressing-data-distribution-shift">Addressing Data Distribution shift</h2>
+<ol>
+  <li>Train model using a massive dataset,</li>
+  <li>Retrain model with new data from new distribution:
+    <ul>
+      <li>Mode:
+        <ul>
+          <li>Train from scratch,</li>
+          <li>Fine-tune,</li>
+        </ul>
+      </li>
+      <li>Data:
+        <ul>
+          <li>Use data from when data started to shift,</li>
+          <li>Use data from the last X days/weeks/months,</li>
+          <li>Use data form the last fine-tuning point.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+<h1 id="monitoring-vs-observability">Monitoring vs. observability</h1>
+<p>As the industry realized that many things can go wrong with an ML system, many companies started investing in monitoring and observability for their ML systems in production. Monitoring and observability are sometimes used exchangeably, but they are different.</p>
+
+<ul>
+  <li>Monitoring refers to the act of tracking, measuring, and logging different metrics that can help us determine when something goes wrong,</li>
+  <li>Observability means setting up our system in a way that gives us visibility into our system to help us investigate what went wrong.</li>
+</ul>
+
+<p>Setting up our system:</p>
+<ul>
+  <li>Adding timers to your functions,</li>
+  <li>Counting NaNs in your features,</li>
+  <li>Logging unusual events e.g. very long inputs.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="monitoring">Monitoring</h2>
+<ul>
+  <li>Operational metrics,</li>
+  <li>ML-specific metrics.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="operational-metrics">Operational metrics</h3>
+<ul>
+  <li>Latency,</li>
+  <li>Throughput,</li>
+  <li>Requests / minute/hour/day,</li>
+  <li>% requests that return with a 2XX code,</li>
+  <li>CPU/GPU utilization,</li>
+  <li>Memory utilization,</li>
+  <li>Availability.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="ml-metrics">ML metrics</h3>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/ml_metrics.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<ol>
+  <li>Accuracy-related metrics,</li>
+  <li>Predictions,</li>
+  <li>Features.</li>
+</ol>
+
+<p><br /></p>
+<h4 id="accuracy-related-metrics">Accuracy-related metrics</h4>
+<ul>
+  <li>Most direct way to monitor a model’s performance,</li>
+  <li>Collect as much feedback as possible,</li>
+  <li>Example: YouTube video recommendations:
+    <ul>
+      <li>Click through rate,</li>
+      <li>Duration watched,</li>
+      <li>Completion rate,</li>
+      <li>Take rate.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h4 id="predictions">Predictions</h4>
+<ul>
+  <li>Predictions are low-dim: easy to visualize, compute stats, and do two-sample tests,</li>
+  <li>Changes in prediction distribution generally mean changes in input distribution,</li>
+  <li>Monitor odd things in predictions:
+    <ul>
+      <li>E.g. if predictions are all False in the last 10 mins.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h4 id="features">Features</h4>
+<ul>
+  <li>Most monitoring tools focus on monitoring features,</li>
+  <li>Feature schema expectations:
+    <ul>
+      <li>Generated from the source distribution,</li>
+      <li>If violated in production, possibly something is wrong,</li>
+    </ul>
+  </li>
+  <li>Example expectations:
+    <ul>
+      <li>Common sense: e.g. “the” is most common word in English,</li>
+      <li>min, max, or median values of a feature are in \([a, b]\),</li>
+      <li>All values of a feature satisfy a regex,</li>
+      <li>Categorical data belongs to a predefined set,</li>
+      <li>\(FEATURE_1 \gt FEATURE_B\).</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p>Feature monitoring problems:</p>
+<ul>
+  <li>Compute &amp; memory cost:
+    <ul>
+      <li>100s models, each with 100s features,</li>
+      <li>Computing stats for 10000s of features is costly,</li>
+    </ul>
+  </li>
+  <li>Alert fatigue:
+    <ul>
+      <li>Most expectation violations are benign,</li>
+    </ul>
+  </li>
+  <li>Schema management:
+    <ul>
+      <li>Feature schema changes over time,</li>
+      <li>Need to find a way to map feature to schema version.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h2 id="monitoring-toolbox">Monitoring Toolbox</h2>
+<ul>
+  <li>Logs:
+    <ul>
+      <li>Log everything,</li>
+      <li>A stream processing problem,</li>
+    </ul>
+  </li>
+  <li>Dashboards:
+    <ul>
+      <li>Make monitoring accessible to non-engineering stakeholders,</li>
+      <li>Good for visualizations but insufficient for discovering distribution shifts,</li>
+    </ul>
+  </li>
+  <li>Alerts:
+    <ul>
+      <li>3 components:
+        <ul>
+          <li>Alert policy: condition for alert,</li>
+          <li>Notification channels,</li>
+          <li>Description,</li>
+        </ul>
+      </li>
+      <li>Alert fatigue:
+        <ul>
+          <li>How to send only meaningful alerts?</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h2 id="monitoring---continual-learning">Monitoring -&gt; Continual Learning</h2>
+<ul>
+  <li>Monitoring is passive:
+    <ul>
+      <li>Wait for a shift to happen to detect it,</li>
+    </ul>
+  </li>
+  <li>Continual learning is active:
+    <ul>
+      <li>Update your models to address shifts.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329, lecture 10</a>.</li>
+</ul>
+
+  </body>
+</html>

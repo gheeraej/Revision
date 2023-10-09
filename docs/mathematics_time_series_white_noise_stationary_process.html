@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mathematics - Time Series - White noise and stationary process</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-time-series"><a href="/Revision/mathematics_time_series.html">Back to Time series</a></h2>
+
+<p><br /></p>
+<h1 id="white-noise">White noise</h1>
+<p>A random process (a - temporal - serie of random variables) is said to be a white noise process or white random process if its observations have a probability distribution with zero mean and finite variance, and are statistically independent.</p>
+
+<p><br /></p>
+<h2 id="weak-white-noise">Weak white noise</h2>
+<p>A process \(\varepsilon_t\) is a weak white noise if:</p>
+<ul>
+  <li>\(\mathbb{E}[\varepsilon_t] = 0\),</li>
+  <li>\(Var[\varepsilon_t] = \sigma^2 \lt \infty\),</li>
+  <li>\(Cov(\varepsilon_t, \varepsilon_s)=0 \text{ (and also } \rho[\varepsilon_t, \varepsilon_s] = 0 \text{)} \;\;\; \forall s \neq t\).</li>
+</ul>
+
+<p>\(\varepsilon_t\) is a weak white noise if it is a serie of uncorrelated random variables with mean 0 and finite variance.</p>
+
+<p><br /></p>
+<h3 id="resources">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://online.stat.psu.edu/stat510/lesson/1/1.2">Weak white noise on STAT510 PennState Eberly College of Science page</a>.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="strong-white-noise">Strong white noise</h2>
+<p>A process \(\varepsilon_t\) is a strong white noise if:</p>
+<ul>
+  <li>\(\mathbb{E}[\varepsilon_t] = 0\),</li>
+  <li>\(Var[\varepsilon_t] = \sigma^2 \lt \infty\),</li>
+  <li>\(\varepsilon_t \perp\!\!\!\perp \varepsilon_s \;\;\; \forall s \neq t\).</li>
+</ul>
+
+<p>\(\varepsilon_t\) is a strong white noise if it is a serie of independant random variables with mean 0 and finite variance.</p>
+
+<p><br /></p>
+<h2 id="gaussian-white-noise">Gaussian white noise</h2>
+<p>A process \(\varepsilon_t\) is a gaussian white noise if:</p>
+<ul>
+  <li>\(\varepsilon_t \sim \mathcal{N}(0, \sigma^2)\),</li>
+  <li>\(\varepsilon_t \perp\!\!\!\perp \varepsilon_s \;\;\; \forall s \neq t\).</li>
+</ul>
+
+<p>\(\varepsilon_t\) is a gaussian white noise if it is a strong white noise following a gaussian distribution.</p>
+
+<p><br /></p>
+<h1 id="stationary-process">Stationary process</h1>
+<p>A stationary process is a process that does not depend on time.</p>
+
+<p><br /></p>
+<h2 id="weak-definition-of-stationary-process">Weak definition of stationary process</h2>
+<p>A process \(X_t\) is a weak (or second order) stationary process if:</p>
+<ul>
+  <li>\(\mathbb{E}[X_t] = \mu \;\;\; \forall t\),</li>
+  <li>\(Var[X_t] = \sigma^2 \lt \infty \;\;\; \forall t\),</li>
+  <li>\(\rho[X_t, X_{t+h}] = \rho_h \text{ (and also } Cov[X_t, X_{t+h}] = Cov_h \text{)} \;\;\; \forall t \text{, } \;\;\; \forall h\).</li>
+</ul>
+
+<p>Hence a process \(X_t\) is a weak (or second order) stationary process if it has a constant expected value (no trend), a constant finite variance and a constant auto-correlation (or equivalently a constant auto-covariance) for a given horizon \(h\).</p>
+
+<p>It is also called second order stationary because the definition only check the two first moments of the random process.</p>
+
+<p>It is the commonly used definition of stationary process.</p>
+
+<p><br /></p>
+<h2 id="strong-definition-of-stationary-process">Strong definition of stationary process</h2>
+<p>A process \(X_t\) is a strong stationary process if, for all function \(f\):</p>
+
+\[f(X_1, X_2, ..., X_t) =^L f(X_{1+h}, X_{2+h}, ..., X_{t+h})\]
+
+<p>Hence \(X_t\) is a strong stationary process if \(f(X_1, X_2, ..., X_t)\) and \(f(X_{1+h}, X_{2+h}, ..., X_{t+h})\) have the same distribution.</p>
+
+<p><br /></p>
+<h1 id="auto-correlation-acf">Auto-correlation (acf)</h1>
+<p>Let \(X_t\) be a stationary process with mean \(\mu\) and variance \(\sigma^2\). The autocorrelation between \(X_t\) and \(X_{t+h}\) does not depend on \(t\) and is:</p>
+
+\[\begin{eqnarray}
+\rho_h &amp;&amp;= \rho[X_t, X_{t+h}]
+&amp;&amp;= Corr[X_t, X_{t+h}]
+&amp;&amp;= \frac{Cov[X_t, X_{t+h}]}{\sigma^2}
+&amp;&amp;= \frac{\mathbb{E}[(X_t - \mu) (X_{t+h} - \mu)]} {\sigma^2}
+\end{eqnarray}\]
+
+<p><br /></p>
+<h2 id="resources-1">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://online.stat.psu.edu/stat510/lesson/1/1.2">acf on STAT510 PennState Eberly College of Science page</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="partial-auto-correlation-pacf">Partial auto-correlation (pacf)</h1>
+<p>Let \(X_t\) be a stationary process with mean \(\mu\) and variance \(\sigma^2\). The partial autocorrelation between \(X_t\) and \(X_{t+h}\) does not depend on \(t\) and is:</p>
+
+\[\begin{eqnarray}
+r_h &amp;&amp;= r[X_t, X_{t+h}]
+&amp;&amp;=r_{X_{t+1},...,X_{t+h-1}}[X_t, X_{t+h}]
+&amp;&amp;= Corr[X_t - P_{X_{t+1},...,X_{t+h-1}}(X_t), X_{t+h} - P_{X_{t+1},...,X_{t+h-1}}(X_{t+h})]
+\end{eqnarray}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(P_{X_{t+1},...,X_{t+h-1}}(X_t)\) is the projection of \(X_t\) on the vector space (linear span) generated by \(X_{t+1},...,X_{t+h-1}\): it is the best prediction of \(X_t\) given \(X_{t+1},...,X_{t+h-1}\)</li>
+  <li>\(X_t - P_{X_{t+1},...,X_{t+h-1}}(X_t)\) is hence the innovation of \(X_t\) not contained in \(X_{t+1},...,X_{t+h-1}\).</li>
+</ul>
+
+<p>The partial autocorrelation of \(X_t\) and \(X_{t+h}\) defines the dependency between \(X_t\) and \(X_{t+h}\) that does not depend on the intermediates variables \(X_{t+1},...,X_{t+h-1}\).</p>
+
+<p>‘The partial autocorrelation at lag \(h\) is the correlation that results after removing the effect of any correlations due to the terms at shorter lags.’
+— Page 81, Section 4.5.6 Partial Autocorrelations, Introductory Time Series with R.</p>
+
+<p><br /></p>
+<h2 id="resources-2">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://online.stat.psu.edu/stat510/lesson/2/2.2">pacf on STAT510 PennState Eberly College of Science page</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="statistical-tests">Statistical Tests</h1>
+<p>Let \(\varepsilon_t\) be a white noise. Using CLT, for \(n\) large enough, the distribution of the autocorrelations follows a normal distribution, with variance \(\frac{1}{n}\) (proof needed).</p>
+
+<p><br /></p>
+<h3 id="acf-plot">acf plot</h3>
+<p>Using the acf plot, we can add a line that represents the choosen confidence interval (95% for example).</p>
+
+<p>If this interval is \(1-\alpha\) then \(100(1-\alpha)%\) of the correlations should be in this interval.</p>
+
+<p><img src="assets/images/acf.png" width="30%" height="30%" /></p>
+
+<p>In R, using the function <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/acf">acf</a>, the confidence interval is shown in a blue dashed line.</p>
+
+<p><br /></p>
+<h3 id="ljung-box-test">Ljung-Box test</h3>
+<p>The Ljung-Box test is:</p>
+
+\[X_{LB} = n(n+2) \sum_{h=1}^k\frac{\rho_h^2}{n-h}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(k\) is the number of lags being tested,</li>
+  <li>\(\rho_h\) is the autocorrelation with lag \(h\),</li>
+  <li>\(n\) is the sample size.</li>
+</ul>
+
+<p>The statistics \(X_{LB}\) follows a chi-2 distribution with \(k\) degrees of freedom (\(X_{LB} \sim \mathcal{X}_k\)).</p>
+
+<p><br /></p>
+<h4 id="resources-3">Resources</h4>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Ljung–Box_test">Ljung-Box test page on Wikipedia</a>.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="durbin-watson-test">Durbin-Watson test</h3>
+<p>The Durbin-Watson test is a test statistic used to detect the presence of autocorrelation at lag 1 in the residuals.</p>
+
+<p>It tests the significativity of \(\rho\) in:</p>
+
+\[\varepsilon_t = \rho \varepsilon_{t-1} + u_t\]
+
+<p>where \(\varepsilon_t\) are the residuals of a model prediction and \(u_t\) is a white noise.</p>
+
+<p>H0 is that \(\rho=0\). The statistic is:</p>
+
+\[DW = \frac{\sum_{t=2}^{n}(\varepsilon_t-\varepsilon_{t-1}^2)}{\sum_{t=1}^{n}\varepsilon_t^2}\]
+
+<p><br /></p>
+<h2 id="resources-4">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://online.stat.psu.edu/stat510/">This course on Time series by PennState Eberly College of Science</a>,</li>
+  <li><a href="https://en.wikipedia.org/wiki/White_noise">White noise page on Wikipedia</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/Bruit_blanc">White noise page on Wikipedia (in french)</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/Stationnarité_d%27une_série_temporelle">Stationary process page on Wikipedia (in french)</a>.</li>
+</ul>
+
+  </body>
+</html>

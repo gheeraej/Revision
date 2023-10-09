@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design Interview</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="steps">Steps</h1>
+
+<p><br /></p>
+<h3 id="1-clarify-requirements">1. Clarify Requirements</h3>
+<ul>
+  <li>Constrains: latency, resources: computation power, time, number of users, etc.</li>
+  <li>Use cases,</li>
+  <li>Is ML required? System has capability to learn? Complex? Patterns?</li>
+</ul>
+
+<p><br /></p>
+<h3 id="2-define-metrics-offline-and-online">2. Define metrics (Offline and Online)</h3>
+<ul>
+  <li>ML Metrics: classification: asymetric or not (accuracy, F1-Score, ROC Curve, AUC, …); regression (MSE, MAE, …),</li>
+  <li>Business metrics: ROI, click through rate, etc.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="3-design-architecture-offline-and-online">3. Design Architecture (Offline and Online):</h3>
+<h4 id="a-data">a) Data</h4>
+<ul>
+  <li>Data: How and where to get data (features and labels)?</li>
+  <li>Data Sources: Internal databases, API, System brokers, …</li>
+  <li>Data Storage: SQL, NoSLQ?</li>
+  <li>Predictions publication: offline, online? Database, API, System brokers?</li>
+</ul>
+
+<h4 id="b-labelling">b) Labelling</h4>
+<ul>
+  <li>Labelling: Hand labelling, Programmatic labeling,
+    <ul>
+      <li>If lack of labelling: weak supervision, semi-supervision, transfer learning, active learning.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="c-data-preprocessing">c) Data Preprocessing</h4>
+<ul>
+  <li>Feature Engineering: missing values, scaling, class unbalanced, categorical features, data augmentation, etc.</li>
+  <li>Feature Importance: model specific: RF, XGBoost, … ; model agnostic: SHAP values, …</li>
+  <li>Data Leakage!</li>
+</ul>
+
+<h4 id="d-model">d) Model</h4>
+<ul>
+  <li>Baseline: simple model, expert rules, current solution,</li>
+  <li>Selection: explainable? black-box? ensemble? auto-ML,</li>
+  <li>Training: Distributed Training (split data and/or model),</li>
+</ul>
+
+<p><br /></p>
+<h3 id="4-offline-evaluation">4. Offline Evaluation</h3>
+<ul>
+  <li>ML Metric,</li>
+  <li>Tests: Perturbation Tests, Invariance Tests, Directional Expectation Tests, Model Calibration, Confidence Measurement, Slice-based Evaluation, …</li>
+</ul>
+
+<p><br /></p>
+<h3 id="5-deployment">5. Deployment</h3>
+<ul>
+  <li>Cloud computing / Edge computing (optimization: quantization, knowledge distillation, pruning, etc.).</li>
+</ul>
+
+<p><br /></p>
+<h3 id="6-monitoring-and-online-training">6. Monitoring and Online training:</h3>
+<ul>
+  <li>System Failures Monitoring:
+    <ul>
+      <li>Distribution shift (covariate, label, concept),</li>
+      <li>Degenerate feedback loops,</li>
+    </ul>
+  </li>
+  <li>Online evaluation:
+    <ul>
+      <li>ML Metric,</li>
+      <li>Canary Testing, A/B Testing, Interleaved Experiments, Shadow Testing,</li>
+    </ul>
+  </li>
+  <li>Model retraining.</li>
+</ul>
+
+<h1 id="resources">Resources:</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329</a>,</li>
+  <li><a href="https://www.hiredintech.com/courses/system-design">This System Design course for interviews on Hire in Tech</a>,</li>
+  <li><a href="https://towardsdatascience.com/how-to-answer-any-machine-learning-system-design-interview-question-a98656bb7ff0">This Toward Data Science blog post on ML System Design interview question</a>,</li>
+  <li><a href="http://blog.gainlo.co/index.php/category/system-design-interview-questions/">This list of System Design questions on Gainlo (more software engineering oriented)</a>,</li>
+  <li><a href="https://www.lecloud.net/tagged/scalability">These blog posts on scalability (more software engineering oriented)</a>.</li>
+</ul>
+
+  </body>
+</html>

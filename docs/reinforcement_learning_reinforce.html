@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>REINFORCE</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-deep-reinforcement-learning"><a href="/Revision/reinforcement_learning_deep_reinforcement_learning.html">Back to Deep Reinforcement Learning</a></h2>
+
+<p><br /></p>
+<h1 id="policy-based-methods">Policy based methods</h1>
+<p>Policy based methods get rid of the estimation of the action value function to estimate the optimal policy and just directly estimate the optimal policy.</p>
+
+<p><br /></p>
+<h2 id="comparison-with-value-based-methods">Comparison with value based methods</h2>
+<p>Here is a comparison of value based methods and policy based methods.</p>
+
+<h5 id="value-based-methods">Value based methods</h5>
+<p>Value based methods estimate:</p>
+<ul>
+  <li>The state value function \(V_\pi(s)\) and the optimal state value function \(V_*(s)\),</li>
+  <li>The action value function \(Q_\pi(s,a)\) and the optimal action value function \(Q_*(s,a)\),</li>
+  <li>The advantage value function \(A_\pi(s,a)\) and the optimal advantage value function \(A_*(s,a)\).</li>
+</ul>
+
+<p>And then they compute the policy using \(\varepsilon\)-greedy method for stochastic policies (or greedy method for deterministic policies).</p>
+
+<h5 id="policy-based-methods-1">Policy based methods</h5>
+<p>Policy based methods estimate directly the policy:</p>
+<ul>
+  <li>\(\pi(a \vert s)\) for stochastic policies,</li>
+  <li>\(\pi(s)\) for deterministic policies.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="advantages">Advantages</h2>
+<h4 id="continuous-space-action">Continuous space action</h4>
+<p>As policy based methods does not compute estimated return for each action it can generalize to action with continuous space.</p>
+
+<p>Action based method relied on discretisation of the action space to deal with continuous action space and it is very inefficient (specifically to choose the best action over a large number of possible actions).</p>
+
+<p><br /></p>
+<h4 id="simplicity">Simplicity</h4>
+<p>It is more natural to directly estimate the best policies instead of deriving it from an estimated action value function.</p>
+
+<p><br /></p>
+<h4 id="stochasticity">Stochasticity</h4>
+<p>Policy based methods can generate true stochastic policy instead of adding randomness using the \(\varepsilon\)-greedy method.</p>
+
+<p>Compare to the DQ network which outputs a estimated returns for each action, a policy based method will directly output a probability for each action.</p>
+
+<p><br /><br /></p>
+<h1 id="reinforce-monte-carlo-policy-gradient">REINFORCE: Monte-Carlo policy gradient</h1>
+<p>REINFORCE (Monte-Carlo policy gradient) is a policy gradient method.</p>
+
+<p>Policy gradient method are a sub class of policy based methods that researche the best policy using the stochastic gradient ascent method (similar to stochastic gradient descent but to find maximum values).</p>
+
+<p>Gradient ascent update rule is:</p>
+
+\[\theta = \theta + \alpha \nabla_\theta U(\theta)\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\alpha\) is the learning rate,</li>
+  <li>the rest of the notations are defined in the next section.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="notation">Notation</h2>
+<p>Policy gradient methods introduce:</p>
+<ul>
+  <li>Trajectory \(\tau = (s_0, a_0, s_1, a_1, \ldots, s_H, a_H, s_{H+1})\) ie a sequence of states and actions</li>
+  <li>Total return associated with th trajectory \(R(\tau)=r_1 + r_2 + \ldots + r_H + r_{H+1}\)</li>
+</ul>
+
+<p>Let’s also introduce:</p>
+<ul>
+  <li>\(\theta\), the set of parameters of the model that dictates the policy,</li>
+  <li>\(U(\theta)\), the expected return,</li>
+  <li>\(P(\tau, \theta)\) the probability of obtaining trajectory \(\tau\) given policy \(\theta\).</li>
+</ul>
+
+<p><br /></p>
+<h2 id="problem">Problem</h2>
+<p>The problem is hence to find the set of parameters \(\theta\) that maximises the expected return \(U(\theta)\):</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/policy_gradient_method.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<h2 id="algorithm">Algorithm</h2>
+<p>Here is a vulgarisation of the algorithm of the policy gradient method:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/PGM_algo.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h3 id="proof-of-the-derivative">Proof of the derivative</h3>
+<p>The proof is in the appendice: <a href="/Revision/reinforcement_learning_reinforce_gradient_proof.html">proof of REINFORCE gradient</a>. It comes from <a href="https://medium.com/@thechrisyoon/deriving-policy-gradients-and-implementing-reinforce-f887949bd63">this Medium blog post by Chris Yoon</a>.</p>
+
+<p>Alternative proofs can be found on <a href="https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html">this blog post by Lilian Weng</a> or <a href="http://incompleteideas.net/book/bookdraft2017nov5.pdf">Reinforcement Learning: An Introduction by Sutton and Barto</a>.</p>
+
+<p><br /></p>
+
+<p>Apart from the derivative that is not obvious to obtain, this is a classic application of gradient ascent.</p>
+
+<p><br /></p>
+<h2 id="limitations">Limitations</h2>
+<ul>
+  <li>Need a batch of complete episodes to make one step of update,</li>
+  <li>High variance.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="resources">Resources</h2>
+<p>See:</p>
+<ul>
+  <li>Advantages of policy based methods: UDRLN video 3.1.7,</li>
+  <li>Notation and problem: UDRLN video 3.2.4,</li>
+  <li>Algorithm: UDRLN video 3.2.5., 3.2.6, 3.2.7 and <a href="http://incompleteideas.net/book/bookdraft2017nov5.pdf">Reinforcement Learning: An Introduction by Sutton and Barto</a> section 13.2.</li>
+</ul>
+
+  </body>
+</html>

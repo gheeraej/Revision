@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ML System Design - Training Data</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-ml-system-design"><a href="/Revision/system_design.html">Back to ML System Design</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>More data leads to better predictions.</p>
+
+<p><br /></p>
+<h1 id="data-biais">Data Biais</h1>
+<ul>
+  <li>Sampling/selection biases</li>
+  <li>Under/over-representation of subgroups</li>
+  <li>Human biases embedded in historical data</li>
+  <li>Labeling biases</li>
+</ul>
+
+<p><br /></p>
+<h1 id="sampling">Sampling</h1>
+<p>Sampling is an integral part of the ML workflow. Sampling happens in many steps of an ML project lifecycle, such as sampling from all possible real-world data to create training data, sampling from a given dataset to create splits for training, validation, and testing, or sampling from all possible events that happen within your ML system for monitoring purposes.</p>
+
+<p>See <a href="/Revision/cross_validation.html">Cross validation</a> for some sampling methods.</p>
+
+<p>Here is a list of sampling methods:</p>
+
+<p>Non-Probability sampling</p>
+<ul>
+  <li>Convenience sampling: samples of data are selected based on their availability,</li>
+  <li>Snowball sampling: future samples are selected based on existing samples. For example, to scrape legitimate Twitter accounts without having access to Twitter databases, you start with a small number of accounts then you scrape all the accounts in their following, and so on,</li>
+  <li>Judgment sampling: experts decide what samples to include,</li>
+  <li>Quota sampling: you select samples based on quotas for certain slices of data without any randomization. For example, when doing a survey, you might want 100 responses from each of the age groups: under 30 years old, between 30 and 60 years old, above 50 years old, regardless of the actual age distribution in the real world.</li>
+</ul>
+
+<p>Probability sampling:</p>
+<ul>
+  <li>Simple Random Sampling: in the simplest form of random sampling, you give all samples in the population equal probabilities of being selected,</li>
+  <li>Stratified Sampling: to avoid the drawback of simple random sampling listed above, you can first divide your population into the groups that you care about and sample from each group separately. For example, to sample 1% of data that has two classes A and B, you can sample 1% of class A and 1% of class B,</li>
+  <li>Weighted Sampling: in weighted sampling, each sample is given a weight, which determines the probability of it being selected,</li>
+  <li>Importance Sampling: it is one of the most important sampling methods, not just in ML. It allows us to sample from a distribution when we only have access to another distribution,</li>
+  <li>Reservoir sampling: an algorithm that is especially useful when you have to deal with continually incoming data, which is usually what you have in production.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="labeling">Labeling</h1>
+<p>Getting labels and accurate labels is mandatory to train an ML model.</p>
+
+<p><br /></p>
+<h2 id="labeling-mutliplicity">Labeling mutliplicity</h2>
+<p>Labellers can’t agree on the label.</p>
+
+<p>Solutions:</p>
+<ul>
+  <li>Clear problem definition,</li>
+  <li>Annotation training,</li>
+  <li>Data lineage: track where data/labels come from (for example, if our model fails mostly on the recently acquired data samples, you might want to look into how the new data was acquired),</li>
+  <li>Learning methods with noisy labels:
+    <ul>
+      <li>Learning with Noisy Labels (Natarajan et al., 2013),</li>
+      <li>Loss factorization, weakly supervised learning and label noise robustness (Patrini et al., 2016),</li>
+      <li>Cost-Sensitive Learning with Noisy Labels (Natarajan et al., 2018),</li>
+      <li>Confident Learning: Estimating Uncertainty in Dataset Labels (Northcutt et al., 2019).</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+<h2 id="handling-the-lack-of-hand-labels">Handling the Lack of Hand Labels</h2>
+<p>Because of the challenges in acquiring sufficient high-quality labels, many techniques have been developed to address the problems that result.:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/lack_of_labels.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>Here is a decision trees showing how to get more labeled data:</p>
+<div style="text-align: center">
+<img src="assets/images/WS_mapping.png" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+<h3 id="weak-supervision-programmatic-labeling">Weak Supervision: Programmatic labeling</h3>
+<p>The insight behind weak supervision is that people rely on heuristics, which can be developed with subject matter expertise, to label data. One of the most popular open-source tools for weak supervision is <a href="https://arxiv.org/pdf/1711.10160.pdf">Snorkel</a>.</p>
+
+<p><br /></p>
+
+<p>Programmatic labeling is a good solution to get more labels:</p>
+<div style="text-align: center">
+<img src="assets/images/hl_vs_pl.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>Programmatic labeling can be performed through labeling functions. Here are some examples of labeling functions:</p>
+<div style="text-align: center">
+<img src="assets/images/lf_examples.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>However, labeling functions are:</p>
+<ul>
+  <li>Noisy: Unknown, inaccurate,</li>
+  <li>Overlapping: LFs may be correlated,</li>
+  <li>Conflicting: different LFs give different labels,</li>
+  <li>Narrow: Don’t generalize well.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="semi-supervision">Semi-supervision</h3>
+<p>If weak supervision leverages heuristics to obtain noisy labels, semi-supervision leverages structural assumptions to generate new labels based on a small set of initial labels. Unlike weak supervision, semi-supervision requires an initial set of labels.</p>
+
+<p><br /></p>
+<h4 id="examples-of-semi-supervision-methods">Examples of semi-supervision methods</h4>
+<p>Self-training:</p>
+<ul>
+  <li>A classic semi-supervision method is self-training. You start by training a model on your existing set of labeled data, and use this model to make predictions for unlabeled samples. Assuming that predictions with high raw probability scores are correct, you add the labels predicted with high probability to your training set, and train a new model on this expanded training set. This goes on until you’re happy with your model performance.</li>
+</ul>
+
+<p>Structural assumption:</p>
+<ul>
+  <li>Another semi-supervision method assumes that data samples that share similar characteristics share the same labels. The similarity might be obvious, such as in the task of classifying the topic of Twitter hashtags as follows. You can start by labeling the hashtag “#AI” as Computer Science. Assuming that hashtags that appear in the same tweet or profile are likely about the same topic, given the profile of MIT CSAIL below, you can also label the hashtags “#ML” and “#BigData” as Computer Science.</li>
+</ul>
+
+<p>Perturbation-based methods:</p>
+<ul>
+  <li>Add white noises to images,</li>
+  <li>Add small values to word embeddings</li>
+</ul>
+
+<p><br /></p>
+<h3 id="transfer-learning">Transfer Learning</h3>
+<p>Transfer learning refers to the family of methods where a model developed for a task is reused as the starting point for a model on a second task. It is closely linked to fine tuning.</p>
+
+<p>It is widely used in:</p>
+<ul>
+  <li>Compute vision where CNN are trained on large amount of data to recognize some objects or animals and are then fine tuned on small amount of data to recognize new objects,</li>
+  <li>NLP where models are trained on large unlabeled dataset with task such as predict the next word of a sentence and are then fine tuned on more specific tasks.</li>
+</ul>
+
+<p><br /></p>
+<h3 id="active-learning">Active learning</h3>
+<p>Active learning is a method for improving the efficiency of data labels. The hope here is that ML models can achieve greater accuracy with fewer training labels if they can choose which data samples to learn from. Active learning is sometimes called query learning — though this term is getting increasingly unpopular — because a model (active learner) sends back queries in the form of unlabeled samples to be labeled by annotators (usually humans).</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/active_learning.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://stanford-cs329s.github.io/syllabus.html">CS329 lecture 3</a>.</li>
+</ul>
+
+  </body>
+</html>

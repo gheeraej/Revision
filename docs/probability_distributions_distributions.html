@@ -1,0 +1,501 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Probability distributions</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-probability-distribution"><a href="/Revision/mathematics_inferential_statistics.html">Back to Probability distribution</a></h2>
+
+<p><br /></p>
+<h1 id="distributions">Distributions</h1>
+<h2 id="continuous-uniform">Continuous Uniform</h2>
+<p>Let \(\mathcal{U}(a,b)\) be an continuous uniform distribution on \([a, b]\). A random sampling following \(\mathcal{U}(a,b)\) outputs any value between \(a\) and \(b\) with an equal probability. The continuous uniform distribution is a continuous distribution with support \([a, b]\).</p>
+
+<p><br /></p>
+<h4 id="pdf-and-cdf">pdf and cdf</h4>
+<p>Mathematically, its probability density function is:</p>
+
+\[f(x;a,b)=\begin{cases}
+          \frac{1}{b-a} &amp;&amp; \text{ if } a \leq x \leq b\\
+          0 &amp;&amp; \text{ otherwise}
+         \end{cases}\]
+
+<p>And its cumulative density function is:</p>
+
+\[F(x;a,b)=\begin{cases}
+          0 &amp;&amp; \text{ if } x \lt a\\
+          \frac{x-a}{b-a} &amp;&amp; \text{ if } a \leq x \leq b\\
+          0 &amp;&amp; \text{ if } x \gt b\\
+         \end{cases}\]
+
+<p><br /></p>
+<h4 id="moments">Moments</h4>
+<p>For \(U \sim \mathcal{U}(a,b)\):</p>
+<ul>
+  <li>\(\mathbb{E}(U)=\frac{a+b}{2}\),</li>
+  <li>\(Var(U)=\frac{(b-a)^2}{12}\) (see <a href="https://math.stackexchange.com/questions/728059/prove-variance-in-uniform-distribution-continuous">this StackExchange page for a proof</a>).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="complementary-infos">Complementary infos</h4>
+<p>The cumulative function \(F\) of a probability distribution applied to a random variable \(X\) that follows this distribution is a random variable that follows the uniform distribution: \(F_X(X) \sim \mathcal{U}(0,1)\)</p>
+
+<p><br /></p>
+<h5 id="proof">Proof</h5>
+
+<p>Let X be a random variable with cdf \(F_X(X)\) and let \(U=F_X(X)\). By definition of the cdf, \(U \in [0,1]\).</p>
+
+<p>Note that the cdf is a continuous increasing function.</p>
+
+<p>U is a random variable as U is a transformation of X, X being a random variable.</p>
+
+<p>Let \(F_U(x)\) be the cdf of U:</p>
+
+\[F_U(x)=P(U \leq x)=P(F_X(X) \leq x)=P(X \leq F_X^{-1}(x))=F_X(F_X^{-1}(x))=x\]
+
+<ol>
+  <li>Use of the definition of the cdf</li>
+  <li>Use of \(U=F_X(X)\)</li>
+  <li>Use the fact that \(F_X^{-1}(F_X(X))=X\) and that \(F_X(X)\) is a continuous increasing function</li>
+  <li>Use again the definition of the cdf</li>
+  <li>Use \(F_X^{-1}(F_X(x))=x\)</li>
+</ol>
+
+<p>So \(F_U(x)=x\) with U taking value in [0, 1], so \(F_U(x)\) is equivalent to a cdf of a uniform variable on [0, 1] so \(U \sim \mathcal{U}(0,1)\).</p>
+
+<p><br /></p>
+<h4 id="reference">Reference</h4>
+<p>See <a href="https://en.wikipedia.org/wiki/Continuous_uniform_distribution">Wikipedia webpage of Continuous Uniform distribution</a>.</p>
+
+<p><br /><br /></p>
+<h2 id="discrete-uniform">Discrete uniform</h2>
+<p>Let \(\mathcal{U}(A,B)\) be an uniform distribution on \([A, B]\). A random sampling following \(\mathcal{U}(A,B)\) outputs any integer value between \(A\) and \(B\) with an equal probability. The discrete uniform distribution is a continuous distribution with support \(k \in \{A, \ldots, B\}\).</p>
+
+<h4 id="pdf-and-cdf-1">pdf and cdf</h4>
+<p>Mathematically, its probability mass function is:</p>
+
+\[f(k;A,B)=\begin{cases}
+          \frac{1}{B - A +1} &amp;&amp; \text{ if } A \leq k \leq B\\
+          0 &amp;&amp; \text{ otherwise}
+      \end{cases}\]
+
+<p>And its cumulative density function is:</p>
+
+\[F(k;A,B)=\begin{cases}
+          0 &amp;&amp; \text{ if } k \lt A\\
+           \frac{\lfloor k \rfloor - A + 1}{B - A + 1} &amp;&amp; \text{ if } a \leq k \leq b\\
+          0 &amp;&amp; \text{ if } k \gt b\\
+         \end{cases}\]
+
+<p><br /></p>
+<h4 id="moments-1">Moments</h4>
+<p>For \(U \sim \mathcal{U}(A,B)\):</p>
+<ul>
+  <li>\(\mathbb{E}(U)=\frac{A+B}{2}\),</li>
+  <li>\(Var(U)=\frac{(B - A + 1)^2 - 1}{12}\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="reference-1">Reference</h4>
+<p>See <a href="https://en.wikipedia.org/wiki/Discrete_uniform_distribution">Wikipedia webpage of Discrete Uniform distribution</a>.</p>
+
+<p><br /><br /></p>
+<h2 id="reciprocal-or-log-uniform">Reciprocal or log-Uniform</h2>
+<p>The reciprocal distribution, or log-uniform distribution, is a continuous probability distribution characterised by its probability density function being proportional to the reciprocal (the inverse, \(1/x\)) of the variable. The reciprocal distribution is a continuous distribution with support \([a, b]\).</p>
+
+<p><br /></p>
+<h4 id="pdf-and-cdf-2">pdf and cdf</h4>
+<p>Mathematically, its probability density function is:</p>
+
+\[f(x;a,b)=\begin{cases}
+          \frac{1}{x \left[\log_e b - \log_e a\right]} = \frac{1}{x \log_e \frac{b}{a}} &amp;&amp; \text{ if } a \leq x \leq b \text{ and } a \gt 0\\
+          0 &amp;&amp; \text{ otherwise}
+         \end{cases}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\log_e\) is the \(\log\) function to base \(\exp\).</li>
+</ul>
+
+<p>And its cumulative density function is:</p>
+
+\[F(x;a,b)=\begin{cases}
+          0 &amp;&amp; \text{ if } x \lt a\\
+          \frac{\log_e x - \log_e a}{\log_e b - \log_e a} = \frac{\log_e \frac{x}{a}}{\log_e \frac{b}{a}}  &amp;&amp; \text{ if } a \leq x \leq b \text{ and } a \gt 0\\
+          0 &amp;&amp; \text{ if } x \gt b\\
+         \end{cases}\]
+
+<p><br /></p>
+<h4 id="moments-2">Moments</h4>
+<p>For \(U \sim \mathcal{U}(a,b)\):</p>
+<ul>
+  <li>\(\mathbb{E}(R)=\frac{b - a}{\log \frac{b}{a}}\),</li>
+  <li>\(Var(R)=\frac{b^2 - a^2}{2 \log \frac{b}{a}} - \left(\frac{b - a}{\log \frac{b}{a}}\right)^2\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="link-with-log-uniform">Link with log-Uniform</h4>
+<p>The reciprocal distribution is equivalent to the distribution of \(\log(X) \sim \mathcal{U}(\log a, \log b)\).
+This relationship is true regardless of the base of the logarithmic or exponential function. If \(\log_{m}(X)\) is uniform distributed, then so is \(\log_{n}(X)\).</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/reciprocal.png" width="50%" height="50%" />
+</div>
+<p>Histogram of the Reciprocal distribution \(\mathcal{R}(10^{-1}, 10^2)\) using normal basis and logarithmic basis.</p>
+
+<p><br /></p>
+<h4 id="reference-2">Reference</h4>
+<p>See <a href="https://en.wikipedia.org/wiki/Reciprocal_distribution">Wikipedia webpage of Reciprocal distribution</a>.</p>
+
+<p><br /><br /></p>
+<h2 id="bernoulli">Bernoulli</h2>
+<p>A Bernoulli random variable is a discrete random variable that takes the value 1 with probability \(p\) and value 0 with probability \(q=1-p\). The only parameter of \(\mathbb{B}(p)\) is p, the probability to obtain 1 and the support of \(\mathbb{B}(p)\) is \(\{0, 1\}\).</p>
+
+<p><br /></p>
+<h4 id="pdf-and-cdf-3">pdf and cdf</h4>
+<p>Its probability density function is:</p>
+
+\[P(Y=y)=\begin{cases}
+          p &amp;&amp; \text{ if } y=1\\
+          1-p &amp;&amp; \text{ if } y=0\\
+          0 &amp;&amp; \text{ otherwise}\
+      \end{cases}\]
+
+<p>Or equivalently:</p>
+
+\[P(Y=y)=p^y(1-p)^y \text{ for } y \in \{0, 1\}\]
+
+<p>(This reformulation is used in the construction of the logistic regression loss function).</p>
+
+<p>The cumulative density function is not very useful, its value is \(q=1-p\) on the support.</p>
+
+<p><br /></p>
+<h4 id="moments-3">Moments</h4>
+<p>For \(B \sim \mathcal{B}(p)\):</p>
+<ul>
+  <li>\(\mathbb{E}(B)=p\),</li>
+  <li>\(Var(B)=pq=p(1-p)\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="reference-3">Reference</h4>
+<p>See <a href="https://en.wikipedia.org/wiki/Bernoulli_distribution">Wikipedia webpage of Bernoulli distribution</a>.</p>
+
+<p><br /><br /></p>
+<h2 id="binomial">Binomial</h2>
+<p>A Binomial distribution is a discrete probability distribution with parameters n and p. It represents the number of success \(n\) Bernoulli trial where each experiment has a probability \(p\) of success (ie \(P[X=1]=p\)). It is written \(\mathbb{B}(n, p)\) and its support is discrete and is \(k \in {0, 1, ..., n}\).</p>
+
+<p><br /></p>
+<h4 id="pdf-and-cdf-4">pdf and cdf</h4>
+<p>Its probability density function is:</p>
+
+\[f(k,n,p)=P(X=k)={n \choose k}p^k q^{n-q}\]
+
+<p>Where k is a number of success and n the number of trials (and p and q the probability to obtain respectively 1 and 0 at each trial).</p>
+
+<p>Its cdf is:</p>
+
+\[F(k,n,p)=P(X \leq k)=\sum_{i=0}^{\vert k \vert^{floored}}{n \choose i}p^i(1-p)^{n-i}\]
+
+<p><br /></p>
+<h4 id="moments-4">Moments</h4>
+<p>For \(B \sim \mathcal{B}(n,p)\):</p>
+<ul>
+  <li>\(\mathbb{E}(B)=np\),</li>
+  <li>\(Var(B)=npq=np(1-p)\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="complementary-infos-1">Complementary infos</h4>
+<p>As the Central Limit Theorem says, the sum of iid variables converges to a gaussian distribution. As the binomial distribution is a sum of iid Bernoulli random variables then the Binomial distribution converges toward the gaussian distribution when n goes to infinity (see <a href="https://math.stackexchange.com/questions/1579015/why-does-binomial-distribution-fits-normal-distribution">this stackexchange link</a>).</p>
+
+<p><br /></p>
+<h4 id="reference-4">Reference</h4>
+<p>See <a href="https://en.wikipedia.org/wiki/Binomial_distribution">Wikipedia webpage of Binomial distribution</a>.</p>
+
+<p><br /><br /></p>
+<h2 id="multinomial">Multinomial</h2>
+<p>A Multinomial distribution is a discrete distribution, generalisation of the Binomial distribution for trials with more than 2 possible outputs. Binomial distribution is the number of success of \(n\) Bernoulli trials and Multinomial distribution would be, for example, the number of counts for each side of a die rolled.</p>
+
+<p>Its parameters are:</p>
+<ul>
+  <li>\(n\), the number of trials,</li>
+  <li>\(k\), the number of possible outcomes of each trial,</li>
+  <li>\(p_1, \ldots, p_k\) the probabilities of each outcome (\(\sum p_i = 1\)).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="pdf-and-cdf-5">pdf and cdf</h4>
+<p>Its probability density function is:</p>
+
+\[f(x_1, \ldots, x_k,n,p) = \frac{\Gamma(\sum_i x_i + 1)}{\prod_i \Gamma(x_i + 1)} \prod_{i=1}p_i^{x_i}\]
+
+<p>Where \(x_i\) is the number of outcomes of class \(i\) (and \(\sum x_i = n\)).</p>
+
+<p>Its cdf is:</p>
+
+\[\begin{eqnarray}
+F(x_1, \ldots, x_k,n,p) &amp;&amp;= P(X_1=x_1, \ldots, X_k=x_k) \\
+&amp;&amp;=\frac{n!}{x_1! \cdots x_k!}p_1^{x_1} \times \cdots \times p_k^{x_k}
+\end{eqnarray}\]
+
+<p>Where \(x_i\) is the number of outcomes of class \(i\) (and \(\sum x_i = n\)).</p>
+
+<p><br /></p>
+<h4 id="moments-5">Moments</h4>
+<p>For \(B \sim \mathcal{B}(n,p)\):</p>
+<ul>
+  <li>\(\mathbb{E}(X_i) = n p_i\),</li>
+  <li>\(Var(X_i) = n p_i (1 - p_i)\),</li>
+  <li>\(Cov(X_i, X_j) = - n p_i p_j \;\;\; i \neq j\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="complementary-infos-2">Complementary infos</h4>
+<p>When \(x_i\) is large enough, we can apply CLT (as multinomial distribution is a some of random variable) and the multinomial distribution converges to the normal distribution:</p>
+
+\[\frac{x_i - n p_i}{\sqrt{n p_i(1 - p_i)}} \sim \mathcal{N}(0, 1)\]
+
+<p>and:</p>
+
+\[\sum_{i=1}^m \frac{(x_i - n p_i)^2}{\sqrt{n p_i(1 - p_i)}} \sim \chi_k^2\]
+
+<p><br /></p>
+<h4 id="reference-5">Reference</h4>
+<p>See :</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Multinomial_distribution">Wikipedia webpage of Multinomial distribution</a>,</li>
+  <li><a href="https://fr.wikipedia.org/wiki/Loi_multinomiale">Wikipedia webpage of Multinomial distribution (in french)</a>.</li>
+</ul>
+
+<p><br /><br /></p>
+<h2 id="normal-or-gaussian">Normal or Gaussian</h2>
+<p>Gaussian distribution is the most important distribution due to the Central Limit Theorem. Under certain conditions, the sum of iid random variables converges toward a gaussian distribution.
+In real world applications, most of the experiment follows normal distributions.
+It is a continuous distribution parametrized by its two first moment, its expected value \(\mu\) and its variance \(\sigma^2\). Its support is \(\mathbb{R}\).</p>
+
+<p><br /></p>
+<h4 id="pdf-and-cdf-6">pdf and cdf</h4>
+<p>The probability density function of the normal distribution is:</p>
+
+\[f(x;\mu,\sigma^2)=\frac{1}{\sigma \sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}\]
+
+<p>And its cumulative density function is in general expressed as the integral of the pdf:</p>
+
+\[F(x;\mu,\sigma^2)=\frac{1}{\sigma \sqrt{2\pi}}\int_{-\infty}^x e^{-\frac{1}{2}\left(\frac{t-\mu}{\sigma}\right)^2}dt\]
+
+<p><br /></p>
+<h4 id="moments-6">Moments</h4>
+<p>For \(N \sim \mathcal{N}(\mu,\sigma^2)\):</p>
+<ul>
+  <li>\(\mathbb{E}(N)=\mu\),</li>
+  <li>\(Var(N)=\sigma^2\),</li>
+  <li>Skewness=0,</li>
+  <li>Kurtosis=3.</li>
+</ul>
+
+<p><br /></p>
+<h4 id="reference-6">Reference</h4>
+<p>See <a href="https://en.wikipedia.org/wiki/Normal_distribution">Wikipedia webpage of Normal distribution</a>.</p>
+
+<p><br /><br /></p>
+<h2 id="chi-2">Chi-2</h2>
+<p>A Chi-2 distribution \(\chi^2(k)\) is a continuous distribution. It is parametrized by its degree of freedom \(k\).</p>
+
+<p>A chi-2 with \(k\) degrees of freedom that can be defined as a sum of k variables \(Z \sim \mathcal{N}(0,1)\). Its support is \(\mathbb{R^+}\).</p>
+
+\[X(k) = \sum_{i=1}^{k} Z_i^2\]
+
+<p>Where:</p>
+<ul>
+  <li>\(Z_i \sim \mathcal{N}(0,1)\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="pdf-and-cdf-7">pdf and cdf</h4>
+<p>The probability density function of the chi-2 distribution is:</p>
+
+\[f(x;k)=\frac{1}{2^{k/2}\Gamma(k/2)}x^{k/2-1}e^{-x/2}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\Gamma(z)=\int_0^{+\infty}t^{z-1}e^{-t}dt\) is the gamma function (\(\Gamma(z+1)=z\Gamma(z)\)).</li>
+</ul>
+
+<p>The cumulative density function of the chi-2 distribution is:</p>
+
+\[F(x;k)=\frac{\gamma \left(k/2, x/2 \right)}{\Gamma(k/2)}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\Gamma(z)\) is the gamma function,</li>
+  <li>\(\gamma(a,z)=\int_0^z t^{a-1}e^{-t}dt\) is the incomplete gamma function.</li>
+</ul>
+
+<p><br /></p>
+<h4 id="moments-7">Moments</h4>
+<p>For \(X \sim \chi^2(k)\):</p>
+<ul>
+  <li>\(\mathbb{E}(X)=k\),</li>
+  <li>\(Var(X)=2k\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="complementary-infos-3">Complementary infos</h4>
+<p>Using CLT, for \(k\) large enough, the Chi-2 distribution can be approximated by a normal distribution.</p>
+
+<p><br /></p>
+<h4 id="reference-7">Reference</h4>
+<p>See <a href="https://en.wikipedia.org/wiki/Chi-squared_distribution">Wikipedia webpage of Chi-2 distribution</a>.</p>
+
+<p><br /><br /></p>
+<h2 id="student">Student</h2>
+<p>A Student’s t-distribution \(\mathcal{T}(\nu)\) is a continuous density probability distribution widely used in statistical tests. It is parametrized by its degree of freedom \(\nu\) and its support is \(\mathbb{R}\).</p>
+
+<p>It can be defined as a mean 0 and variance 1 normal variable divided by the square root of a chi-2 variable divided by it degree of freedom:</p>
+
+\[\mathcal{T}(\nu) = \frac{Z}{\sqrt{X/\nu}}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(Z \sim \mathcal{N}(0,1)\),</li>
+  <li>\(X \sim \mathcal{X}(\nu)\) where \(\nu\) is its degree of freedom,</li>
+  <li>\(Z\) and \(X\) are independant.</li>
+</ul>
+
+<p><br /></p>
+<h4 id="pdf-and-cdf-8">pdf and cdf</h4>
+<p>Formulations of the pdf and cdf of the Student’s t-distribution are complex. See <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution">the Wikipedia webpage of the Student’s t-distribution</a> to find them.</p>
+
+<p><br /></p>
+<h4 id="moments-8">Moments</h4>
+<p>For \(T \sim \mathcal{T}(\nu)\):</p>
+<ul>
+  <li>\(\mathbb{E}(T)= \begin{cases} 0 \text{ if } \nu \gt 0 \\
+                               \text{undefined otherwise}
+                 \end{cases}\),</li>
+  <li>\(Var(T)=\begin{cases} \frac{\nu}{\nu-2} \text{ if } \nu \gt 2 \\
+                       \infty \text{ if } 1 \lt \nu \leq 2 \\
+                       \text{undefined otherwise}
+                 \end{cases}\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="reference-8">Reference</h4>
+<p>See <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution">Wikipedia webpage of the Student’s t-distribution</a>.</p>
+
+<p><br /><br /></p>
+<h2 id="fisher">Fisher</h2>
+<p>A Fisher distribution \(\mathcal{F}(d_1, d_2)\) is a continuous distribution. It is parametrized by two degree of freedom \(d_1\) and \(d_2\). These two degrees of freedom are the parameters of the two chi-2 distributions that defined the Fisher distribution, one at the numerator and the other at the denominator. The support of the Fisher distribution is \(\mathbb{R^+}\).</p>
+
+\[F(d_1, d_2)=\frac{X_1/d_1}{X_2/d_2}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(X_1 \sim \mathcal{X}(d_1)\) where \(d_1\) is its degree of freedom,</li>
+  <li>\(X_2 \sim \mathcal{X}(d_2)\) where \(d_2\) is its degree of freedom.</li>
+</ul>
+
+<p><br /></p>
+<h4 id="pdf-and-cdf-9">pdf and cdf</h4>
+<p>Formulations of the pdf and cdf of the Fisher distribution are complex. See <a href="https://en.wikipedia.org/wiki/F-distribution">the Wikipedia webpage of the Fisher distribution</a> to find them.</p>
+
+<p><br /></p>
+<h4 id="reference-9">Reference</h4>
+<p>See <a href="https://en.wikipedia.org/wiki/F-distribution">Wikipedia webpage of the Fisher distribution</a>.</p>
+
+<p><br /></p>
+<h4 id="moments-9">Moments</h4>
+<p>For \(F \sim \mathcal{F}(d_1,d_2)\):</p>
+<ul>
+  <li>\(\mathbb{E}(F)= \frac{d_2}{d_2-2} \text{ if } d_2 \gt 2\),</li>
+  <li>\(Var(F)=\frac{2d_2^2\left(d_1+d_2-2\right)}{d_1\left(d_2-2\right)^2\left(d_2-4\right)} \text{ if } d_2 \gt 4\).</li>
+</ul>
+
+<p><br /><br /></p>
+<h2 id="poisson">Poisson</h2>
+<p>A Poisson distribution is a discrete probability distribution \(\mathcal{P}(\lambda)\) that describes the number of events occuring in a time interval. Its support is \(\mathbb{N}\). A Poisson distribution has one parameter \(\lambda\) that represents the mean and variance of the distribution.</p>
+
+<p><br /></p>
+<h4 id="pdf-and-cdf-10">pdf and cdf</h4>
+<p>The probability density function of the Poisson distribution is:</p>
+
+\[f(k;\lambda)=\frac{e^{-\lambda}\lambda^k}{k!}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(k\) is the number of occurrences.</li>
+</ul>
+
+<p>The cumulative density function of the Poisson distribution is:</p>
+
+\[F(k;\lambda)=\frac{\Gamma\left(\vert k+1 \vert^{floored}, \lambda\right)}{\vert k \vert^{floored}!}=
+e^{-\lambda}\sum_{i=1}^{\vert k \vert^{floored}} \frac{\lambda^i}{i!}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\Gamma\) is the <a href="https://en.wikipedia.org/wiki/Incomplete_gamma_function">upper incomplete gamma function</a></li>
+</ul>
+
+<p>Where:</p>
+<ul>
+  <li>\(\Gamma(z)\) is the gamma function,</li>
+  <li>\(\gamma(a,z)=\int_0^z t^{a-1}e^{-t}dt\) is the incomplete gamma function.</li>
+</ul>
+
+<p><br /></p>
+<h4 id="moments-10">Moments</h4>
+<p>For \(P \sim \mathcal{P}(\lambda)\):</p>
+<ul>
+  <li>\(\mathbb{E}(P)= \lambda\),</li>
+  <li>\(Var(P)= \lambda\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="reference-10">Reference</h4>
+<p>See <a href="https://en.wikipedia.org/wiki/Poisson_distribution">Wikipedia webpage of the Poisson distribution</a>.</p>
+
+<p><br /><br /></p>
+<h2 id="exponential">Exponential</h2>
+<p>An Exponential distribution \(\mathcal{E}(\lambda)\) is a continuous distribution. It is parametrized by \(\lambda\). In a Poisson distribution framework of events (i.e., a in which events occur continuously and independently at a constant average rate), the exponential distribution is the probability distribution of the time between events (it models the distribution of the occurences of the events).</p>
+
+<p><br /></p>
+<h4 id="pdf-and-cdf-11">pdf and cdf</h4>
+<p>The probability density function of the Exponential distribution is:</p>
+
+\[f(x;\lambda)=\lambda e^{-\lambda x}\]
+
+<p>The cumulative density function of the Poisson distribution is:</p>
+
+\[F(x;\lambda)=1 - \lambda e^{-\lambda x}\]
+
+<p><br /></p>
+<h4 id="moments-11">Moments</h4>
+<p>For \(E \sim \mathcal{E}(\lambda)\):</p>
+<ul>
+  <li>\(\mathbb{E}(E)= \frac{1}{\lambda}\),</li>
+  <li>\(Var(E)= \frac{1}{\lambda^2}\).</li>
+</ul>
+
+<p><br /></p>
+<h4 id="reference-11">Reference</h4>
+<p>See <a href="https://en.wikipedia.org/wiki/Exponential_distribution">Wikipedia webpage of the Exponential distribution</a>.</p>
+
+<p><br /><br /></p>
+<h2 id="other-distribution">Other distribution</h2>
+<p>See <a href="https://en.wikipedia.org/wiki/List_of_probability_distributions">this Wikipedia list of all probability distributions</a>.</p>
+
+  </body>
+</html>

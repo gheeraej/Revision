@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>BERT</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-transformers"><a href="/Revision/transformers.html">Back to Transformers</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>BERT is a Transformer model using the Encoder part.</p>
+
+<p>Major innovation in BERT comes from the way it has been trained in a semi-supervised fashion. Indeed, using the encoder part, the model has access to every words of a text ant this a problem to perform semi-supervised training (ie without external data or labels) like predict a specific word in the text (as an encoder has access to all of the input ie to this word).</p>
+
+<p><br /></p>
+<h1 id="semi-supervised-training">Semi-Supervised Training</h1>
+<p>The idea of BERT is to use a mask block to mask a word it will later predict. It can also replace a word in a text by any word of the vocabulary and be asked to predict the true word that should be at this position:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bert_mask.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>Another task used to train BERT is to predict if a given sentence is the following sentence of another sentence:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bert_sentence.png" width="40%" height="40%" />
+</div>
+<p>The label can be automatically extract and training data automatically generated (hence it is semi-supervised learning).</p>
+
+<p><br /></p>
+
+<p>Using these methods BERT can be trained in a semi-supervised fashion.</p>
+
+<p><br /></p>
+<h1 id="fine-tuning">Fine-Tuning</h1>
+<p>Once BERT has been trained using semi-supervised training on large amount of data it can be fine-tuned to perform any supervised nlp task:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/bert_tl.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://jalammar.github.io/illustrated-bert/">The illustrated BERT by Jay Alammar</a>,</li>
+  <li><a href="https://www.blog.google/products/search/search-language-understanding-bert/">BERT application in Google search</a>.</li>
+</ul>
+
+  </body>
+</html>

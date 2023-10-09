@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Transformers - Introduction and Architecure</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-transformers"><a href="/Revision/transformers.html">Back to Transformers</a></h2>
+
+<p><br /></p>
+<h1 id="introduction">Introduction</h1>
+<p>Transformers is a family of Deep Learning models, generally used for NLP, that share a similar architecture, similar features such as attention and similar learning methods (such as semi supervised learning).</p>
+
+<p>After being trained using semi supervised learning, the transformers can be fine tuned on specific tasks using transfer learning and labelised data.</p>
+
+<p><br /></p>
+<h1 id="architecture">Architecture</h1>
+<p>A transformer is composed of an encoder and/or a decoder:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/transformers_encoder_decoder.png" width="15%" height="15%" />
+</div>
+<p><br /></p>
+
+<ul>
+  <li>The encoder receives an input and builds a representation of this input. It tries to encode the maximum of useful information given the input.</li>
+  <li>The decoder uses the encoder’s representation along with other inputs to generate a target sequence.</li>
+</ul>
+
+<p>For example for a translation task, during training, the decoder uses as input the sentence in the translated language (with mask in order to not see the word it needs to predict) coupled with the encode information from the encoder. It uses all of that to predict the next word. In inference it has not access to the true label of the precedent translated words and then is uses its own predicted words as an approximation.</p>
+
+<p><br /></p>
+<h2 id="encoder-models">Encoder models</h2>
+<p>Encoder models only uses the encoder part of a Transformer. At each stage, the attention layers can access all the words in the initial sentence. These models are often characterized as having “bi-directional” attention, and are often called auto-encoding models.</p>
+
+<p>The pretraining of these models usually revolves around somehow corrupting a given sentence (for instance, by masking random words in it) and tasking the model with finding or reconstructing the initial sentence.</p>
+
+<p>These models are best suited for tasks requiring an understanding of the full sentence, such as sentence classification, named entity recognition (and more generally word classification), and extractive question answering.</p>
+
+<p>Example of models: BERT, ALBERT, ROBERTa, DistilBERT, ELECTRA …</p>
+
+<p><br /></p>
+<h2 id="decoder-models">Decoder models</h2>
+<p>Decoder models use only the decoder of a Transformer model. At each stage, for a given word the attention layers can only access the words positioned before it in the sentence. These models are often called auto-regressive models.</p>
+
+<p>The pretraining of decoder models usually revolves around predicting the next word in the sentence.</p>
+
+<p>These models are best suited for tasks involving text generation.</p>
+
+<p>Example of models: GPT, GPT-2, CTRL, Transformer XL, …</p>
+
+<p><br /></p>
+<h2 id="sequence-to-sequence-models">Sequence-to-sequence models</h2>
+<p>Encoder-decoder models (also called sequence-to-sequence models) use both parts of the Transformer architecture. At each stage, the attention layers of the encoder can access all the words in the initial sentence, whereas the attention layers of the decoder can only access the words positioned before a given word in the input.</p>
+
+<p>The pretraining of these models can be done using the objectives of encoder or decoder models. However more complex task are used such as predicting masked words in a sentence.</p>
+
+<p>Sequence-to-sequence models are best suited for tasks revolving around generating new sentences depending on a given input, such as summarization, translation, or generative question answering.</p>
+
+<p>Example of models: BART, mBART, Marian, T5, …</p>
+
+<p><br /></p>
+<h1 id="architecture-from-original-paper-attention-is-all-you-need">Architecture from original paper: ‘Attention is all you need’</h1>
+<p>Here is the architecture of the original paper introducing transformers:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/transformers.png" width="30%" height="30%" />
+</div>
+<p>The left part is the encoder and the right part is the decoder.
+<br /></p>
+
+<p>Different important parts of a transformers appears:</p>
+<ul>
+  <li>Input embedding ie tokenizer,</li>
+  <li>Positional encoding,</li>
+  <li>Multi-head attention.</li>
+</ul>
+
+<p>The grey blocks are repeated \(N\) times, the output of one block being the input of the next block.</p>
+
+<p>Let’s detail the different parts of a transformer (see <a href="/Revision/transformers_attention.html">this page</a> for the presentation of the concept of attention).</p>
+
+<p><br /></p>
+<h2 id="feed-forward">Feed Forward</h2>
+<p>The Transformer uses basic feed forward layers (ie fully connected layers) after self-attention:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/ff1.png" width="40%" height="40%" />
+</div>
+<p><br /></p>
+
+<p>The output of a feed forward layer is used as input for the next block:
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/ff2.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="residual-blocks">Residual blocks</h2>
+<p>Transformer uses <a href="/Revision/deep_learning_common_problems.html#resnet">residual blocks</a> to allow better gradient flow (the dot lines):
+<br /></p>
+<div style="text-align: center">
+<img src="assets/images/transformers_residual_block.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="final-linear-and-softmax-layer">Final linear and Softmax layer</h2>
+<p>Last layer of a transformer is a linear block followed by a softmax function (ie a multi-class logistic regression).
+In next word prediction, it outputs a probability for each word of the vocabulary:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/transformers_softmax.png" width="40%" height="40%" />
+</div>
+
+<p><br /></p>
+<h2 id="loss">Loss</h2>
+<p>The loss for encoder is cross-entropy <a href="/Revision/loss_functions.html#cross-entropy-log-loss">Cross-Entropy</a>.</p>
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://jalammar.github.io/illustrated-transformer/">The illustrated Transformer by Jay Alammar</a>,</li>
+  <li><a href="https://arxiv.org/pdf/1706.03762.pdf">Attention is all you need by A Vaswani and al.</a>,</li>
+</ul>
+
+  </body>
+</html>

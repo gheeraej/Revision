@@ -1,0 +1,450 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>C# - Class</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-c---class-struct-and-interface"><a href="/Revision/csharp_class_struct_and_interface.html">Back to C# - Class, Struct and Interface</a></h2>
+
+<p><br /></p>
+<h1 id="class"><a href="https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/classes">Class</a></h1>
+<p>A type that is defined as a class is a reference type. Classes are creatd using the <code class="language-plaintext cs highlighter-rouge">class</code> keyword.</p>
+
+<p><br /></p>
+<h1 id="creation">Creation</h1>
+<p>A simple class is created like this:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">MyClass</span>
+  <span class="p">{</span>
+    <span class="c1">// Code of your class</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>It generally contains a creator that will specify how to create the instance of the class and some variable:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">MyClass</span>
+  <span class="p">{</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">myClassVariable</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">MyClass</span><span class="p">(){</span>
+      <span class="c1">// Code of you Class Creator</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">myClassMethod</span><span class="p">()</span> <span class="p">{}</span>
+
+  <span class="p">}</span></code></pre></figure>
+
+<p>Fields (also called attributes or variables) and methods inside classes are often referred to as members:</p>
+<ul>
+  <li>myClassVariable is an attribute or field of MyClass,</li>
+  <li>myClassMethod is a method of MyClass,</li>
+  <li>Both are members of MyClass.</li>
+</ul>
+
+<p><br /></p>
+<h2 id="creation-with-inheritance">Creation with inheritance</h2>
+<p>If the class inherit from another class or interface (a class can inherit from only on parent class but from multiple interfaces) the class creation is a little bit more complex:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">interface</span> <span class="nc">IHobby</span>
+  <span class="p">{</span>
+      <span class="k">public</span> <span class="kt">string</span> <span class="n">Hobby</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">interface</span> <span class="nc">IHaircut</span>
+  <span class="p">{</span>
+      <span class="k">public</span> <span class="kt">string</span> <span class="n">HairColor</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">public</span> <span class="k">void</span> <span class="nf">printHairColor</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">class</span> <span class="nc">Person</span>
+  <span class="p">{</span>
+      <span class="k">public</span> <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+      <span class="k">public</span> <span class="k">void</span> <span class="nf">printAge</span><span class="p">()</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Person age is: </span><span class="p">{</span><span class="n">age</span><span class="p">}</span><span class="s">"</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="c1">// A Footballer is a personne with a haircut and hobby</span>
+  <span class="k">class</span> <span class="nc">Footballer</span><span class="p">:</span> <span class="n">Person</span><span class="p">,</span> <span class="n">IHaircut</span><span class="p">,</span> <span class="n">IHobby</span>
+  <span class="p">{</span>
+      <span class="k">public</span> <span class="kt">string</span> <span class="n">HairColor</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// A class must implement all members of interfaces from which it derived</span>
+      <span class="k">public</span> <span class="kt">string</span> <span class="n">Hobby</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// A class must implement all members of interfaces from which it derived</span>
+
+      <span class="k">public</span> <span class="nf">Footballer</span><span class="p">(</span><span class="kt">int</span> <span class="n">age</span><span class="p">,</span> <span class="kt">string</span> <span class="n">hairColor</span><span class="p">,</span> <span class="kt">string</span> <span class="n">hobby</span><span class="p">)</span>
+      <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="n">age</span> <span class="p">=</span> <span class="n">age</span><span class="p">;</span>
+          <span class="k">this</span><span class="p">.</span><span class="n">HairColor</span> <span class="p">=</span> <span class="n">hairColor</span><span class="p">;</span>
+          <span class="k">this</span><span class="p">.</span><span class="n">Hobby</span> <span class="p">=</span> <span class="n">hobby</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="k">public</span> <span class="k">void</span> <span class="nf">printHairColor</span><span class="p">()</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Hair Color is: </span><span class="p">{</span><span class="n">HairColor</span><span class="p">}</span><span class="s">"</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="instanciation">Instanciation</h1>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span> <span class="p">}</span>
+  <span class="n">MyClass</span> <span class="n">myClass</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyClass</span><span class="p">();</span></code></pre></figure>
+
+<p><br /></p>
+
+<p>All the following instanciations methods also work:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">MyClass</span>
+  <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">myInt</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">myString</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">MyClass</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="nf">MyClass</span><span class="p">(</span><span class="kt">int</span> <span class="n">varInt</span><span class="p">)</span> <span class="p">{</span> <span class="n">myInt</span> <span class="p">=</span> <span class="n">varInt</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="nf">MyClass</span><span class="p">(</span><span class="kt">string</span> <span class="n">varString</span><span class="p">)</span> <span class="p">{</span> <span class="n">myString</span> <span class="p">=</span> <span class="n">varString</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="nf">MyClass</span><span class="p">(</span><span class="kt">int</span> <span class="n">varInt</span><span class="p">,</span> <span class="kt">string</span> <span class="n">varString</span><span class="p">)</span> <span class="p">{</span> <span class="n">myInt</span> <span class="p">=</span> <span class="n">varInt</span><span class="p">;</span> <span class="n">myString</span> <span class="p">=</span> <span class="n">varString</span><span class="p">;</span> <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">MyClass</span> <span class="n">myClass11</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyClass</span><span class="p">();</span>
+  <span class="n">MyClass</span> <span class="n">myClass12</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyClass</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
+  <span class="n">MyClass</span> <span class="n">myClass13</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyClass</span><span class="p">(</span><span class="s">"text"</span><span class="p">);</span>
+  <span class="n">MyClass</span> <span class="n">myClass14</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyClass</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="s">"text"</span><span class="p">);</span>
+
+  <span class="n">MyClass</span> <span class="n">myClass21</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyClass</span><span class="p">()</span> <span class="p">{</span> <span class="n">myInt</span> <span class="p">=</span> <span class="m">1</span> <span class="p">,</span> <span class="n">myString</span> <span class="p">=</span> <span class="s">"text"</span><span class="p">};</span>
+  <span class="n">MyClass</span> <span class="n">myClass22</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyClass</span><span class="p">(</span><span class="m">1</span><span class="p">)</span> <span class="p">{</span> <span class="n">myString</span> <span class="p">=</span> <span class="s">"text"</span><span class="p">};</span>
+  <span class="n">MyClass</span> <span class="n">myClass23</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyClass</span><span class="p">(</span><span class="s">"text"</span><span class="p">)</span> <span class="p">{</span> <span class="n">myInt</span> <span class="p">=</span> <span class="m">1</span> <span class="p">};</span>
+  <span class="n">MyClass</span> <span class="n">myClass24</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyClass</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="s">"text"</span><span class="p">);</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="types-of-inheritance">Types of inheritance</h1>
+<h2 id="non-virtual-non-abstract">Non Virtual, Non Abstract</h2>
+<p>Non <code class="language-plaintext cs highlighter-rouge">virtual</code> or <code class="language-plaintext cs highlighter-rouge">abstract</code> methods can’t be overriden.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">Person</span>
+  <span class="p">{</span>
+      <span class="k">public</span> <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+
+      <span class="k">public</span> <span class="nf">Person</span><span class="p">(</span><span class="kt">int</span> <span class="n">age</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="n">age</span> <span class="p">=</span> <span class="n">age</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="k">public</span> <span class="k">void</span> <span class="nf">printAge</span><span class="p">()</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Person age is: </span><span class="p">{</span><span class="n">age</span><span class="p">}</span><span class="s">"</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">class</span> <span class="nc">Footballer</span><span class="p">:</span> <span class="n">Person</span>
+  <span class="p">{</span>
+      <span class="k">public</span> <span class="nf">Footballer</span><span class="p">(</span><span class="kt">int</span> <span class="n">age</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">age</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+      <span class="c1">// Can't override printAge function</span>
+  <span class="p">}</span>
+
+  <span class="n">Footballer</span> <span class="n">footballer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Footballer</span><span class="p">(</span><span class="m">30</span><span class="p">);</span>
+  <span class="n">footballer</span><span class="p">.</span><span class="nf">printAge</span><span class="p">()</span> <span class="c1">// Person age is: 30</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="virtual">Virtual</h2>
+<p><code class="language-plaintext cs highlighter-rouge">virtual</code> methods from parents class may be overriden using the <code class="language-plaintext cs highlighter-rouge">override</code> keyword.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">Person</span>
+  <span class="p">{</span>
+      <span class="k">public</span> <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+
+      <span class="k">public</span> <span class="nf">Person</span><span class="p">(</span><span class="kt">int</span> <span class="n">age</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="n">age</span> <span class="p">=</span> <span class="n">age</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="k">public</span> <span class="k">virtual</span> <span class="k">void</span> <span class="nf">printAge</span><span class="p">()</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Person age is: </span><span class="p">{</span><span class="n">age</span><span class="p">}</span><span class="s">"</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">class</span> <span class="nc">Footballer</span><span class="p">:</span> <span class="n">Person</span>
+  <span class="p">{</span>
+      <span class="k">public</span> <span class="nf">Footballer</span><span class="p">(</span><span class="kt">int</span> <span class="n">age</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">age</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+
+      <span class="c1">// Not mandatory to override the function</span>
+      <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">printAge</span><span class="p">()</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Footballer age is: </span><span class="p">{</span><span class="n">age</span><span class="p">}</span><span class="s">"</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">Footballer</span> <span class="n">footballer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Footballer</span><span class="p">(</span><span class="m">30</span><span class="p">);</span>
+  <span class="n">footballer</span><span class="p">.</span><span class="nf">printAge</span><span class="p">()</span> <span class="c1">// Footballer age is: 30</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="abstract">Abstract</h2>
+<p><code class="language-plaintext cs highlighter-rouge">abstract</code> methods from abstract parents class must be overriden using the <code class="language-plaintext cs highlighter-rouge">override</code> keyword. A non abstract class can’t have <code class="language-plaintext cs highlighter-rouge">abstract</code> (ie undefined) methods.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Person</span>
+  <span class="p">{</span>
+      <span class="k">public</span> <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+      <span class="k">public</span> <span class="k">abstract</span> <span class="k">void</span> <span class="nf">printAge</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">class</span> <span class="nc">Footballer</span><span class="p">:</span> <span class="n">Person</span>
+  <span class="p">{</span>
+      <span class="k">public</span> <span class="nf">Footballer</span><span class="p">(</span><span class="kt">int</span> <span class="n">age</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="n">age</span> <span class="p">=</span> <span class="n">age</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">printAge</span><span class="p">()</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Footballer age is: </span><span class="p">{</span><span class="n">age</span><span class="p">}</span><span class="s">"</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">Footballer</span> <span class="n">footballer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Footballer</span><span class="p">(</span><span class="m">30</span><span class="p">);</span>
+  <span class="n">footballer</span><span class="p">.</span><span class="nf">printAge</span><span class="p">()</span> <span class="c1">// Footballer age is: 30</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="class-types">Class Types</h1>
+<p>There exist different types of class in C#. The basic behaviour of</p>
+
+<p><br /></p>
+<h4 id="basic">Basic</h4>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span> <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="static-class">Static Class</h4>
+<p>A Static Class cannot instantiate objects with the <code class="language-plaintext cs highlighter-rouge">new</code> keyword, and class members can only be accessed by using the actual class name.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">static</span> <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="k">public</span> <span class="kt">int</span> <span class="n">myClassStaticVariable</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">MyClass</span><span class="p">.</span><span class="n">myClassStaticVariable</span><span class="p">);</span> <span class="c1">// 1</span></code></pre></figure>
+
+<p>Every member of a static class must also be declared as static.</p>
+
+<p><br /></p>
+<h4 id="abstract-class">Abstract class</h4>
+<p>Abstract class cannot be used to create objects directly. An abstract class is just a template for its children classes. Children classes of an abstract class can be instantiate.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">abstract</span> <span class="k">class</span> <span class="nc">MyClass</span>
+  <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">myClassVariable</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">printVariable</span><span class="p">()</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">myClassStaticVariable</span><span class="p">);</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="k">abstract</span> <span class="k">void</span> <span class="nf">printVariableSquared</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">class</span> <span class="nc">MyChildClass</span><span class="p">:</span> <span class="n">MyClass</span>
+  <span class="p">{</span>
+    <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">printVariableSquared</span><span class="p">()</span> <span class="p">{</span><span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">myClassStaticVariable</span> <span class="p">*</span> <span class="n">myClassStaticVariable</span><span class="p">)}</span>
+  <span class="p">}</span>
+
+  <span class="n">MyChildClass</span> <span class="n">myChildClassInstance</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyChildClass</span><span class="p">();</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">myChildClassInstance</span><span class="p">.</span><span class="n">myClassVariable</span><span class="p">);</span> <span class="c1">// 1</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="partial-class">Partial Class</h4>
+<p>Partial Class allows methods, events, and properties to be split into separate/multiple .cs source files, which are combined into one class at compile time.</p>
+
+<p><br />
+In file1.cs:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">partial</span> <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">myClassVariable1</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br />
+In file2.cs:</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">partial</span> <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">myClassVariable2</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="sealed-class">Sealed Class</h4>
+<p>Sealed classes are used to restrict the inheritance feature of object-oriented programming. Once a class is defined as a sealed class, this class cannot be inherited.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">sealed</span> <span class="k">class</span> <span class="nc">MySealedClass</span> <span class="p">{}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="access-modifiers">Access modifiers</h1>
+<p>Access modifiers are keywords that modify the rights to access class, attributes and methods.<br />
+Each of these keywords may be applied to the class itself, to its attributes or to its methods.</p>
+
+<p><br /></p>
+<h3 id="modifiers-for-attributes-and-methods">Modifiers for attributes and methods</h3>
+<p>The default accessibility of class members in C# is private (see <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/accessibility-levels?redirectedfrom=MSDN">Microsoft page on accessibility levels</a>).</p>
+
+<p><br /></p>
+<h4 id="public">Public</h4>
+<p>Public attributes and methods are accessible from anywhere in the code.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">publicAttribute</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">publicMethod</span><span class="p">()</span> <span class="p">{}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="private">Private</h4>
+<p>Private attributes and methods are only accessible from within the class.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">privateAttribute</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">void</span> <span class="nf">privateMethod</span><span class="p">()</span> <span class="p">{}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="protected">Protected</h4>
+<p>Protected attributes and methods are only accessible by class members and classes that inherit from it.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+    <span class="k">protected</span> <span class="kt">int</span> <span class="n">privateAttribute</span><span class="p">;</span>
+    <span class="k">protected</span> <span class="k">void</span> <span class="nf">privateMethod</span><span class="p">()</span> <span class="p">{}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="internal">Internal</h4>
+<p>Internal attributes and methods are only accessible at the current <a href="https://learn.microsoft.com/fr-fr/dotnet/standard/assembly/">assembly</a> point of the class.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+    <span class="k">internal</span> <span class="kt">int</span> <span class="n">privateAttribute</span><span class="p">;</span>
+    <span class="k">internal</span> <span class="k">void</span> <span class="nf">privateMethod</span><span class="p">()</span> <span class="p">{}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="modifiers-for-class">Modifiers for class</h3>
+<p>The default accessibility of a class is internal. A class can’t be declared as private.</p>
+
+<p><br /></p>
+<h4 id="public-1">Public</h4>
+<p>A public class is accessible from anywhere in the code.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">public</span> <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span> <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h4 id="protected-1">Protected</h4>
+<p>A protected class is only accessible by class members and classes that inherit from it. It is not used a lot but here is an example (example from <a href="https://stackoverflow.com/questions/1017778/protected-classes-in-net">StackOverflow</a>):</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">class</span> <span class="nc">MyParentClass</span> <span class="p">{</span>
+    <span class="k">protected</span> <span class="k">class</span> <span class="nc">ProtectedClass</span> <span class="p">{</span> <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">class</span> <span class="nc">MyChildClass</span><span class="p">:</span> <span class="n">MyParentClass</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="k">void</span> <span class="nf">methodCallingProtectedClass</span><span class="p">(</span><span class="n">Outer</span><span class="p">.</span><span class="n">Foo</span> <span class="n">foo</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span> <span class="c1">// OK</span>
+  <span class="p">}</span>
+
+  <span class="k">class</span> <span class="nc">MyOtherClass</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="k">void</span> <span class="nf">methodCallingProtectedClass</span><span class="p">(</span><span class="n">Outer</span><span class="p">.</span><span class="n">Foo</span> <span class="n">foo</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span> <span class="c1">// ERROR: Access error</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>Here, the ProtectedClass is accessible from MyChildClass as MyChildClass inherits (derives) from MyParentClass but it is not accessible from MyOtherClass.</p>
+
+<p><br /></p>
+<h4 id="internal-1">Internal</h4>
+<p>An internal class is only accessible at the current <a href="https://learn.microsoft.com/fr-fr/dotnet/standard/assembly/">assembly</a> point of the class.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">internal</span> <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span> <span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="property-accessor-and-getset">Property, Accessor and get/set</h1>
+<p>A property is a member that provides a flexible mechanism to read, write, or compute the value of a private field. Properties can be used as if they’re public data members, but they’re special methods called accessors. This feature enables data to be accessed easily and still helps promote the safety and flexibility of methods. (from <a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/properties">Microsoft page on C# properties</a>).</p>
+
+<p><br /></p>
+
+<p>Properties can be read-write, readable only or writable only (this one is less common).<br />
+<code class="language-plaintext cs highlighter-rouge">get</code> and <code class="language-plaintext cs highlighter-rouge">set</code> functions are used to respectively read and write data through the Property.
+The <code class="language-plaintext cs highlighter-rouge">get</code> and <code class="language-plaintext cs highlighter-rouge">set</code> are accessed transparantly by just calling the Property.</p>
+
+<p><br /></p>
+<h2 id="example">Example</h2>
+<h3 id="basic-property">Basic Property</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">public</span> <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// Basic get and set: returns the value of Name and write to the value of Name</span>
+  <span class="p">}</span>
+  <span class="n">MyClass</span> <span class="n">myClass</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyClass</span><span class="p">();</span>
+  <span class="n">myClass</span><span class="p">.</span><span class="n">Name</span> <span class="p">=</span> <span class="s">"Henry"</span><span class="p">;</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">myClass</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span> <span class="c1">// Henry</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="basic-property-other-syntax">Basic Property: Other Syntax</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">public</span> <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="kt">string</span> <span class="n">_name</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">MyClass</span><span class="p">(</span><span class="kt">string</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">_name</span> <span class="p">=</span> <span class="n">name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span>
+        <span class="k">get</span> <span class="p">=&gt;</span> <span class="n">_name</span><span class="p">;</span>
+        <span class="k">set</span> <span class="p">=&gt;</span> <span class="n">_name</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">MyClass</span> <span class="n">myClass</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyClass</span><span class="p">(</span><span class="s">"John"</span><span class="p">);</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">myClass</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span> <span class="c1">// John</span>
+  <span class="n">myClass</span><span class="p">.</span><span class="n">Name</span> <span class="p">=</span> <span class="s">"Henry"</span><span class="p">;</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">myClass</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span> <span class="c1">// Henry</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="more-complex-property">More Complex Property</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs"><span class="k">public</span> <span class="k">class</span> <span class="nc">TimePeriod</span> <span class="p">{</span>
+  <span class="k">private</span> <span class="kt">double</span> <span class="n">_seconds</span><span class="p">;</span> <span class="c1">// can't access this field outside the class, must use Hours</span>
+
+  <span class="k">public</span> <span class="kt">double</span> <span class="n">Hours</span> <span class="p">{</span>
+      <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_seconds</span> <span class="p">/</span> <span class="m">3600</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">set</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="k">value</span> <span class="p">&lt;</span> <span class="m">0</span> <span class="p">||</span> <span class="k">value</span> <span class="p">&gt;</span> <span class="m">24</span><span class="p">)</span>
+              <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentOutOfRangeException</span><span class="p">(</span><span class="k">nameof</span><span class="p">(</span><span class="k">value</span><span class="p">),</span> <span class="s">"The valid range is between 0 and 24."</span><span class="p">);</span>
+          <span class="n">_seconds</span> <span class="p">=</span> <span class="k">value</span> <span class="p">*</span> <span class="m">3600</span><span class="p">;</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">TimePeriod</span> <span class="n">timePeriod</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TimePeriod</span><span class="p">();</span>
+  <span class="n">timePeriod</span><span class="p">.</span><span class="n">Hours</span> <span class="p">=</span> <span class="m">5</span><span class="p">;</span> <span class="c1">// transform and store data in _seconds</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">timePeriod</span><span class="p">.</span><span class="n">Hours</span><span class="p">);</span> <span class="c1">// 5: retrieve data from _seconds and transform it in hours</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="required">Required</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">public</span> <span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="n">required</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">MyClass</span> <span class="n">myClass</span> <span class="p">=</span> <span class="k">new</span> <span class="n">MyClass</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Henry"</span> <span class="p">};</span>
+  <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">myClass</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span> <span class="c1">// Henry</span></code></pre></figure>
+
+<p><br /></p>
+<h1 id="implicit-and-explicit-inheritance-from-interface">Implicit and Explicit inheritance from Interface</h1>
+<p>When inheriting from an interface, the override of the method may be implicit or explicit.</p>
+
+<p><br /></p>
+<h3 id="implicit-override">Implicit override</h3>
+<p>Implicit override is the classic way of inheriting an interface method.</p>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">interface</span> <span class="nc">ISampleInterface</span> <span class="p">{</span>
+    <span class="k">void</span> <span class="nf">SampleMethod</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">class</span> <span class="nc">ImplementationClass</span> <span class="p">:</span> <span class="n">ISampleInterface</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">SampleMethod</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Implementation of interface method."</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="cm">/* You can instanciate an object of class ImplementationClass and call the method SampleMethod */</span>
+  <span class="n">ImplementationClass</span> <span class="n">obj</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ImplementationClass</span><span class="p">();</span>
+  <span class="n">obj</span><span class="p">.</span><span class="nf">SampleMethod</span><span class="p">();</span> <span class="c1">// "Implementation of interface method."</span></code></pre></figure>
+
+<p><br /></p>
+<h3 id="explicit-override">Explicit override</h3>
+
+<figure class="highlight"><pre><code class="language-cs" data-lang="cs">  <span class="k">interface</span> <span class="nc">ISampleInterface</span> <span class="p">{</span>
+    <span class="k">void</span> <span class="nf">SampleMethod</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">class</span> <span class="nc">ImplementationClass</span> <span class="p">:</span> <span class="n">ISampleInterface</span> <span class="p">{</span>
+    <span class="k">void</span> <span class="n">ISampleInterface</span><span class="p">.</span><span class="nf">SampleMethod</span><span class="p">()</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Implementation of interface method."</span><span class="p">);</span> <span class="p">}</span> <span class="c1">// Should not reuse public keywork</span>
+  <span class="p">}</span>
+
+  <span class="cm">/* You can't instanciate an object of class ImplementationClass using ImplementationClass constructor and call the method SampleMethod */</span>
+  <span class="cm">/* You need to instanciate a ISampleInterface object using ImplementationClass constructor to call SampleMethod */</span>
+  <span class="n">ISampleInterface</span> <span class="n">obj</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ImplementationClass</span><span class="p">();</span>
+  <span class="n">obj</span><span class="p">.</span><span class="nf">SampleMethod</span><span class="p">();</span> <span class="c1">// "Implementation of interface method."</span></code></pre></figure>
+
+<p><br /></p>
+<h2 id="boxing-and-unboxing">Boxing and Unboxing</h2>
+<p>See <a href="/Revision/csharp_other.html#boxing-and-unboxing-class-examples">Boxing and Unboxing Class Examples</a>.</p>
+
+<p><br /></p>
+<h1 id="ressources">Ressources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://hackr.io/blog/c-sharp-interview-questions]">Hackr IO blog post on C# interview questions</a>,</li>
+  <li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/properties">Microsoft page on C# properties</a>.</li>
+</ul>
+
+  </body>
+</html>

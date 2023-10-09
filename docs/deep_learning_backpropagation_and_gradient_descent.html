@@ -1,0 +1,340 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Deep Learning - Backpropagation and Gradient descent</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-deep-learning"><a href="/Revision/deep_learning.html">Back to Deep Learning</a></h2>
+
+<p><br /></p>
+<h1 id="backpropagation">Backpropagation</h1>
+<p>Backpropagation is an algorithm that computes the gradient of the loss function with respect to the weights of the neural network.</p>
+
+<p>It is a way of performing gradient descent with respect to the given loss on each weight (each parameter) of the network.</p>
+
+<p><br /></p>
+<h2 id="chain-rule">Chain Rule</h2>
+<p>Chain rule is the way of computing gradient of complex function by squashing the function in simple part and compound their gradient.</p>
+
+<p><br /></p>
+<h4 id="simple-example">Simple example</h4>
+<p>If:</p>
+
+\[h(x) = f(g(x))\]
+
+<p>then:</p>
+
+\[h'(x)=f'(g(x))g'(x)\]
+
+<p>Equivalently if:</p>
+
+\[h=f\circ g\]
+
+<p>then:</p>
+
+\[h'=(f \circ g)' = (f' \circ g)\cdot g'\]
+
+<p>Also equivalently if:</p>
+<ul>
+  <li>\(z = h(x) = f(g(x))\) and,</li>
+  <li>\(y = g(x)\) hence \(z = f(y) = f(g(x))\)</li>
+</ul>
+
+<p>then:</p>
+
+\[\frac{dz}{dx} = \frac{dz}{dy} \cdot \frac{dy}{dx}\]
+
+<p><br /></p>
+<h4 id="generalisation">Generalisation</h4>
+<p>The generalisation to \(n\) composed functions \(f_n \circ f_{n-1} \circ \cdots \circ f_2 \circ f_1\) is:</p>
+
+\[\frac{df_{n}}{dx} = \frac{df_{n}}{df_{n-1}} \frac{df_{n-1}}{df_{n-2}} \cdots \frac{df_{1}}{dx}\]
+
+<p><br /></p>
+<h3 id="resources">Resources</h3>
+<p>See: <a href="https://en.wikipedia.org/wiki/Chain_rule">Wikipedia page on Chaine rule</a>.</p>
+
+<p><br /></p>
+<h2 id="formula">Formula</h2>
+<p>Let denote our loss by \(C\). The gradient with respect to the input x is:</p>
+
+<p><br /><br /></p>
+
+\[\frac {dC}{dx} = \frac {dC}{dx^{L+1}} \cdot \frac {df^{L}(b^L + W^L x^L)}{d(b^L + W^L x^L)} \circ {\frac {d(b^L + W^L x^L)}{dx^L}} \cdot \frac {df^{L-1}(b^{L-1} + W^{L-1} x^{L-1})}{d(b^{L-1} + W^{L-1} x^{L-1})} \circ \frac {d(b^{L-1} + W^{L-1} x^{L-1})}{dx^{L-1}} \ldots \frac {df^1 (b^1 + W^1 x^1)}{d(b^1 + W^1 x^1)} \circ \frac {d(b^1 + W^1 x^1)} {dx}\]
+
+<p><br /><br /></p>
+
+<p>Where:</p>
+<ul>
+  <li>\(\circ\) is an elementwize product (Hadamard product),</li>
+  <li>we use the fact that \(x^l=f^{l-1}(b^{l-1} + W^{l-1}x^{l-1})\).</li>
+</ul>
+
+<p>It can also be rewrite:</p>
+
+\[\nabla_{x}C = (W^{1})^{T} \cdot (f^{1})' \ldots \circ (W^{L-1})^{T} \cdot (f^{L-1})' \circ (W^{L})^{T} \cdot (f^{L})' \circ \nabla_{x^{L+1}}C\]
+
+<p>Where \(\nabla_{x}\) is the gradient of \(C\) wrt \(x\).</p>
+
+<p>Let’s define \(\delta\) such that:</p>
+
+\[\delta^l := (f^{l})' \circ (W^{l+1})^{T} \cdots \circ (W^{L-1})^{T}\cdot (f^{L-1})' \circ (W^{L})^{T} \cdot (f^{L})' \circ \nabla_{x^{L+1}}C\]
+
+<p>\(\delta^l\) is the derivative wrt to \(x^l\).</p>
+
+<p>What we are looking for is the gradient of the weights. These are the parameters that we are going to tune (getting the gradient wrt to the input won’t be useful to train the network - but it may be useful to check which part of the input lead to a wrong prediction).</p>
+
+<p>The gradient wrt to \(W^l\) is:</p>
+
+\[\begin{eqnarray}
+\nabla_{W^{l}} C &amp;&amp;= \frac {dC}{dx^{L+1}} \cdot \frac {df^{L}(b^L + W^L x^L)}{d(b^L + W^L x^L)} \circ {\frac {d(b^L + W^L x^L)}{dx^L}} \ldots \frac {df^l (b^l + W^l x^l)}{d(b^l + W^l x^l)} \circ \frac {d(b^l + W^l x^l)} {dW^l} \\
+&amp;&amp;= \frac{df^l}{dW^l} (f^{l})' \circ (W^{l+1})^{T} \cdots \circ (W^{L-1})^{T}\cdot (f^{L-1})' \circ (W^{L})^{T} \cdot (f^{L})' \circ \nabla_{x^{L+1}}C\\
+&amp;&amp;= \frac{d(b^l + W^l x^l)}{dW^l} \delta^l\\
+&amp;&amp;= \delta^l (x^l)^T
+\end{eqnarray}\]
+
+<p><br /><br /></p>
+
+<p>The gradients wrt to every parameters can be computed sequentially using the fact that:</p>
+
+\[\delta^{l-1}:=(f^{l-1})'\circ (W^{l})^{T}\cdot \delta ^{l}\]
+
+<p><br /><br /></p>
+<h2 id="training">Training</h2>
+<p>Training of a neural network is done through backpropagation which is equivalent to a <a href="/Revision/mathematics_optimization.html#gradient_descent">Gradient Descent</a>.</p>
+
+<p>Generally in a neural network, the gradient descent is stochastic which means that only a sub sample of the training dataset is used at each iteration to compute the gradient.</p>
+
+<p>Apart the classical Stochastic Gradient Descent method, other more complex and stable Gradient Descent methods have been created to improve stability and speed of the calibration of a neural network.</p>
+
+<p><br /><br /></p>
+<h2 id="example-of-backpropagation-graphs">Example of backpropagation graphs</h2>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/backprop1.png" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+
+<div style="text-align: center">
+<img src="assets/images/backprop2.png" width="50%" height="50%" />
+</div>
+<p><br /></p>
+
+<p>Images and texts are taken from <a href="https://cs231n.github.io/optimization-2/">CS231n</a>.</p>
+
+<p><br /></p>
+<h2 id="resources-1">Resources</h2>
+<p>See:</p>
+<ul>
+  <li><a href="https://cs231n.github.io/optimization-2/">CS231n</a>.</li>
+</ul>
+
+<p><br /></p>
+<h1 id="gradient-descent">Gradient Descent</h1>
+<p>For a parameter \(W^{l}\) we saw that the gradient is:</p>
+
+\[\nabla_{W^{l}} C(X, Y) = \delta^l (x^l)^T\]
+
+<p>Hence the gradient descent update rule is:</p>
+
+\[(W^{l})^{i+1} = (W^{l})^i - \alpha \nabla_{W^{l}} C(X, Y) = (W^{l})^i - \alpha \delta^l (x^l)^T\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\alpha\) is an hyperparameter for the stp size,</li>
+  <li>\(\delta^l\) is define in the Backpropagation part.</li>
+</ul>
+
+<p>The simplified form is:</p>
+
+\[W = W - \alpha \nabla_W C(X, Y)\]
+
+<p>Or more simplified:</p>
+
+\[W = W - \alpha \nabla_W\]
+
+<p><br /></p>
+<h2 id="stochastic-gradient-descent">Stochastic Gradient Descent</h2>
+<p>Stochastic Gradient Descent is equivalent to Gradient Descend but taken only on a batch \(B\) ie a sub sample of the dataset. Using a sub sample of data allows to compute more quicky the loss function and avoid to wait a long time before getting an update.</p>
+
+\[\nabla_{W^{l}} C(X_B, Y_B) = \delta^l (x_B^l)^T\]
+
+<p>Hence the gradient descent update rule is:</p>
+
+\[(W^{l})^{i+1} = (W^{l})^i - \alpha \nabla_{W^{l}} C(X_B, Y_B) = (W^{l})^i - \alpha \delta^l (x_B^l)^T\]
+
+<p>The simplified form is:</p>
+
+\[W = W - \alpha \nabla_W C(X_B, Y_B)\]
+
+<p>And more simplified by not expressing the loss and the dataset we obtain the same representation than for normal gradient descent:</p>
+
+\[W = W - \alpha \nabla_W\]
+
+<p><br /></p>
+<h3 id="other-stochastic-gradient-descent-methods">Other stochastic gradient descent methods</h3>
+<p>For the next methods, we will use simplified notations.</p>
+
+<p>However keep in mind that:</p>
+<ul>
+  <li>The gradient descent is still done layer \(l\) by layer \(l\) (ie on \(W^l\)),</li>
+  <li>It is still an iterative process, ie \((W^{l})^{i+1}\) depends on \((W^{l})^i\),</li>
+  <li>The gradient still depends on the choice of the loss \(C\),</li>
+  <li>We are still in a stochastic gradient framework working batch \(B\) by batch \(B\).</li>
+</ul>
+
+<p>Their exist two families of SGD upgrades:</p>
+<ul>
+  <li>One based on momentum,</li>
+  <li>A second one based on second order derivative.</li>
+</ul>
+
+<h5 id="momentum-methods">Momentum methods</h5>
+<p>The momentum methods introduce a variable \(v\) for velocity and the gradient will update the velocity of updates not directly the parameter.</p>
+
+<h5 id="adaptive-learning-rate-methods">Adaptive learning rate methods</h5>
+<p>When using gradient descent a tradeoff exists between the time taken to converge and the precision of the convergence.</p>
+
+<p>The parameter \(\alpha\) is used to modify the step size. A large \(\alpha\) will induce large steps and a small \(\alpha\) small steps. In general we want to make large steps at the begining of the training and smaller steps at the end. The \(\alpha\) parameter can be decayed during the training:</p>
+<ul>
+  <li>Decay by a factor after a number of iterations,</li>
+  <li>Exponential decay : \(\alpha = \alpha_0 e^{-ki}\) where \(i\) is the iteration number (and \(k\) an hyperparameter),</li>
+  <li>\(1/i\) decay : \(\alpha = \frac{\alpha_0}{1+ki}\) where \(i\) is the iteration number (and \(k\) an hyperparameter).</li>
+</ul>
+
+<p>The Adaptive learning rate methods include adaptation of the learning rate direclty based on the derivatives values.</p>
+
+<p><br /></p>
+<h4 id="momentum">Momentum</h4>
+<p>The update rule using the momentum method is:</p>
+
+\[\begin{cases}
+  v = \mu v - \alpha \nabla_W \\
+  W = W + v
+\end{cases}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(\mu\) is an hyperparameter,</li>
+  <li>\(v\) is the momentum variable.</li>
+</ul>
+
+<p>The method is called momentum as the gradient keep a trace of the precedent gradient direction and hence follows the momentum.</p>
+
+<p><br /></p>
+<h4 id="nesterov-momentum">Nesterov Momentum</h4>
+<p>Nesterov Momentum is similar to Momentum.
+The update rule using the Nesterov momentum method is:</p>
+
+\[\begin{cases}
+  W_{ahead} = W + \mu v \\
+  v = \mu v - \alpha \nabla_{W_{ahead}} \\
+  W = W + v
+\end{cases}\]
+
+<p>Nesterov Momentum still uses the momentum ie keeps trace of the precedent gradient direction but it will compute the update to the variable \(v\) with respect to \(W_{ahead}\) ie the \(W\) variable where another gradient step has been applied.</p>
+
+<h5 id="comparison-with-momentum-method">Comparison with Momentum method</h5>
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/nesterov.jpeg" width="50%" height="50%" />
+</div>
+<p><br /></p>
+
+<p>Instead of evaluating gradient at the current position (red circle), we know that our momentum is about to carry us to the tip of the green arrow. With Nesterov momentum we therefore instead evaluate the gradient at this “looked-ahead” position.</p>
+
+<p>From <a href="https://cs231n.github.io/neural-networks-3/#update">CS231n course</a>.</p>
+
+<p><br /></p>
+<h4 id="adagrad">Adagrad</h4>
+<p>Adagrad is an adaptive learning rate method.
+The update rule using the Adagrad method is:</p>
+
+\[\begin{cases}
+  c = c + \nabla^2_W \\
+  W = W - \alpha \frac{\nabla_W}{\sqrt{c} + \varepsilon}
+\end{cases}\]
+
+<p>Where:</p>
+<ul>
+  <li>\(c\) keeps track of the sum of the squared derivatives,</li>
+  <li>\(\varepsilon\) avoid divisions by 0.</li>
+</ul>
+
+<p>Weights that receive high gradients will have their effective learning rate reduced, while weights that receive small or infrequent updates will have their effective learning rate increased</p>
+
+<p><br /></p>
+<h4 id="rmsprop">RMSprop</h4>
+<p>RMSprop is an adaptive learning rate method.
+The update rule using the RMSprop method is:</p>
+
+\[\begin{cases}
+  c = \gamma c + (1 - \gamma) \nabla^2_W \\
+  W = W - \alpha \frac{\nabla_W}{\sqrt{c} + \varepsilon}
+\end{cases}\]
+
+<p>RMSprop is similar to Adagrad but the variable \(c\) acts like a weigted sum of the last squared gradient.</p>
+
+<p><br /></p>
+<h4 id="adam">ADAM</h4>
+<p>ADAM is an adaptive learning rate and momentum method.
+The update rule using the ADAM method is:</p>
+
+\[\begin{cases}
+  m = \beta_1 m + (1 - \beta_1) \nabla_W \\
+  v = \beta_2 v + (1 - \beta_2) \nabla^2_W \\
+  W = W - \alpha \frac{m}{\sqrt{v} + \varepsilon}
+\end{cases}\]
+
+<p>Is is very similar to RMSprop but with momentum.</p>
+
+<p><br /></p>
+<h3 id="comparison-of-the-different-sgd-methods">Comparison of the different SGD methods</h3>
+<p>Here are some animations that may help the intuitions about the learning process dynamics:</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/sgd1.gif" width="25%" height="25%" />
+</div>
+
+<p>Contours of a loss surface and time evolution of different optimization algorithms. Notice the “overshooting” behavior of momentum-based methods, which make the optimization look like a ball rolling down the hill.</p>
+
+<p><br /></p>
+<div style="text-align: center">
+<img src="assets/images/sgd2.gif" width="25%" height="25%" />
+</div>
+<p><br />
+A visualization of a saddle point in the optimization landscape, where the curvature along different dimension has different signs (one dimension curves up and another down). Notice that SGD has a very hard time breaking symmetry and gets stuck on the top. Conversely, algorithms such as RMSprop will see very low gradients in the saddle direction. Due to the denominator term in the RMSprop update, this will increase the effective learning rate along this direction, helping RMSProp proceed.</p>
+
+<p>Images credit: <a href="https://twitter.com/alecrad">Alec Radford</a>.</p>
+
+<p><br /></p>
+<h3 id="discussion-on-second-order-methods">Discussion on second order methods</h3>
+<p>Second order methods based on <a href="/Revision/mathematics_optimization.html#newton_s_method">Newton’s method</a> automatically adapt the step size given the second derivative of the loss.
+They used a second order approximation of a the Taylor series of a function \(f\).</p>
+
+<p>However this approximation uses the Hessian matrix of the function and the computing (and inverting) the Hessian matrix of a neural network is very costly in time and memory.</p>
+
+<p>Hence Newton’s method is not use to calibrate neural networks.</p>
+
+<p><br /></p>
+<h3 id="resources-2">Resources</h3>
+<p>See:</p>
+<ul>
+  <li><a href="https://cs231n.github.io/neural-networks-3/#update">CS231n</a>.</li>
+</ul>
+
+  </body>
+</html>

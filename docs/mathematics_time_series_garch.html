@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mathematics - Time Series - GARCH</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+      </script>
+      <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+  </head>
+  <body>
+    <h1><a href="http://localhost:4000/Revision/">Revision</a></h1>
+    <h2 id="back-to-time-series"><a href="/Revision/mathematics_time_series.html">Back to Time series</a></h2>
+
+<p><br /></p>
+<h1 id="arch-and-garch">ARCH and GARCH</h1>
+<p>ARCH and GARCH model are used to model stochastic process with time dependant variance (like financial serie).
+They are simply, AR and ARMA models applied to the volatility term of a stochastic process.</p>
+
+<p><br /></p>
+<h2 id="arch">ARCH</h2>
+<p>ARCH for autoregressive conditional heteroskedasticity model is a statistical model for time series data that describes the variance of the current error term or innovation as a function of the actual sizes of the previous time periods’ error terms (an AR model for the variance).</p>
+
+<p>Let \(\varepsilon_t = \sigma_t z_t\)</p>
+
+<p>Where:</p>
+<ul>
+  <li>\(\sigma_t\) is the standar deviation,</li>
+  <li>\(z_{t}\) is a strong white noise process.</li>
+</ul>
+
+<p>In the ARCH framework, the serie of the variances \(\sigma_t^2\) is model by an \(AR_p\) process:</p>
+
+\[\sigma_{t}^{2} = \varphi_0 + \sum_{k=1}^{p} \varphi_k \varepsilon_{t-k}^2\]
+
+<p>Here, the variance \(\sigma_{t}^{2}\) is autoregressed by the error term values squared.</p>
+
+<p>With certain constraints imposed on the coefficients, the \(\varepsilon_t\) series squared will theoretically be \(AR_p\).</p>
+
+<p><br /></p>
+<h2 id="garch">GARCH</h2>
+<p>GARCH for generalized autoregressive conditional heteroskedasticity model is a statistical model for time series data that describes the variance of the current error term or innovation as an ARMA model.</p>
+
+<p>Let \(\varepsilon_t = \sigma_t z_t\)</p>
+
+<p>Where:</p>
+<ul>
+  <li>\(\sigma_t\) is the standar deviation,</li>
+  <li>\(z_{t}\) is a gaussian white noise process.</li>
+</ul>
+
+<p>In the ARCH framework, the serie of the variances \(\sigma_t^2\) is model by an \(ARMA_{p,q}\) process:</p>
+
+\[\sigma_{t}^{2} = \varphi_0 + \sum_{k=1}^{p} \varphi_k \varepsilon_{t-k}^2 + \sum_{k=1}^{q}\theta_k \sigma_{t-k}^{2}\]
+
+<p><br /></p>
+<h1 id="resources">Resources</h1>
+<p>See:</p>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Autoregressive_conditional_heteroskedasticity">ARCH page on Wikipedia</a>,</li>
+  <li><a href="https://online.stat.psu.edu/stat510/lesson/11/11.1">ARCH page on Stat 510 course by PennState Eberly College University</a>,</li>
+  <li><a href="http://www.varennes-ecofin.com/materials/NLSC4.pdf">This course on GARCH models by Gilles de Truchis and Elena Dumitrescu</a>.</li>
+</ul>
+
+  </body>
+</html>
